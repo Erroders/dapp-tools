@@ -11,13 +11,7 @@ import solc from 'solc';
 
 // returns OpenZeppelin's contracts from node_modules as required to compile the custom contract
 function findImports(path: string): { contents: string } {
-    // const imported_contract_path = resolve(__dirname, '..', 'node_modules', path);
-    // NOTE: currently hard coded path to OZ contracts
-    const imported_contract_path = resolve(
-        '/mnt/DATA/Dev/Hackathons/Encode X Polygon/dapp-tools',
-        'node_modules',
-        path,
-    );
+    const imported_contract_path = resolve('./utils/imports', path);
     // console.log(imported_contract_path);
     const imported_contract = readFileSync(imported_contract_path, { encoding: 'utf-8' });
     return {
@@ -51,7 +45,12 @@ export default function compile(contract_code: string, contract_name: string, cb
             console.log(err);
         } else {
             // compiles and parse the output into json format
-            const output = JSON.parse(solcSnapshot.compile(JSON.stringify(input), { import: findImports }));
+            const output = JSON.parse(
+                solcSnapshot.compile(JSON.stringify(input), {
+                    import: findImports,
+                }),
+            );
+            // console.log(output);
             const abi_ = output.contracts[`${contract_name}.sol`][contract_name].abi;
             const bytecode_ = output.contracts[`${contract_name}.sol`][contract_name].evm.bytecode;
             cb({ abi: abi_, bytecode: bytecode_, contract: contract_code });
