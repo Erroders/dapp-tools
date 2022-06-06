@@ -11,7 +11,7 @@ import { Access, buildGeneric, GenericOptions, printContract } from 'root/packag
 import compile from '../../../utils/contract_compiler';
 
 // type for user provided data for ERC1155 contract
-type ERC1155Data = {
+export type ERC1155Data = {
     name: string;
     uri: string;
     burnable?: boolean;
@@ -27,9 +27,12 @@ type ERC1155Data = {
 
 // request handler
 // NOTE: logs "API resolved without sending a response for /api/erc1155, this may result in stalled requests."
-export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default function handler(
+    req: NextApiRequest,
+    res: NextApiResponse<{ abi: any; bytecode: any; contract: string } | string>,
+) {
     const opts: ERC1155Data = req.body;
-    const cb = (result: any) => {
+    const cb = (result: { abi: any; bytecode: any; contract: string }) => {
         if (result) {
             res.status(200).send(result);
         } else {

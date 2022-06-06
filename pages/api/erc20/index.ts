@@ -11,7 +11,7 @@ import { Access, buildGeneric, GenericOptions, printContract } from 'root/packag
 import compile from '../../../utils/contract_compiler';
 
 // type for user provided data for ERC20 contract
-type ERC20Data = {
+export type ERC20Data = {
     name: string;
     symbol: string;
     burnable?: boolean;
@@ -28,9 +28,12 @@ type ERC20Data = {
 
 // request handler
 // NOTE: logs "API resolved without sending a response for /api/erc20, this may result in stalled requests."
-export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default function handler(
+    req: NextApiRequest,
+    res: NextApiResponse<{ abi: any; bytecode: any; contract: string } | string>,
+) {
     const opts: ERC20Data = req.body;
-    const cb = (result: any) => {
+    const cb = (result: { abi: any; bytecode: any; contract: string }) => {
         if (result) {
             res.status(200).send(result);
         } else {
