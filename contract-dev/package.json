@@ -1,0 +1,22 @@
+{
+    "name": "contract-dev",
+    "version": "1.0.0",
+    "description": "Dapp-Tools' smart contract development",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "deploy": "npx hardhat run scripts/deploy.js --network mumbai"
+    },
+    "keywords": [
+        "Smart Contracts",
+        "Hardhat"
+    ],
+    "author": "Raghav Goyal",
+    "license": "MIT",
+    "devDependencies": {
+        "@nomiclabs/hardhat-ethers": "^2.0.6",
+        "dotenv": "^16.0.1",
+        "ethers": "^5.6.8",
+        "hardhat": "^2.9.7"
+    }
+}

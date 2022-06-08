@@ -2,10 +2,14 @@
 
 # dependencies
 node_modules
-build/
-generated/
 /.pnp
 .pnp.js
+
+# dirs
+build
+generated
+artifacts
+cache
 
 # testing
 /coverage
@@ -29,6 +33,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
