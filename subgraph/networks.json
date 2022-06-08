@@ -1,0 +1,12 @@
+{
+    "mumbai": {
+        "DappTools": {
+            "address": "0x47AECb0e3dDF7643DF854372abb3970a9F8262B0"
+        }
+    },
+    "matic": {
+        "DappTools": {
+            "address": "0x57AECb0e3dDF7643DF854372abb3970a9F8262B0"
+        }
+    }
+}

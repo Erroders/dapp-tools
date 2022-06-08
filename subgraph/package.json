@@ -1,0 +1,18 @@
+{
+    "name": "Dapp Tools",
+    "license": "UNLICENSED",
+    "scripts": {
+        "codegen": "graph codegen",
+        "build-polygon": "graph build --network matic --network-file networks.json",
+        "build-mumbai": "graph build --network mumbai --network-file networks.json",
+        "deploy": "graph deploy --node https://api.thegraph.com/deploy/ Erroders/Dapp Tools",
+        "create-local": "graph create --node http://localhost:8020/ Erroders/Dapp Tools",
+        "remove-local": "graph remove --node http://localhost:8020/ Erroders/Dapp Tools",
+        "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Erroders/Dapp Tools"
+    },
+    "dependencies": {
+        "@graphprotocol/graph-cli": "0.30.4",
+        "@graphprotocol/graph-ts": "^0.27.0",
+        "@openzeppelin/subgraphs": "^0.1.8"
+    }
+}

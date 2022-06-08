@@ -1,0 +1,152 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: DappTools
+    network: mumbai
+    source:
+      abi: DappTools
+      address: "0x47AECb0e3dDF7643DF854372abb3970a9F8262B0"
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - RegisterToken
+      abis:
+        - name: DappTools
+          file: ./abis/DappTools.json
+      eventHandlers:
+        - event: RegisterToken(indexed address,indexed address,uint8)
+          handler: handleRegisterToken
+      file: ./src/dapp-tools.ts
+templates:
+  - name: AccessControl
+    kind: ethereum/contract
+    network: mumbai
+    source:
+      abi: AccessControl
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/accesscontrol.ts
+      entities:
+        - AccessControl
+      abis:
+        - name: AccessControl
+          file: ./abis/IAccessControl.json
+      eventHandlers:
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+  - name: DappToolsRegisteredERC20
+    kind: ethereum/contract
+    network: mumbai
+    source:
+      abi: IERC20
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/erc20.ts
+      entities:
+        - ERC20Contract
+      abis:
+        - name: IERC20
+          file: ./abis/IERC20Metadata.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+  - name: DappToolsRegisteredERC721
+    kind: ethereum/contract
+    network: mumbai
+    source:
+      abi: IERC721
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/erc721.ts
+      entities:
+        - ERC721Contract
+      abis:
+        - name: IERC721
+          file: ./abis/IERC721Metadata.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+  - name: DappToolsRegisteredERC1155
+    kind: ethereum/contract
+    network: mumbai
+    source:
+      abi: IERC1155
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/erc1155.ts
+      entities:
+        - ERC1155Contract
+      abis:
+        - name: IERC1155
+          file: ./abis/IERC1155MetadataURI.json
+      eventHandlers:
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: TransferBatch(indexed address,indexed address,indexed
+            address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed
+            address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+  - name: Ownable
+    kind: ethereum/contract
+    network: mumbai
+    source:
+      abi: Ownable
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/ownable.ts
+      entities:
+        - Ownable
+      abis:
+        - name: Ownable
+          file: ./abis/Ownable.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+  - name: Pausable
+    kind: ethereum/contract
+    network: mumbai
+    source:
+      abi: Pausable
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/pausable.ts
+      entities:
+        - Pausable
+      abis:
+        - name: Pausable
+          file: ./abis/Pausable.json
+      eventHandlers:
+        - event: Paused(address)
+          handler: handlePaused
+        - event: Unpaused(address)
+          handler: handleUnpaused
