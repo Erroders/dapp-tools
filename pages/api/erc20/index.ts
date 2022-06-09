@@ -33,7 +33,6 @@ export default function handler(
     res: NextApiResponse<{ abi: any; bytecode: any; contract: string } | string>,
 ) {
     const opts: ERC20Data = req.body;
-    console.log(opts.name);
     const cb = (result: { abi: any; bytecode: any; contract: string }) => {
         if (result) {
             res.status(200).send(result);
