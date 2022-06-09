@@ -9,8 +9,6 @@ module.exports = {
     networks: {
         mumbai: {
             url: process.env.MUMBAI_ALCHEMY_URL || '',
-            gas: 2100000,
-            gasPrice: 8000000000,
             accounts: [`0x${process.env.MUMBAI_DEPLOYER_PRIV_KEY}`],
         },
     },
