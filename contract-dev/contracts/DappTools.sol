@@ -29,6 +29,11 @@ contract DappTools is IDappTools, Ownable {
         _fees = fees_;
     }
 
+    function withdrawFees() public payable onlyOwner {
+        payable(owner()).transfer(_fees);
+        _fees = 0;
+    }
+
     function _register(
         address contract_address,
         address deployer,
