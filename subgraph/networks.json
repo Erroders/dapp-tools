@@ -1,7 +1,8 @@
 {
     "mumbai": {
         "DappTools": {
-            "address": "0x47AECb0e3dDF7643DF854372abb3970a9F8262B0"
+            "address": "0x47AECb0e3dDF7643DF854372abb3970a9F8262B0",
+            "startBlock": 26656055
         }
     },
     "matic": {
