@@ -1,9 +1,10 @@
 import React from 'react';
 
-interface CardProps {
+export interface CardProps {
     title: string;
     description?: string;
-    icon?: JSX.Element;
+    icon?: string;
+
     secondaryTitle?: string;
     actionBtnText?: string;
     actionBtnLink?: string;
@@ -16,7 +17,7 @@ const Card = ({ title, description, icon, secondaryTitle, actionBtnText, actionB
 
             <div className="relative flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2">
                 <div className="px-8 pb-8 transition-opacity group-hover:opacity-0 group-hover:absolute">
-                    {icon}
+                    <img src={`data:image/svg+xml;utf8,${icon}`} className="w-12 h-12" />
 
                     <h2 className="mt-4 text-2xl font-medium">{title}</h2>
                 </div>
