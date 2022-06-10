@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '../generalComponents';
+import { Button } from '../generalComponents';
 
 const Homepage = () => {
     const icon = (
@@ -19,21 +19,13 @@ const Homepage = () => {
         </svg>
     );
 
+    const a = () => {};
+
     return (
         <div className="p-6 max-w-screen-xl mx-auto">
-            <div className="grid grid-cols-3 gap-4">
-                {[1, 2, 3, 4, 5, 6, 7].map(() => {
-                    return (
-                        <a href="https://google.com">
-                            <Card
-                                title="Go around the world"
-                                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, praesentium voluptatem
-                        omnis atque culpa repellendus."
-                                actionBtnText="Read more"
-                                icon={icon}
-                            />
-                        </a>
-                    );
+            <div className="grid grid-cols-2 gap-4">
+                {[1, 2, 3, 4, 5].map(() => {
+                    return <Button title="Submit" leftIcon={icon} />;
                 })}
             </div>
         </div>
