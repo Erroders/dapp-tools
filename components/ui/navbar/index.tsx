@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { WalletContext } from '../../../pages';
 
 interface NavbarProps {
     title?: string;
@@ -6,8 +7,10 @@ interface NavbarProps {
 }
 
 const Navbar = ({ title = 'Dapp Tools', walletAddressText = 'Connect Wallet' }: NavbarProps) => {
+    const walletContext = useContext(WalletContext);
+
     return (
-        <header className="shadow-md sticky top-0 w-full bg-white z-50">
+        <header className="shadow-md sticky top-0 w-full bg-white z-30">
             <div className="max-w-screen-xl p-4 mx-auto">
                 <div className="flex items-center justify-between space-x-4 lg:space-x-10">
                     <div className="flex lg:w-0 lg:flex-1 text-xl font-medium">{title}</div>
@@ -20,8 +23,13 @@ const Navbar = ({ title = 'Dapp Tools', walletAddressText = 'Connect Wallet' }: 
                             </button> */}
 
                             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
-                            <button className="relative p-2 text-xs flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2">
-                                {walletAddressText}
+                            <button
+                                className="relative p-2 text-xs flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2"
+                                onClick={() => {
+                                    walletContext.updateConnectWalletModalVisibility(true);
+                                }}
+                            >
+                                {walletContext.walletAddress || 'Connect Wallet'}
                             </button>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ interface ButtonProps {
 
 const Button = ({ title, leftIcon, rightIcon, onClick }: ButtonProps) => {
     return (
-        <button className="relative block group cursor-pointer" onClick={onClick}>
+        <button className="relative block group cursor-pointer w-full h-full" onClick={onClick}>
             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
 
             <div className="relative flex items-end h-full w-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2">
