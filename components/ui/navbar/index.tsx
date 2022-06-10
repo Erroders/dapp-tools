@@ -7,7 +7,7 @@ interface NavbarProps {
 
 const Navbar = ({ title = 'Dapp Tools', walletAddressText = 'Connect Wallet' }: NavbarProps) => {
     return (
-        <header className="shadow-md sticky top-0 w-full bg-white">
+        <header className="shadow-md sticky top-0 w-full bg-white z-50">
             <div className="max-w-screen-xl p-4 mx-auto">
                 <div className="flex items-center justify-between space-x-4 lg:space-x-10">
                     <div className="flex lg:w-0 lg:flex-1 text-lg font-medium">{title}</div>
