@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { WalletContext } from '../../../pages';
+import { WalletContext } from '../../../pages/_app';
 
 interface NavbarProps {
     title?: string;

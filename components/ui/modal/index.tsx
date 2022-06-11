@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import React, { RefObject, useContext, useEffect, useRef, useState } from 'react';
-import { WalletContext } from '../../../pages';
+import { WalletContext } from '../../../pages/_app';
 import connectWallet, { wallets } from '../../wallet/connectWallet';
 import { Button } from '../generalComponents';
 
