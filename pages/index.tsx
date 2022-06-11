@@ -1,8 +1,7 @@
 import type { NextPage } from 'next';
-import connectWallet, { wallets } from '../components/wallet/connectWallet';
-import { deployContract } from '../utils/contract_deployer';
-import { ERCs } from '../utils/types';
-import { getWalletTokenDetails } from '../utils/wallet_token_details';
+import Homepage from '../components/ui/homepage';
+import WalletModal from '../components/ui/modal';
+import Navbar from '../components/ui/navbar';
 import { ERC20Data } from './api/erc20';
 
 const Home: NextPage = () => {
@@ -23,19 +22,11 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <h1>Hello world!</h1>
-            <button
-                onClick={async () => {
-                    const provider = await connectWallet(wallets.METAMASK);
-                    const contractDetails = await deployContract(erc20Opts, ERCs.ERC20, provider);
-                    console.log(contractDetails);
-
-                    const data = await getWalletTokenDetails(provider);
-                    console.log(data);
-                }}
-            >
-                Click Me
-            </button>
+            <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
+            <main>
+                <Homepage />
+            </main>
+            <WalletModal />
         </>
     );
 };
