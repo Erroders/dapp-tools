@@ -1,7 +1,9 @@
-<center><img src="./public/logo-white.svg" height="100" /></center>
+<div align="center">
+    <img src="./public/logo-white.svg" height="100" style="margin:auto;"/>
+</div>
 <br>
 
-Dapp tools is a *no-code solution* and a launchpad for ERC standard Tokens on EVM compatible chains. We use **OpenZeppelin**'s battle-tested smart contracts library (version `4.x`), thus have reduced risk of vulnerabilities. We also provide TokenScan (just like Etherscan) to answer queries (like total supply, biggest token holders, most recent transfers, all NFTs owned by any account) for any token with provided contract address. These queries are being fulfilled by using **Covalent API**.
+Dapp Tools is a *no-code solution* and a launchpad for ERC standard Tokens on EVM compatible chains. We use **OpenZeppelin**'s battle-tested smart contracts library (version `4.x`), thus have reduced risk of vulnerabilities. We also provide TokenScan (just like Etherscan) to answer queries (like total supply, biggest token holders, most recent transfers, all NFTs owned by any account) for any token with provided contract address. These queries are being fulfilled by using **Covalent API**.
 
 ERC Standards provides a bunch of features for each type of token (like mintable, burnable, pausable, access control, ...). Users would be prompted to choose between these options and create different flavoured tokens based on their needs. Further customization is restricted for now to respect the security offered by OZ contracts. In future we may integrate an IDE and other toolings for developers to ease customization of contracts with guidance to maintain security.
 
