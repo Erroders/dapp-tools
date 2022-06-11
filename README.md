@@ -1,4 +1,5 @@
-# Dapp Tools
+<center><img src="./public/logo-white.svg" height="100" /></center>
+<br>
 
 Dapp tools is a *no-code solution* and a launchpad for ERC standard Tokens on EVM compatible chains. We use **OpenZeppelin**'s battle-tested smart contracts library (version `4.x`), thus have reduced risk of vulnerabilities. We also provide TokenScan (just like Etherscan) to answer queries (like total supply, biggest token holders, most recent transfers, all NFTs owned by any account) for any token with provided contract address. These queries are being fulfilled by using **Covalent API**.
 
