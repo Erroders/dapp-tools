@@ -2,7 +2,7 @@
 
 Dapp tools is a *no-code solution* and a launchpad for ERC standard Tokens on EVM compatible chains. We use **OpenZeppelin**'s battle-tested smart contracts library (version `4.x`), thus have reduced risk of vulnerabilities. We also provide TokenScan (just like Etherscan) to answer queries (like total supply, biggest token holders, most recent transfers, all NFTs owned by any account) for any token with provided contract address. These queries are being fulfilled by using **Covalent API**.
 
-ERC Standards provides a bunch of features for each type of token (like mintable, burnable, pausable, access control, ...). Users would be prompted to choose between these options and create different flavoured tokens based on them. Further customization is restricted for now to respect the security offered by OZ contracts. In future we may integrate an IDE and other toolings for developers to ease customization of contracts.
+ERC Standards provides a bunch of features for each type of token (like mintable, burnable, pausable, access control, ...). Users would be prompted to choose between these options and create different flavoured tokens based on their needs. Further customization is restricted for now to respect the security offered by OZ contracts. In future we may integrate an IDE and other toolings for developers to ease customization of contracts with guidance to maintain security.
 
 Note: Currently we offer to deploy on Polygon Mainnet and Mumbai Testnet only. Options for other chains are being tested internally and will be opened soon.
 
@@ -20,6 +20,7 @@ An ERC20 token contract keeps track of fungible tokens: any one token is exactly
 name: Token Name
 symbol: Token Symbol
 
+premint: Create an initial amount of tokens for the deployer.
 mintable: Privileged accounts will be able to create more supply.
 burnable: Token holders will be able to destroy their tokens.
 pausable: Privileged accounts will be able to pause the token transfers, applicable for all or none.
@@ -27,7 +28,6 @@ pausable: Privileged accounts will be able to pause the token transfers, applica
 ownable: Contract deployer is the sole owner and one with a single account authorized for all privileged actions.
 role-based: Flexible mechanism with a separate role for each privileged action. Contract deployer by default have all the roles. A role can have many authorized accounts and can be granted by the contract deployer only.
 
-premint: Create an initial amount of tokens for the deployer.
 
 securityContact: Where people can contact you to report security issues. Will only be visible if contract metadata is verified.
 license: LICENSE
@@ -46,7 +46,7 @@ symbol: Token Symbol
 baseUri: Will be concatenated with token IDs to generate the token URIs.
 
 mintable: Privileged accounts will be able to emit new tokens.
-    increment: New tokens will be automatically assigned an incremental id.
+    - increment: New tokens will be automatically assigned an incremental id.
 burnable: Token holders will be able to destroy their tokens.
 pausable: Privileged accounts will be able to pause the token transfers, applicable for all or none.
 
@@ -86,123 +86,7 @@ securityContact: Where people can contact you to report security issues. Will on
 license: LICENSE
 ```
 
-> These token definitions are from Ethereum and OpenZeppelin documentation.
-
+<br>
 <br>
 
----
-
-<br>
-
-## Connect Wallet
-
-```tsx
-import connectWallet, { wallets } from '../components/wallet/connectWallet';
-
-connectWallet(wallets.WALLETCONNECT).then((provider) => {
-    console.log(provider);
-});
-```
-
-**Options (more to be added)**:
-
--   wallets.WALLETCONNECT
--   wallets.METAMASK
-
----
-
-## Contract Deployment
-
--   Include the following code to deploy ERC20/721/1155 contract.
--   For this, must include the contract creation **options** as shown below for different ERCs and **kind** in the deploy function.
--   enum for **kind** are : `**ERC20, ERC721, ERC1155**`
-
-#### options format in JSON for **erc20** contract
-
-```json
-{
-    "name": "TestToken",
-    "symbol": "TST",
-    "burnable": true,
-    "pausable": true,
-    "premint": "", # any interger value as string
-    "mintable": true,
-    "permit": false,
-    "access": "ownable",
-    "info": {
-      "securityContact": "rg@email.com",
-      "license": "MIT"
-    }
-}
-```
-
-#### options format in JSON for **erc721** contract
-
-```json
-{
-    "name": "TestNFT",
-    "symbol": "TNFT",
-    "baseUri": "https://dvsfdg.com/samplenft.png",
-    "enumerable": false,
-    "uriStorage": true,
-    "burnable": false,
-    "pausable": false,
-    "mintable": true,
-    "incremental": false,
-    "accesss": "ownable",
-    "info": {
-        "securityContact": "rg@email.com",
-        "license": "MIT"
-    }
-}
-```
-
-#### options format in JSON for **erc1155** contract
-
-```json
-{
-    "name": "TestNFTCollection",
-    "uri": "dhsgfdshgvjaghvdf",
-    "burnable": false,
-    "pausable": false,
-    "mintable": false,
-    "supply": true,
-    "accesss": "ownable",
-    "info": {
-        "securityContact": "rg@email.com",
-        "license": "MIT"
-    }
-}
-```
-
-### Actual code (to be included)
-
-```tsx
-import { deployContract } from '../utils/contract_deployer';
-import { ERCs } from '../utils/types';
-import { ERC20Data } from './api/erc20';
-
-const erc20Opts: ERC20Data = {
-    name: 'TestToken',
-    symbol: 'TTK',
-    burnable: false,
-    pausable: false,
-    premint: '0',
-    mintable: true,
-    permit: false,
-    accesss: 'ownable',
-    info: {
-        securityContact: 'abcg@email.com',
-        license: 'MIT',
-    },
-};
-
-const contractDetails = await deployContract(erc20Opts, ERCs.ERC20, provider);
-console.log(contractDetails);
-
-// prints (contractDetails):
-/*  {
-      contractAddress: '0x834a27aba12F5490c0F54e8228C7fC939f16863e', 
-      confirmationLink: 'https://mumbai.polygonscan.com/tx/0x0cdd1eec4ad7471d5cf87455ea30b22c56425e1625f6ca1278a4404f668e4711'
-    }*/
-```
+> These token definitions are referenced from Ethereum and OpenZeppelin documentation.
