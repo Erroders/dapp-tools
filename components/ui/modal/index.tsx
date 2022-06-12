@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import React, { RefObject, useContext, useEffect, useRef, useState } from 'react';
 import { WalletContext } from '../../../pages/_app';
 import connectWallet, { wallets } from '../../wallet/connectWallet';
+import { ConnectWalletCallbackFunctionsProps } from '../../wallet/connectWallet/connectWalletInternal';
 import { Button } from '../generalComponents';
 
 const WalletModal = () => {
@@ -14,15 +15,38 @@ const WalletModal = () => {
     function updateProvider(provider: ethers.providers.Web3Provider | null) {
         if (provider) {
             walletContext.updateWeb3Provider(provider);
-            provider
-                .getSigner()
-                .getAddress()
-                .then((address) => {
-                    walletContext.updateWalletAddress(address);
-                });
+
+            const signer = provider.getSigner();
+
+            signer.getAddress().then((address) => {
+                walletContext.updateWalletAddress(address);
+            });
+
+            signer.getChainId().then((chainId) => {
+                walletContext.updateChainid(chainId);
+            });
+
             closeModal();
         }
     }
+
+    const callbackFunctions: ConnectWalletCallbackFunctionsProps = {
+        accountsChanged(accounts) {
+            walletContext.updateWalletAddress(accounts[0]);
+        },
+        chainChanged(chainId) {
+            console.log('chainChanged -> ' + chainId);
+            walletContext.updateChainid(parseInt(chainId, 16));
+        },
+        connect(info) {
+            console.log('connect');
+            console.log(info);
+        },
+        disconnect(error) {
+            console.log('disconnect');
+            console.log(error);
+        },
+    };
 
     return (
         <div
@@ -44,7 +68,7 @@ const WalletModal = () => {
                         <Button
                             title="Metamask"
                             onClick={() => {
-                                connectWallet(wallets.METAMASK).then((provider) => {
+                                connectWallet(wallets.METAMASK, callbackFunctions).then((provider) => {
                                     updateProvider(provider);
                                 });
                             }}
@@ -54,7 +78,7 @@ const WalletModal = () => {
                         <Button
                             title="Wallet Connect"
                             onClick={() => {
-                                connectWallet(wallets.WALLETCONNECT).then((provider) => {
+                                connectWallet(wallets.WALLETCONNECT, callbackFunctions).then((provider) => {
                                     updateProvider(provider);
                                 });
                             }}
