@@ -15,12 +15,17 @@ const WalletModal = () => {
     function updateProvider(provider: ethers.providers.Web3Provider | null) {
         if (provider) {
             walletContext.updateWeb3Provider(provider);
-            provider
-                .getSigner()
-                .getAddress()
-                .then((address) => {
-                    walletContext.updateWalletAddress(address);
-                });
+
+            const signer = provider.getSigner();
+
+            signer.getAddress().then((address) => {
+                walletContext.updateWalletAddress(address);
+            });
+
+            signer.getChainId().then((chainId) => {
+                walletContext.updateChainid(chainId);
+            });
+
             closeModal();
         }
     }
@@ -31,6 +36,7 @@ const WalletModal = () => {
         },
         chainChanged(chainId) {
             console.log('chainChanged -> ' + chainId);
+            walletContext.updateChainid(parseInt(chainId, 16));
         },
         connect(info) {
             console.log('connect');
