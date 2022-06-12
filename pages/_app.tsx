@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ethers } from 'ethers';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 interface WalletContextProps {
     walletAddress: string;
@@ -27,6 +27,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     const [connectWalletModalVisibility, setConnectWalletModalVisibility] = useState(false);
     const [walletAddress, setWalletAddress] = useState('');
     const [web3Provider, setWeb3Provider] = useState<ethers.providers.Web3Provider | null>(null);
+
+    // useEffect(() => {
+    //     console.log(web3Provider);
+    // }, [walletAddress]);
 
     function toggleConnectWalletModalVisibility() {
         setConnectWalletModalVisibility(!connectWalletModalVisibility);

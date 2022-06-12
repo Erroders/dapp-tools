@@ -2,15 +2,18 @@
 // https://www.npmjs.com/package/web3modal
 
 import { ethers } from 'ethers';
-import connectWalletInternal from './connectWalletInternal';
+import connectWalletInternal, { ConnectWalletCallbackFunctionsProps } from './connectWalletInternal';
 import { wallets, networks } from './enums';
 
-async function connectWallet(wallet: wallets): Promise<ethers.providers.Web3Provider | null> {
-    const provider = await connectWalletInternal(wallet);
+async function connectWallet(
+    wallet: wallets,
+    callbackFunc: ConnectWalletCallbackFunctionsProps,
+): Promise<ethers.providers.Web3Provider | null> {
+    const provider = await connectWalletInternal(wallet, callbackFunc);
 
     const network = await provider?.getNetwork();
 
-    if (network?.chainId == process.env.NEXT_PUBLIC_CHAIN_ID) {
+    if (provider && network?.chainId == process.env.NEXT_PUBLIC_CHAIN_ID) {
         return provider;
     }
 

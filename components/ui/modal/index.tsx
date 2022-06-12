@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import React, { RefObject, useContext, useEffect, useRef, useState } from 'react';
 import { WalletContext } from '../../../pages/_app';
 import connectWallet, { wallets } from '../../wallet/connectWallet';
+import { ConnectWalletCallbackFunctionsProps } from '../../wallet/connectWallet/connectWalletInternal';
 import { Button } from '../generalComponents';
 
 const WalletModal = () => {
@@ -24,6 +25,23 @@ const WalletModal = () => {
         }
     }
 
+    const callbackFunctions: ConnectWalletCallbackFunctionsProps = {
+        accountsChanged(accounts) {
+            walletContext.updateWalletAddress(accounts[0]);
+        },
+        chainChanged(chainId) {
+            console.log('chainChanged -> ' + chainId);
+        },
+        connect(info) {
+            console.log('connect');
+            console.log(info);
+        },
+        disconnect(error) {
+            console.log('disconnect');
+            console.log(error);
+        },
+    };
+
     return (
         <div
             className={
@@ -44,7 +62,7 @@ const WalletModal = () => {
                         <Button
                             title="Metamask"
                             onClick={() => {
-                                connectWallet(wallets.METAMASK).then((provider) => {
+                                connectWallet(wallets.METAMASK, callbackFunctions).then((provider) => {
                                     updateProvider(provider);
                                 });
                             }}
@@ -54,7 +72,7 @@ const WalletModal = () => {
                         <Button
                             title="Wallet Connect"
                             onClick={() => {
-                                connectWallet(wallets.WALLETCONNECT).then((provider) => {
+                                connectWallet(wallets.WALLETCONNECT, callbackFunctions).then((provider) => {
                                     updateProvider(provider);
                                 });
                             }}

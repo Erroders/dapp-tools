@@ -19,7 +19,33 @@ const providerOptions = {
     },
 };
 
-async function connectWalletInternal(wallet: wallets): Promise<ethers.providers.Web3Provider | null> {
+// function accountsChanged(accounts: string[]) {
+//     console.log(accounts[0]);
+// }
+
+// function chainChanged(chainId: number) {
+//     console.log(chainId);
+// }
+
+// function connect(info: { chainId: number }) {
+//     console.log(info);
+// }
+
+// function disconnect(error: { code: number; message: string }) {
+//     console.log(error);
+// }
+
+export interface ConnectWalletCallbackFunctionsProps {
+    accountsChanged: (accounts: string[]) => void;
+    chainChanged: (chainId: number) => void;
+    connect: (info: { chainId: number }) => void;
+    disconnect: (error: { code: number; message: string }) => void;
+}
+
+async function connectWalletInternal(
+    wallet: wallets,
+    callbackFunc: ConnectWalletCallbackFunctionsProps,
+): Promise<ethers.providers.Web3Provider | null> {
     const web3Modal = new Web3Modal({
         network: 'matic', // optional
         cacheProvider: true, // optional
@@ -27,8 +53,13 @@ async function connectWalletInternal(wallet: wallets): Promise<ethers.providers.
     });
 
     try {
-        const instance = await web3Modal.connectTo(wallet);
-        const provider = new ethers.providers.Web3Provider(instance);
+        const connection = await web3Modal.connectTo(wallet);
+        const provider = new ethers.providers.Web3Provider(connection);
+
+        connection.on('accountsChanged', callbackFunc.accountsChanged);
+        connection.on('chainChanged', callbackFunc.chainChanged);
+        connection.on('connect', callbackFunc.connect);
+        connection.on('disconnect', callbackFunc.disconnect);
 
         return provider;
     } catch (error) {
