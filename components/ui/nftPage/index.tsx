@@ -1,10 +1,7 @@
-import Image from 'next/image';
-import { getIPFSUrl } from '../../../utils/getIPFSUrl';
-import CustomNftDataProps from './CustomNftDataProps';
 import Description from './Description';
+import Details from './Details';
 import NftDataProps from './NftDataProps';
 import Properties from './Properties';
-import PropertiesCard from './PropertiesCard';
 
 interface NftPageProps {
     nftData: NftDataProps;
@@ -32,6 +29,15 @@ const NftPage = ({ nftData: data }: NftPageProps) => {
 
                     <Description description={data.nft_data[0].external_data.description} />
                     <Properties data={data.nft_data[0].external_data.attributes} />
+                    <Details
+                        blockchain={'Ethereum'}
+                        contractAddress={data.contract_address}
+                        contractTickerSymbol={data.contract_ticker_symbol}
+                        metadata={{ burned: data.nft_data[0].burned }}
+                        tokenId={data.nft_data[0].token_id}
+                        tokenStandard={data.nft_data[0].supports_erc}
+                        tokenBalance={data.nft_data[0].token_balance}
+                    />
                 </div>
                 <div className="col-span-3"></div>
             </div>

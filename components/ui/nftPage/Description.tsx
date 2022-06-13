@@ -3,7 +3,7 @@ import React from 'react';
 const Description = ({ description }: { description: string }) => {
     return (
         <div className="bg-white border-2 border-black divide-y divide-gray-200 my-2">
-            <details className="p-6 group" open>
+            <details className="p-6 group">
                 <summary className="flex items-center justify-between cursor-pointer">
                     <h5 className="text-lg font-semibold text-gray-900">Description</h5>
 
