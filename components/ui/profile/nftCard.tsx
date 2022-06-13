@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from 'react';
-
-// source - https://www.programiz.com/javascript/regex
-// function to fetch IPFS hash from any ipfs URL
-export function fetchIPFSHash(url: string): string {
-    const reguarExp = /ipfs:?\/+/;
-    const output = url.split(reguarExp);
-    return output[1];
-}
-
+import { useRouter } from 'next/router';
+import React, { useContext, useEffect, useState } from 'react';
+import { WalletContext } from '../../../pages/_app';
+import { getIPFSUrl } from '../../../utils/getIPFSUrl';
 interface ICard {
     contractAddress: string;
     contractName: string;
@@ -29,16 +23,15 @@ interface IIPFSdata {
 }
 
 const NFTCard = (props: ICard) => {
+    const router = useRouter();
+    const walletContext = useContext(WalletContext);
+
     const [ipfsData, setIpfsData] = useState<IIPFSdata>();
+    const [chainId, setChainId] = useState<number>();
 
     useEffect(() => {
         const fetchData = async (tokenUrl: string) => {
-            let link = tokenUrl;
-            // check if link is ipfs or not
-            if (tokenUrl.includes('ipfs')) {
-                const hash = fetchIPFSHash(tokenUrl);
-                link = `https://ipfs.io/ipfs/${hash}`;
-            }
+            const link = await getIPFSUrl(tokenUrl);
             const response = await fetch(link, {
                 method: 'GET',
                 headers: {
@@ -47,11 +40,7 @@ const NFTCard = (props: ICard) => {
             });
             const text = await response.json();
             if (text) {
-                let imageLink = text.image;
-                if (imageLink.includes('ipfs')) {
-                    const imageHash = fetchIPFSHash(imageLink);
-                    imageLink = `https://ipfs.io/ipfs/${imageHash}`;
-                }
+                const imageLink = await getIPFSUrl(text.image);
                 const data: IIPFSdata = {
                     name: text.name,
                     description: text.description,
@@ -62,7 +51,18 @@ const NFTCard = (props: ICard) => {
             }
         };
         fetchData(props.nftData.tokenUrl);
-    }, [props.contractAddress]);
+    }, []);
+
+    useEffect(() => {
+        const getChainId = async () => {
+            if (walletContext.web3Provider) {
+                const network = await walletContext.web3Provider.getNetwork();
+                const chainId = network.chainId;
+                setChainId(chainId);
+            }
+        };
+        getChainId();
+    }, [walletContext]);
 
     return (
         <div className="relative block group h-56">
@@ -84,7 +84,7 @@ const NFTCard = (props: ICard) => {
                     </h2>
                 </div>
 
-                <div className="absolute w-full h-full bg-black flex justify-end flex-col bg-opacity-50 transition-opacity opacity-0 group-hover:opacity-100 group-hover:relative">
+                <div className="absolute w-full z-10 h-full bg-black flex justify-end flex-col bg-opacity-50 transition-opacity opacity-0 group-hover:opacity-100 group-hover:relative">
                     <h2 className="px-8 mt-4 text-xl font-bold text-white">{ipfsData && ipfsData.name}</h2>
                     <p className="px-8 text-xl mt-0.5 font-bold text-white">
                         <span className="text-base font-medium">Token ID : </span>
@@ -101,7 +101,19 @@ const NFTCard = (props: ICard) => {
                             );
                         })}
                     </div>
-                    <div className=" px-8 pb-4 flex text-xs mt-1.5 font-semibold items-center gap-1 justify-end text-white cursor-pointer">
+                    <div
+                        className=" px-8 pb-4 flex text-xs mt-1.5 font-semibold items-center gap-1 justify-end text-white cursor-pointer"
+                        onClick={() => {
+                            router.push({
+                                pathname: '/nft',
+                                query: {
+                                    chainid: chainId,
+                                    tokenid: props.nftData.tokenId,
+                                    contract: props.contractAddress,
+                                },
+                            });
+                        }}
+                    >
                         <span>Know More</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
