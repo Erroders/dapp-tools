@@ -1,5 +1,6 @@
 import Description from './Description';
 import Details from './Details';
+import NameDetails from './NameDetails';
 import NftDataProps from './NftDataProps';
 import Properties from './Properties';
 
@@ -8,8 +9,6 @@ interface NftPageProps {
 }
 
 const NftPage = ({ nftData: data }: NftPageProps) => {
-    // console.log(JSON.stringify(data));
-    console.log('first');
     console.log(data);
 
     return (
@@ -19,13 +18,6 @@ const NftPage = ({ nftData: data }: NftPageProps) => {
                     <div className="border-2 border-black relative">
                         <img src={'https://ipfs.io/ipfs/QmVDedcUBNGcHZ2NydBp6y5StDPcEYYC7bwzx4EVZKze32'} />
                     </div>
-                    {/* <h1 className="py-2">
-                        <span className="text-3xl font-medium py-4 tracking-wider">{data.contract_name}</span>
-                        <span className="p-4"></span>
-                        <span className="text-3xl font-bold py-4 tracking-wider">#{data.nft_data[0].token_id}</span>
-                    </h1> */}
-                    {/* <h2 className="text-sm">Owned By: {data.nft_data[0].owner}</h2> */}
-                    {/* <h2 className="text-sm">Supported ERCs: {data.nft_data[0].supports_erc.map((v) => v + ' ')}</h2> */}
 
                     <Description description={data.nft_data[0].external_data.description} />
                     <Properties data={data.nft_data[0].external_data.attributes} />
@@ -39,7 +31,13 @@ const NftPage = ({ nftData: data }: NftPageProps) => {
                         tokenBalance={data.nft_data[0].token_balance}
                     />
                 </div>
-                <div className="col-span-3"></div>
+                <div className="col-span-3">
+                    <NameDetails
+                        contractName={data.contract_name}
+                        tokenId={data.nft_data[0].token_id}
+                        owner={data.nft_data[0].owner}
+                    />
+                </div>
             </div>
         </div>
     );
