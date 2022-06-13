@@ -26,17 +26,21 @@ const Properties = ({ data }: { data: Array<PropertiesProps> }) => {
                     </span>
                 </summary>
 
-                <div className="grid grid-cols-3 gap-3 py-2 mt-4">
-                    {data.map((attribute) => {
-                        return (
-                            <PropertiesCard
-                                key={attribute.trait_type}
-                                traitType={attribute.trait_type}
-                                value={attribute.value}
-                            />
-                        );
-                    })}
-                </div>
+                {data.length === 0 ? (
+                    <p className="py-2 mt-4">Properties Not Available</p>
+                ) : (
+                    <div className="grid grid-cols-3 gap-3 py-2 mt-4">
+                        {data.map((attribute) => {
+                            return (
+                                <PropertiesCard
+                                    key={attribute.trait_type}
+                                    traitType={attribute.trait_type}
+                                    value={attribute.value}
+                                />
+                            );
+                        })}
+                    </div>
+                )}
             </details>
         </div>
     );

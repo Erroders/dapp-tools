@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { getIPFSUrl } from '../../../utils/getIPFSUrl';
 import CustomNftDataProps from './CustomNftDataProps';
+import Description from './Description';
 import NftDataProps from './NftDataProps';
 import Properties from './Properties';
 import PropertiesCard from './PropertiesCard';
@@ -29,6 +30,7 @@ const NftPage = ({ nftData: data }: NftPageProps) => {
                     {/* <h2 className="text-sm">Owned By: {data.nft_data[0].owner}</h2> */}
                     {/* <h2 className="text-sm">Supported ERCs: {data.nft_data[0].supports_erc.map((v) => v + ' ')}</h2> */}
 
+                    <Description description={data.nft_data[0].external_data.description} />
                     <Properties data={data.nft_data[0].external_data.attributes} />
                 </div>
                 <div className="col-span-3"></div>
