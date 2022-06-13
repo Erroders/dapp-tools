@@ -4,6 +4,7 @@ import NameDetails from './NameDetails';
 import NftMetadataProps from './NftMetadataProps';
 import NftTransactionsProps from './NftTransactionsProps';
 import Properties from './Properties';
+import Transactions from './Transactions';
 
 interface NftPageProps {
     nftMetadata: NftMetadataProps;
@@ -11,7 +12,7 @@ interface NftPageProps {
 }
 
 const NftPage = ({ nftMetadata, nftTransactions }: NftPageProps) => {
-    // console.log(data);
+    console.log(nftTransactions);
 
     return (
         <div className="p-6 max-w-screen-xl mx-auto">
@@ -39,6 +40,7 @@ const NftPage = ({ nftMetadata, nftTransactions }: NftPageProps) => {
                         tokenId={nftMetadata.nft_data[0].token_id}
                         owner={nftMetadata.nft_data[0].owner}
                     />
+                    <Transactions data={nftTransactions.nft_transactions} />
                 </div>
             </div>
         </div>
