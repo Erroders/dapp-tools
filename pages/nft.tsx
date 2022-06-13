@@ -4,15 +4,15 @@ import path from 'path';
 import WalletModal from '../components/ui/modal';
 import Navbar from '../components/ui/navbar';
 import NftPage, { NftDataProps } from '../components/ui/nftPage';
-import CustomNftDataProps from '../components/ui/nftPage/CustomNftDataProps';
-import tranformNftData from '../utils/nft/tranformNftData';
+import NftTransactionsProps from '../components/ui/nftPage/NftTransactionsProps';
 
 interface NFTProps {
-    data: NftDataProps;
+    nftMetadata: NftDataProps;
+    nftTransactions: NftTransactionsProps;
 }
 
-const NFT: NextPage<NFTProps> = ({ data }) => {
-    if (!data) {
+const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions }) => {
+    if (!nftMetadata) {
         return (
             <>
                 <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
@@ -26,7 +26,7 @@ const NFT: NextPage<NFTProps> = ({ data }) => {
         <>
             <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
             <main>
-                <NftPage nftData={data} />
+                <NftPage nftMetadata={nftMetadata} nftTransactions={nftTransactions} />
             </main>
             <WalletModal />
         </>
@@ -51,24 +51,32 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         };
     }
 
-    const apiUrl =
+    const metadataApiUrl =
         new URL(
             path.join('v1', chainid, 'tokens', contract, 'nft_metadata', tokenid),
             process.env.NEXT_PUBLIC_COVALENT_BASEURL,
         ).toString() + '/';
+    const transactionsApiUrl =
+        new URL(
+            path.join('v1', chainid, 'tokens', contract, 'nft_transactions', tokenid),
+            process.env.NEXT_PUBLIC_COVALENT_BASEURL,
+        ).toString() + '/';
 
-    const res = await axios.get(apiUrl, {
+    const metadataRes = await axios.get(metadataApiUrl, {
+        params: {
+            key: process.env.NEXT_PUBLIC_COVALENT_API_KEY,
+        },
+    });
+    const transactionsRes = await axios.get(transactionsApiUrl, {
         params: {
             key: process.env.NEXT_PUBLIC_COVALENT_API_KEY,
         },
     });
 
-    // const dataToSend = await tranformNftData(res.data.data.items[0]);
-    const dataToSend = res.data.data.items[0];
-
     return {
         props: {
-            data: dataToSend,
+            nftMetadata: metadataRes.data.data.items[0],
+            nftTransactions: transactionsRes.data.data.items[0],
         },
     };
 };

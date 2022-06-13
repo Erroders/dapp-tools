@@ -1,18 +1,18 @@
 import axios from 'axios';
 import { NftDataProps } from '../../components/ui/nftPage';
-import CustomNftDataProps from '../../components/ui/nftPage/CustomNftDataProps';
+import CustomNftMetadataProps from '../../components/ui/nftPage/CustomNftMetadataProps';
 import { getIPFSUrl } from '../getIPFSUrl';
 
-export default async function tranformNftData(data: NftDataProps): Promise<CustomNftDataProps> {
+export default async function tranformNftData(data: NftDataProps): Promise<CustomNftMetadataProps> {
     let nftImage = await getIPFSUrl(data.nft_data[0].token_url);
 
     nftImage = await axios.get(JSON.parse(nftImage).image);
 
-    let newData: CustomNftDataProps = {
+    let newData: CustomNftMetadataProps = {
         nft_data: {
             image: nftImage,
         },
-    } as CustomNftDataProps;
+    } as CustomNftMetadataProps;
 
     console.log('aaaaaaaaaa');
     console.log(newData);
