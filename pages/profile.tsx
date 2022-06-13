@@ -1,18 +1,18 @@
-import type { NextPage } from 'next';
-import Homepage from '../components/ui/homepage';
+import React from 'react';
 import WalletModal from '../components/ui/modal';
 import Navbar from '../components/ui/navbar';
+import Profile from '../components/ui/profile';
 
-const Home: NextPage = () => {
+const profile = () => {
     return (
         <>
             <Navbar />
             <main>
-                <Homepage />
+                <Profile />
             </main>
             <WalletModal />
         </>
     );
 };
 
-export default Home;
+export default profile;
