@@ -4,6 +4,7 @@ import path from 'path';
 import WalletModal from '../components/ui/modal';
 import Navbar from '../components/ui/navbar';
 import NftPage, { NftDataProps } from '../components/ui/nftPage';
+import CustomNftDataProps from '../components/ui/nftPage/CustomNftDataProps';
 import tranformNftData from '../utils/nft/tranformNftData';
 
 interface NFTProps {
@@ -24,7 +25,9 @@ const NFT: NextPage<NFTProps> = ({ data }) => {
     return (
         <>
             <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
-            <main>{/* <NftPage nftData={data} /> */}</main>
+            <main>
+                <NftPage nftData={data} />
+            </main>
             <WalletModal />
         </>
     );
@@ -60,7 +63,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
     });
 
-    const dataToSend = tranformNftData(res.data.data.items[0]);
+    // const dataToSend = await tranformNftData(res.data.data.items[0]);
+    const dataToSend = res.data.data.items[0];
 
     return {
         props: {
