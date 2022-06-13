@@ -13,6 +13,7 @@
         "@openzeppelin/contracts": "^4.6.0",
         "@openzeppelin/wizard-cairo": "^0.1.0",
         "@walletconnect/web3-provider": "^1.7.8",
+        "axios": "^0.27.2",
         "ethers": "^5.6.8",
         "next": "12.1.6",
         "react": "18.1.0",
