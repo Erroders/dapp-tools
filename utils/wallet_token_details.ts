@@ -6,12 +6,13 @@ import { ethers } from 'ethers';
 //- https://www.covalenthq.com/docs/api/#/0/Get%20token%20balances%20for%20address/USD/1
 export async function getWalletTokenDetails(
     provider: ethers.providers.Web3Provider | null,
-): Promise<{ cryptocurrencyData: any[]; nftData: any[] } | undefined> {
+): Promise<{ dustCryptocurrencyData: any[]; nonDustCryptocurrencyData: any[]; nftData: any[] } | undefined> {
     // covalent api key and base endpoint URL
     const API_KEY = process.env.NEXT_PUBLIC_COVALENT_API_KEY;
     const baseURL = process.env.NEXT_PUBLIC_COVALENT_BASEURL;
 
-    let cryptocurrencyData: any[] = [];
+    let dustCryptocurrencyData: any[] = [];
+    let nonDustCryptocurrencyData: any[] = [];
     let nftData: any[] = [];
 
     if (provider) {
@@ -28,14 +29,19 @@ export async function getWalletTokenDetails(
             const data = result.data.items;
 
             data.map((item: any) => {
-                if (item.type === 'cryptocurrency' || item.type === 'dust') {
-                    cryptocurrencyData.push(item);
+                if (item.type === 'cryptocurrency') {
+                    nonDustCryptocurrencyData.push(item);
+                } else if (item.type === 'dust') {
+                    dustCryptocurrencyData.push(item);
                 } else if (item.type === 'nft') {
                     nftData.push(item);
                 }
             });
-            console.log(data);
-            return { cryptocurrencyData: cryptocurrencyData, nftData: nftData };
+            return {
+                dustCryptocurrencyData: dustCryptocurrencyData,
+                nonDustCryptocurrencyData: nonDustCryptocurrencyData,
+                nftData: nftData,
+            };
         }
         throw new Error('Something went wrong .....');
     }
