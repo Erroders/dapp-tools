@@ -36,7 +36,7 @@ const WalletModal = () => {
         },
         chainChanged(chainId) {
             console.log('chainChanged -> ' + chainId);
-            walletContext.updateChainid(parseInt(chainId, 16));
+            walletContext.updateChainid(parseInt(chainId + '', 16));
         },
         connect(info) {
             console.log('connect');
