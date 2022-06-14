@@ -30,7 +30,9 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
         <header className="shadow-md sticky top-0 w-full bg-white z-30">
             <div className="max-w-screen-xl p-4 mx-auto">
                 <div className="flex items-center justify-between space-x-4 lg:space-x-10">
-                    <div className="flex lg:w-0 lg:flex-1 text-xl font-medium">{title}</div>
+                    <div className="flex lg:w-0 lg:flex-1 text-xl font-medium">
+                        <Link href={'/'}>{title}</Link>
+                    </div>
 
                     <div className="items-center justify-end flex space-x-4">
                         <div className="relative block group">
