@@ -14,6 +14,7 @@ const Profile = () => {
     const [dustCryptocurrencyData, setDustCryptocurrencyData] = useState<any[]>([]);
     const [nonDustCryptocurrencyData, setNonDustCryptocurrencyData] = useState<any[]>([]);
     const [tab, setTab] = useState<'Cryptocurrencies' | 'NFTs'>('Cryptocurrencies');
+    let nftFlag = 0;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,6 +23,7 @@ const Profile = () => {
                 data && setDustCryptocurrencyData(data.dustCryptocurrencyData);
                 data && setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
                 data && setNftData(data.nftData);
+                nftFlag = 0;
             } else {
                 walletContext.updateConnectWalletModalVisibility(true);
             }
@@ -139,9 +141,12 @@ const Profile = () => {
                         </>
                     ) : (
                         <>
-                            {nftData.length > 0 ? (
-                                nftData.length > 0 &&
+                            {nftData.length > 0 &&
                                 nftData.map((obj, index1) => {
+                                    if (obj.contract_name === null || obj.nft_data.length === 0) {
+                                        nftFlag = nftFlag + 1;
+                                        return;
+                                    }
                                     return obj.nft_data.map((nft: any, index2: any) => {
                                         return (
                                             <NFTCard
@@ -159,14 +164,16 @@ const Profile = () => {
                                             />
                                         );
                                     });
-                                })
-                            ) : (
-                                <div className="w-full col-span-4 text-center py-20">
-                                    <div className="flex flex-col gap-2 text-2xl font-semibold text-gray-500">
-                                        <span>No NFTs were found in the Wallet</span>
-                                        <span className="text-xl italic">{walletAddress}</span>
+                                })}
+                            {(nftData.length === 0 || nftFlag === nftData.length) && (
+                                <>
+                                    <div className="w-full col-span-4 text-center py-20">
+                                        <div className="flex flex-col gap-2 text-2xl font-semibold text-gray-500">
+                                            <span>No NFTs were found in the Wallet</span>
+                                            <span className="text-xl italic">{walletAddress}</span>
+                                        </div>
                                     </div>
-                                </div>
+                                </>
                             )}
                         </>
                     )}
