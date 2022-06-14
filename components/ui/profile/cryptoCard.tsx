@@ -41,15 +41,16 @@ const CryptoCard = (props: ICard) => {
                         {new BigNumber(props.balance).shiftedBy(-props.contractDecimals).toFixed(3)}
                     </p>
                     <div className="flex gap-2 items-center mt-3">
-                        {props.ercSupports.map((erc, index) => {
-                            return (
-                                <div key={index}>
-                                    <span className="rounded-full px-4 py-1.5 bg-green-100 text-green-700 font-medium text-xs">
-                                        {erc}
-                                    </span>
-                                </div>
-                            );
-                        })}
+                        {props.ercSupports &&
+                            props.ercSupports.map((erc, index) => {
+                                return (
+                                    <div key={index}>
+                                        <span className="rounded-full px-4 py-1.5 bg-green-100 text-green-700 font-medium text-xs">
+                                            {erc}
+                                        </span>
+                                    </div>
+                                );
+                            })}
                     </div>
                     <div className="flex text-xs mt-1 font-semibold items-center gap-1 justify-end text-gray-700 cursor-pointer">
                         <span>Know More</span>
