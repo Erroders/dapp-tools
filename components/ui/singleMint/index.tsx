@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Input, { InputTypes } from '../generalComponents/Input';
+import { Input, InputTypes, SubmitButton } from '../generalComponents';
 
 const SingleMint = () => {
     const [nftImage, setNftImage] = useState('');
@@ -39,7 +39,14 @@ const SingleMint = () => {
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 gap-4 max-w-md">
+                    <form
+                        className="grid grid-cols-1 gap-4 max-w-md"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+
+                            // TODO: Submit Form
+                        }}
+                    >
                         <Input id="name" label="Token Name" type={InputTypes.TEXT} />
                         <Input id="symbol" label="Token Symbol" type={InputTypes.TEXT} />
 
@@ -55,7 +62,9 @@ const SingleMint = () => {
 
                         <Input id="securityContact" label="Security Contact" type={InputTypes.TEXT} />
                         <Input id="license" label="License" type={InputTypes.TEXT} />
-                    </div>
+
+                        <SubmitButton title="Submit" />
+                    </form>
                 </div>
             </div>
         </div>
