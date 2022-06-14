@@ -4,9 +4,10 @@ import NftCollectionTokenProps from './NftCollectionTokenProps';
 
 interface CollectionProps {
     data: Array<NftCollectionTokenProps>;
+    chainId: string;
 }
 
-const Collection = ({ data }: CollectionProps) => {
+const Collection = ({ data, chainId }: CollectionProps) => {
     return (
         <div className="bg-white border-2 border-black divide-y divide-gray-200 my-2">
             <details className="p-6 group" open>
@@ -32,7 +33,7 @@ const Collection = ({ data }: CollectionProps) => {
                         {data.map((token, index) => {
                             return (
                                 <div key={token.token_id}>
-                                    <NftCard {...token} />
+                                    <NftCard chainId={chainId} {...token} />
                                 </div>
                             );
                         })}

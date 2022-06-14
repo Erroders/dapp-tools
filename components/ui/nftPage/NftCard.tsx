@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import getNftImage from '../../../utils/nft/getNftImage';
 import NftCollectionTokenProps from './NftCollectionTokenProps';
 
-const NftCard = ({ token_id, contract_address, contract_name, logo_url }: NftCollectionTokenProps) => {
-    console.log(logo_url);
+interface NFTCardProps extends NftCollectionTokenProps {
+    chainId: string;
+}
+
+const NftCard = ({ token_id, contract_address, contract_name, logo_url, chainId }: NFTCardProps) => {
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => {
+        getNftImage({
+            chainId: chainId,
+            contractAddress: contract_address,
+            tokenId: token_id,
+        }).then((value) => {
+            setImageUrl(value);
+        });
+    }, []);
 
     return (
         <div className="relative block w-72">
@@ -13,7 +28,7 @@ const NftCard = ({ token_id, contract_address, contract_name, logo_url }: NftCol
                     {/* TODO: covalent logo url :angry_face */}
                     {/* <img src={logo_url} alt="" /> */}
 
-                    <img src={'https://ipfs.io/ipfs/QmVDedcUBNGcHZ2NydBp6y5StDPcEYYC7bwzx4EVZKze32'} />
+                    <img src={imageUrl} />
 
                     <h4 className="px-2 py-2">
                         <span className="text-sm font-medium">{contract_name}</span>

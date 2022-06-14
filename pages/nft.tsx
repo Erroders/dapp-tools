@@ -11,9 +11,10 @@ interface NFTProps {
     nftMetadata: NftDataProps;
     nftTransactions: NftTransactionsProps;
     nftCollectionTokens: Array<NftCollectionTokenProps>;
+    chainId: string;
 }
 
-const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions, nftCollectionTokens }) => {
+const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions, nftCollectionTokens, chainId }) => {
     if (!nftMetadata) {
         return (
             <>
@@ -32,6 +33,7 @@ const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions, nftCollectionTo
                     nftMetadata={nftMetadata}
                     nftTransactions={nftTransactions}
                     nftCollectionTokens={nftCollectionTokens}
+                    chainId={chainId}
                 />
             </main>
             <WalletModal />
@@ -99,6 +101,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             nftMetadata: metadataRes.data.data.items[0],
             nftTransactions: transactionsRes.data.data.items[0],
             nftCollectionTokens: tokenIdsRes.data.data.items.slice(0, 10),
+            chainId: chainid,
         },
     };
 };

@@ -12,10 +12,11 @@ interface NftPageProps {
     nftMetadata: NftMetadataProps;
     nftTransactions: NftTransactionsProps;
     nftCollectionTokens: Array<NftCollectionTokenProps>;
+    chainId: string;
 }
 
-const NftPage = ({ nftMetadata, nftTransactions, nftCollectionTokens }: NftPageProps) => {
-    console.log(nftMetadata);
+const NftPage = ({ nftMetadata, nftTransactions, nftCollectionTokens, chainId }: NftPageProps) => {
+    // console.log(nftMetadata);
 
     return (
         <div className="p-6 max-w-screen-xl mx-auto">
@@ -27,6 +28,7 @@ const NftPage = ({ nftMetadata, nftTransactions, nftCollectionTokens }: NftPageP
 
                     <Description description={nftMetadata.nft_data[0].external_data.description} />
                     <Properties data={nftMetadata.nft_data[0].external_data.attributes} />
+                    {/* TODO: blockchain */}
                     <Details
                         blockchain={'Ethereum'}
                         contractAddress={nftMetadata.contract_address}
@@ -44,7 +46,7 @@ const NftPage = ({ nftMetadata, nftTransactions, nftCollectionTokens }: NftPageP
                         owner={nftMetadata.nft_data[0].owner}
                     />
                     <Transactions data={nftTransactions.nft_transactions} />
-                    <Collection data={nftCollectionTokens} />
+                    <Collection data={nftCollectionTokens} chainId={chainId} />
                 </div>
             </div>
         </div>
