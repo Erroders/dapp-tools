@@ -14,8 +14,6 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
 
     useEffect(() => {
         walletContext.web3Provider?.getNetwork().then((v) => {
-            console.log(v);
-
             setNetworkName(v.name);
         });
     }, [walletContext.web3Provider]);
