@@ -15,14 +15,14 @@ interface NftPageProps {
 }
 
 const NftPage = ({ nftMetadata, nftTransactions, nftCollectionTokens }: NftPageProps) => {
-    console.log(nftCollectionTokens);
+    console.log(nftMetadata);
 
     return (
         <div className="p-6 max-w-screen-xl mx-auto">
             <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-2">
                     <div className="border-2 border-black relative">
-                        <img src={'https://ipfs.io/ipfs/QmVDedcUBNGcHZ2NydBp6y5StDPcEYYC7bwzx4EVZKze32'} />
+                        <img src={nftMetadata.nft_data[0].external_data.image} />
                     </div>
 
                     <Description description={nftMetadata.nft_data[0].external_data.description} />
