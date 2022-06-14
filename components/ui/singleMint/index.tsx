@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
-import { Input, InputTypes, SubmitButton } from '../generalComponents';
+import { TextInput, TextInputTypes, SubmitButton, ImageInput, CheckboxInput } from '../generalComponents';
 
 const SingleMint = () => {
     const [nftImage, setNftImage] = useState('');
+
+    const [name, setName] = useState('');
+    const [symbol, setSymbol] = useState('');
+    const [enumerable, setEnumerable] = useState(false);
+    const [uriStorage, setUriStorage] = useState(true);
+    const [burnable, setBurnable] = useState(false);
+    const [pausable, setPausable] = useState(false);
+    const [mintable, setMintable] = useState(true);
+    const [incremental, setIncremental] = useState(false);
+    const [access, setAccess] = useState(false);
+    const [securityContract, setSecurityContract] = useState('');
+    const [license, setLicense] = useState('');
+
     const handleImageChange = (imageFile: File) => {
         // setNftImage(imageUrl);
         // TODO: Upload Image on NFT Storage
@@ -30,10 +43,9 @@ const SingleMint = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="max-w-md">
-                        <Input
+                        <ImageInput
                             id="nftImage"
                             label="Select Image"
-                            type={InputTypes.IMAGE}
                             image={nftImage}
                             imageOnChange={handleImageChange}
                         />
@@ -47,21 +59,61 @@ const SingleMint = () => {
                             // TODO: Submit Form
                         }}
                     >
-                        <Input id="name" label="Token Name" type={InputTypes.TEXT} />
-                        <Input id="symbol" label="Token Symbol" type={InputTypes.TEXT} />
+                        <TextInput
+                            id="name"
+                            label="Token Name"
+                            type={TextInputTypes.TEXT}
+                            value={name}
+                            setValue={setName}
+                        />
+                        <TextInput
+                            id="symbol"
+                            label="Token Symbol"
+                            type={TextInputTypes.TEXT}
+                            value={symbol}
+                            setValue={setSymbol}
+                        />
 
                         <div className="grid grid-cols-2 gap-4">
-                            <Input id="enumerable" label="Enumerable" type={InputTypes.CHECKBOX} />
-                            <Input id="uriStorage" label="URI Storage" type={InputTypes.CHECKBOX} />
-                            <Input id="burnable" label="Burnable" type={InputTypes.CHECKBOX} />
-                            <Input id="pausable" label="Pausable" type={InputTypes.CHECKBOX} />
-                            <Input id="mintable" label="Mintable" type={InputTypes.CHECKBOX} />
-                            <Input id="incremental" label="Incremental" type={InputTypes.CHECKBOX} />
-                            <Input id="accesss" label="Access Control" type={InputTypes.CHECKBOX} />
+                            <CheckboxInput
+                                id="enumerable"
+                                label="Enumerable"
+                                value={enumerable}
+                                setValue={setEnumerable}
+                            />
+                            <CheckboxInput
+                                id="uriStorage"
+                                label="URI Storage"
+                                value={uriStorage}
+                                setValue={setUriStorage}
+                            />
+                            <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
+                            <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
+                            <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
+                            <CheckboxInput
+                                id="incremental"
+                                label="Incremental"
+                                value={incremental}
+                                setValue={setIncremental}
+                            />
+                            {/* TODO: Make a radio button */}
+                            <CheckboxInput id="accesss" label="Access Control" value={access} setValue={setAccess} />
                         </div>
 
-                        <Input id="securityContact" label="Security Contact" type={InputTypes.TEXT} />
-                        <Input id="license" label="License" type={InputTypes.TEXT} />
+                        <TextInput
+                            id="securityContact"
+                            label="Security Contact"
+                            type={TextInputTypes.TEXT}
+                            value={securityContract}
+                            setValue={setSecurityContract}
+                        />
+                        <TextInput
+                            id="license"
+                            label="License"
+                            type={TextInputTypes.TEXT}
+                            value={license}
+                            setValue={setLicense}
+                        />
 
                         <SubmitButton title="Submit" />
                     </form>
