@@ -18,7 +18,7 @@ const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions, nftCollectionTo
     if (!nftMetadata) {
         return (
             <>
-                <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
+                <Navbar />
                 <main>Invalid</main>
                 <WalletModal />
             </>
@@ -27,7 +27,7 @@ const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions, nftCollectionTo
 
     return (
         <>
-            <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
+            <Navbar />
             <main>
                 <NftPage
                     nftMetadata={nftMetadata}

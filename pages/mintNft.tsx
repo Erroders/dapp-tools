@@ -5,7 +5,7 @@ import Navbar from '../components/ui/navbar';
 const MintNft: NextPage = () => {
     return (
         <>
-            <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
+            <Navbar />
             <main>NFT Mint</main>
             <WalletModal />
         </>
