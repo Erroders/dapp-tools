@@ -2,12 +2,12 @@ import React from 'react';
 
 interface SubmitButtonProps {
     title: string;
+    disabled?: boolean;
     leftIcon?: JSX.Element;
     rightIcon?: JSX.Element;
-    onClick?: VoidFunction;
 }
 
-const SubmitButton = ({ title, leftIcon, rightIcon, onClick }: SubmitButtonProps) => {
+const SubmitButton = ({ title, leftIcon, rightIcon, disabled = false }: SubmitButtonProps) => {
     return (
         <div className="relative block">
             <label htmlFor="submitbtn">
