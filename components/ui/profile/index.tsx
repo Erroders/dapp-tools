@@ -18,21 +18,22 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (provider) {
-                const data = await getWalletTokenDetails(provider);
-                data && setDustCryptocurrencyData(data.dustCryptocurrencyData);
-                data && setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
-                data && setNftData(data.nftData);
-                nftFlag = 0;
-            } else {
-                walletContext.updateConnectWalletModalVisibility(true);
-            }
+            const data = await getWalletTokenDetails(provider);
+            data && setDustCryptocurrencyData(data.dustCryptocurrencyData);
+            data && setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
+            data && setNftData(data.nftData);
+            nftFlag = 0;
         };
-        fetchData()
-            .then(() => {
-                console.log(nonDustCryptocurrencyData, dustCryptocurrencyData, nftData);
-            })
-            .catch(console.error);
+
+        if (provider) {
+            fetchData()
+                .then(() => {
+                    console.log(nonDustCryptocurrencyData, dustCryptocurrencyData, nftData);
+                })
+                .catch(console.error);
+        } else {
+            walletContext.updateConnectWalletModalVisibility(true);
+        }
     }, [walletAddress, provider]);
 
     return (
