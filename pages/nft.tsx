@@ -4,14 +4,18 @@ import path from 'path';
 import WalletModal from '../components/ui/modal';
 import Navbar from '../components/ui/navbar';
 import NftPage, { NftDataProps } from '../components/ui/nftPage';
-import tranformNftData from '../utils/nft/tranformNftData';
+import NftCollectionTokenProps from '../components/ui/nftPage/NftCollectionTokenProps';
+import NftTransactionsProps from '../components/ui/nftPage/NftTransactionsProps';
 
 interface NFTProps {
-    data: NftDataProps;
+    nftMetadata: NftDataProps;
+    nftTransactions: NftTransactionsProps;
+    nftCollectionTokens: Array<NftCollectionTokenProps>;
+    chainId: string;
 }
 
-const NFT: NextPage<NFTProps> = ({ data }) => {
-    if (!data) {
+const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions, nftCollectionTokens, chainId }) => {
+    if (!nftMetadata) {
         return (
             <>
                 <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
@@ -24,7 +28,14 @@ const NFT: NextPage<NFTProps> = ({ data }) => {
     return (
         <>
             <Navbar walletAddressText="0xb8CD57fA4e11987d1e1CBC4E5fB961b5f55e34cc" />
-            <main>{/* <NftPage nftData={data} /> */}</main>
+            <main>
+                <NftPage
+                    nftMetadata={nftMetadata}
+                    nftTransactions={nftTransactions}
+                    nftCollectionTokens={nftCollectionTokens}
+                    chainId={chainId}
+                />
+            </main>
             <WalletModal />
         </>
     );
@@ -48,23 +59,49 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         };
     }
 
-    const apiUrl =
+    const metadataApiUrl =
         new URL(
             path.join('v1', chainid, 'tokens', contract, 'nft_metadata', tokenid),
             process.env.NEXT_PUBLIC_COVALENT_BASEURL,
         ).toString() + '/';
+    const transactionsApiUrl =
+        new URL(
+            path.join('v1', chainid, 'tokens', contract, 'nft_transactions', tokenid),
+            process.env.NEXT_PUBLIC_COVALENT_BASEURL,
+        ).toString() + '/';
+    const tokenIdsApiUrl =
+        new URL(
+            path.join('v1', chainid, 'tokens', contract, 'nft_token_ids'),
+            process.env.NEXT_PUBLIC_COVALENT_BASEURL,
+        ).toString() + '/';
 
-    const res = await axios.get(apiUrl, {
+    const metadataRes = await axios.get(metadataApiUrl, {
         params: {
             key: process.env.NEXT_PUBLIC_COVALENT_API_KEY,
         },
     });
+    const transactionsRes = await axios.get(transactionsApiUrl, {
+        params: {
+            key: process.env.NEXT_PUBLIC_COVALENT_API_KEY,
+        },
+    });
+    const tokenIdsRes = await axios.get(tokenIdsApiUrl, {
+        params: {
+            'page-number': 0,
+            'page-size': 10,
+            key: process.env.NEXT_PUBLIC_COVALENT_API_KEY,
+        },
+    });
 
-    const dataToSend = tranformNftData(res.data.data.items[0]);
+    // console.log(tokenIdsRes.data.data.items.slice(0, 10));
+    // console.log(JSON.stringify(tokenIdsRes.data.data.items[0]));
 
     return {
         props: {
-            data: dataToSend,
+            nftMetadata: metadataRes.data.data.items[0],
+            nftTransactions: transactionsRes.data.data.items[0],
+            nftCollectionTokens: tokenIdsRes.data.data.items.slice(0, 10),
+            chainId: chainid,
         },
     };
 };
