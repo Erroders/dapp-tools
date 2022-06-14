@@ -53,7 +53,12 @@ async function connectWalletInternal(
     });
 
     try {
-        const connection = await web3Modal.connectTo(wallet);
+        let connection;
+        if (wallet === wallets.ANY) {
+            connection = await web3Modal.connect();
+        } else {
+            connection = await web3Modal.connectTo(wallet);
+        }
         const provider = new ethers.providers.Web3Provider(connection);
 
         connection.on('accountsChanged', callbackFunc.accountsChanged);

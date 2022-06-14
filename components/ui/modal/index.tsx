@@ -8,6 +8,12 @@ import { Button } from '../generalComponents';
 const WalletModal = () => {
     const walletContext = useContext(WalletContext);
 
+    useEffect(() => {
+        connectWallet(wallets.ANY, callbackFunctions).then((provider) => {
+            updateProvider(provider);
+        });
+    }, []);
+
     function closeModal() {
         walletContext.updateConnectWalletModalVisibility(false);
     }
@@ -36,7 +42,7 @@ const WalletModal = () => {
         },
         chainChanged(chainId) {
             console.log('chainChanged -> ' + chainId);
-            walletContext.updateChainid(parseInt(chainId, 16));
+            walletContext.updateChainid(parseInt(chainId + '', 16));
         },
         connect(info) {
             console.log('connect');
