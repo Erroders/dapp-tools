@@ -8,6 +8,12 @@ import { Button } from '../generalComponents';
 const WalletModal = () => {
     const walletContext = useContext(WalletContext);
 
+    useEffect(() => {
+        connectWallet(wallets.ANY, callbackFunctions).then((provider) => {
+            updateProvider(provider);
+        });
+    }, []);
+
     function closeModal() {
         walletContext.updateConnectWalletModalVisibility(false);
     }
