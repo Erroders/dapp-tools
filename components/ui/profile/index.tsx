@@ -144,7 +144,12 @@ const Profile = () => {
                         <>
                             {nftData.length > 0 &&
                                 nftData.map((obj, index1) => {
-                                    if (obj.contract_name === null || obj.nft_data.length === 0) {
+                                    if (
+                                        !obj ||
+                                        obj.contract_name === null ||
+                                        !obj.nft_data ||
+                                        obj.nft_data.length === 0
+                                    ) {
                                         nftFlag = nftFlag + 1;
                                         return;
                                     }
