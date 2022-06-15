@@ -19,6 +19,7 @@
         "ethereum-blockies-base64": "^1.0.2",
         "ethers": "^5.6.8",
         "next": "12.1.6",
+        "nft.storage": "^6.3.0",
         "react": "18.1.0",
         "react-dom": "18.1.0",
         "root": "github:OpenZeppelin/contracts-wizard",

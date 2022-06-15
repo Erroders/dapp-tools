@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextInput, TextInputTypes, SubmitButton, ImageInput, CheckboxInput, Button } from '../generalComponents';
+import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
+import { TextInput, TextInputTypes, ImageInput, CheckboxInput, Button } from '../generalComponents';
 import RadioInput from '../generalComponents/RadioInput';
 
 const SingleMint = () => {
@@ -37,12 +38,21 @@ const SingleMint = () => {
         setStep1Open(false);
         setStep2Open(true);
     };
-    const handleStep2Submit = () => {
+    const handleStep2Submit = async () => {
         console.log('Clicked Mint');
 
         if (!nftImage || !nftName || !nftDescription || !nftExternalUrl) {
             return;
         }
+
+        const metadata = await uploadIpfsData({
+            name: nftName,
+            description: nftDescription,
+            externalUrl: nftExternalUrl,
+            image: nftImage,
+        });
+
+        console.log(metadata);
 
         // TODO: Upload Image on NFT Storage
         // TODO: Upload Data on NFT Storage
