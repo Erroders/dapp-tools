@@ -24,9 +24,12 @@ interface TextInputProps {
     type: TextInputTypes;
     value: string;
     setValue: React.Dispatch<React.SetStateAction<string>>;
+    minNum?: number;
+    maxNum?: number;
+    defaultValue?: string | number;
 }
 
-const TextInput = ({ id, label, type, value, setValue }: TextInputProps) => {
+const TextInput = ({ id, label, type, value, setValue, minNum, maxNum, defaultValue }: TextInputProps) => {
     return (
         <div className="relative">
             <label className="block text-xs font-medium text-gray-500" htmlFor={id}>
@@ -41,6 +44,9 @@ const TextInput = ({ id, label, type, value, setValue }: TextInputProps) => {
                 onChange={(e) => {
                     setValue(e.currentTarget.value);
                 }}
+                min={minNum}
+                max={maxNum}
+                defaultValue={defaultValue}
             />
         </div>
     );
