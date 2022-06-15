@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, TextInputTypes, SubmitButton, ImageInput, CheckboxInput, Button } from '../generalComponents';
+import RadioInput from '../generalComponents/RadioInput';
 
 const SingleMint = () => {
     const [name, setName] = useState('');
@@ -10,7 +11,7 @@ const SingleMint = () => {
     const [pausable, setPausable] = useState(false);
     const [mintable, setMintable] = useState(true);
     const [incremental, setIncremental] = useState(false);
-    const [access, setAccess] = useState(false);
+    const [access, setAccess] = useState('Ownable');
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState('');
 
@@ -106,12 +107,22 @@ const SingleMint = () => {
                                     value={incremental}
                                     setValue={setIncremental}
                                 />
-                                {/* TODO: Make a radio button */}
-                                <CheckboxInput
+
+                                <RadioInput
                                     id="accesss"
                                     label="Access Control"
                                     value={access}
                                     setValue={setAccess}
+                                    valueOptions={[
+                                        {
+                                            value: 'ownable',
+                                            label: 'Ownable',
+                                        },
+                                        {
+                                            value: 'roles',
+                                            label: 'Roles',
+                                        },
+                                    ]}
                                 />
                             </div>
 
