@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "lib": ["dom", "dom.iterable", "esnext"],
+        "target": "es6",
+        "lib": ["dom", "dom.iterable", "esnext", "es2015", "ES5", "ScriptHost"],
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
@@ -15,6 +15,6 @@
         "jsx": "preserve",
         "incremental": true
     },
-    "include": ["next-env.d.ts", "additional.d.ts", "**/*.ts", "**/*.tsx"],
-    "exclude": ["node_modules"]
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules", "subgraph", "contract-dev"]
 }

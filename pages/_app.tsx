@@ -12,7 +12,7 @@ interface WalletContextProps {
     updateWalletAddress: (walletAddress: string) => void;
     updateChainid: (chainId: number) => void;
     updateConnectWalletModalVisibility: (visibilty: boolean) => void;
-    updateWeb3Provider: (provider: ethers.providers.Web3Provider) => void;
+    updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => void;
 }
 
 export const WalletContext = createContext<WalletContextProps>({
@@ -24,7 +24,7 @@ export const WalletContext = createContext<WalletContextProps>({
     updateWalletAddress: (walletAddress: string) => {},
     updateChainid: (chainId: number) => {},
     updateConnectWalletModalVisibility: (visibilty: boolean) => {},
-    updateWeb3Provider: (provider: ethers.providers.Web3Provider) => {},
+    updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => {},
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         setWalletAddress(walletAddress);
     }
 
-    function updateWeb3Provider(provider: ethers.providers.Web3Provider) {
+    function updateWeb3Provider(provider: ethers.providers.Web3Provider | null) {
         setWeb3Provider(provider);
     }
 

@@ -7,7 +7,7 @@
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Access, buildGeneric, GenericOptions, printContract } from 'root/packages/core/dist/index';
+import { Access, erc1155 as ERC1155, GenericOptions } from 'root/packages/core/dist/index';
 import compile from '../../../utils/contract_compiler';
 
 // type for user provided data for ERC1155 contract
@@ -57,7 +57,6 @@ function erc1155(opts: ERC1155Data, cb: any): { contract: string; abi: any; byte
         upgradeable: false, //-<
         info: opts.info,
     };
-    const erc1155_contract = buildGeneric(erc1155_opts);
-    const contract_code = printContract(erc1155_contract);
+    const contract_code = ERC1155.print(erc1155_opts);
     compile(contract_code, opts.name, cb);
 }
