@@ -7,7 +7,7 @@
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Access, erc20 as ERC20, GenericOptions } from 'root/packages/core/dist/index';
+import { Access, erc20 as ERC20, GenericOptions } from '@openzeppelin/wizard';
 import compile from '../../../utils/contract_compiler';
 
 // type for user provided data for ERC20 contract
