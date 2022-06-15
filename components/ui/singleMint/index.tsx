@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { TextInput, TextInputTypes, SubmitButton, ImageInput, CheckboxInput } from '../generalComponents';
+import { TextInput, TextInputTypes, SubmitButton, ImageInput, CheckboxInput, Button } from '../generalComponents';
 
 const SingleMint = () => {
-    const [nftImage, setNftImage] = useState('');
-
     const [name, setName] = useState('');
     const [symbol, setSymbol] = useState('');
     const [enumerable, setEnumerable] = useState(false);
@@ -16,9 +14,28 @@ const SingleMint = () => {
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState('');
 
+    const [nftImage, setNftImage] = useState('');
+    const [nftName, setNftName] = useState('');
+    const [nftDescription, setNftDescription] = useState('');
+    const [nftExternalUrl, setNftExternalUrl] = useState('');
+
+    const [step1Open, setStep1Open] = useState(true);
+    const [step2Open, setStep2Open] = useState(false);
+
     const handleImageChange = (imageFile: File) => {
         // setNftImage(imageUrl);
         // TODO: Upload Image on NFT Storage
+    };
+
+    // TODO: Submit Form
+    const handleStep1Submit = () => {
+        console.log('Clicked Next');
+
+        setStep1Open(false);
+        setStep2Open(true);
+    };
+    const handleStep2Submit = () => {
+        console.log('Clicked Mint');
     };
 
     return (
@@ -34,90 +51,155 @@ const SingleMint = () => {
                 </div>
             </header>
 
-            <div className="p-6 max-w-screen-xl mx-auto">
-                <div>
-                    <h2 className="text-xl font-semibold">Token Details</h2>
-                    <p className="text-sm ml-0.5">Enter token details and choose your network</p>
-                    <hr className="my-3 border-gray-300" />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="max-w-md">
-                        <ImageInput
-                            id="nftImage"
-                            label="Select Image"
-                            image={nftImage}
-                            imageOnChange={handleImageChange}
-                        />
-                    </div>
-
-                    <form
-                        className="grid grid-cols-1 gap-4 max-w-md"
-                        onSubmit={(e) => {
+            <div className="p-6 max-w-screen-xl mx-auto space-y-4">
+                <details id="step1" className="bg-white border border-black divide-gray-200 p-6" open={step1Open}>
+                    <summary
+                        className="flex cursor-pointer"
+                        onClick={(e) => {
                             e.preventDefault();
-
-                            // TODO: Submit Form
                         }}
                     >
-                        <TextInput
-                            id="name"
-                            label="Token Name"
-                            type={TextInputTypes.TEXT}
-                            value={name}
-                            setValue={setName}
-                        />
-                        <TextInput
-                            id="symbol"
-                            label="Token Symbol"
-                            type={TextInputTypes.TEXT}
-                            value={symbol}
-                            setValue={setSymbol}
-                        />
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <CheckboxInput
-                                id="enumerable"
-                                label="Enumerable"
-                                value={enumerable}
-                                setValue={setEnumerable}
-                            />
-                            <CheckboxInput
-                                id="uriStorage"
-                                label="URI Storage"
-                                value={uriStorage}
-                                setValue={setUriStorage}
-                            />
-                            <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
-                            <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
-                            <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
-                            <CheckboxInput
-                                id="incremental"
-                                label="Incremental"
-                                value={incremental}
-                                setValue={setIncremental}
-                            />
-                            {/* TODO: Make a radio button */}
-                            <CheckboxInput id="accesss" label="Access Control" value={access} setValue={setAccess} />
+                        <div>
+                            <h2 className="text-xl font-semibold">Token Details</h2>
+                            <p className="text-sm ml-0.5">Enter token details and choose your network</p>
                         </div>
+                    </summary>
 
-                        <TextInput
-                            id="securityContact"
-                            label="Security Contact"
-                            type={TextInputTypes.TEXT}
-                            value={securityContract}
-                            setValue={setSecurityContract}
-                        />
-                        <TextInput
-                            id="license"
-                            label="License"
-                            type={TextInputTypes.TEXT}
-                            value={license}
-                            setValue={setLicense}
-                        />
+                    <hr className="my-3 border-gray-300" />
 
-                        <SubmitButton title="Submit" />
-                    </form>
-                </div>
+                    <div className="grid grid-cols-2 gap-4 mt-6">
+                        <div className="grid grid-cols-1 gap-4 max-w-md">
+                            <TextInput
+                                id="name"
+                                label="Token Name"
+                                type={TextInputTypes.TEXT}
+                                value={name}
+                                setValue={setName}
+                            />
+                            <TextInput
+                                id="symbol"
+                                label="Token Symbol"
+                                type={TextInputTypes.TEXT}
+                                value={symbol}
+                                setValue={setSymbol}
+                            />
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <CheckboxInput
+                                    id="enumerable"
+                                    label="Enumerable"
+                                    value={enumerable}
+                                    setValue={setEnumerable}
+                                />
+                                <CheckboxInput
+                                    id="uriStorage"
+                                    label="URI Storage"
+                                    value={uriStorage}
+                                    setValue={setUriStorage}
+                                />
+                                <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
+                                <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
+                                <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
+                                <CheckboxInput
+                                    id="incremental"
+                                    label="Incremental"
+                                    value={incremental}
+                                    setValue={setIncremental}
+                                />
+                                {/* TODO: Make a radio button */}
+                                <CheckboxInput
+                                    id="accesss"
+                                    label="Access Control"
+                                    value={access}
+                                    setValue={setAccess}
+                                />
+                            </div>
+
+                            <TextInput
+                                id="securityContact"
+                                label="Security Contact"
+                                type={TextInputTypes.TEXT}
+                                value={securityContract}
+                                setValue={setSecurityContract}
+                            />
+                            <TextInput
+                                id="license"
+                                label="License"
+                                type={TextInputTypes.TEXT}
+                                value={license}
+                                setValue={setLicense}
+                            />
+
+                            <Button
+                                title="Next"
+                                onClick={() => {
+                                    handleStep1Submit();
+                                }}
+                                size="sm"
+                            />
+                        </div>
+                    </div>
+                </details>
+
+                <details id="step2" className="bg-white border border-black divide-gray-200 p-6" open={step2Open}>
+                    <summary
+                        className="flex cursor-pointer"
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        <div>
+                            <h2 className="text-xl font-semibold">NFT Details</h2>
+                            <p className="text-sm ml-0.5">Enter NFT Details and upload Image</p>
+                        </div>
+                    </summary>
+
+                    <hr className="my-3 border-gray-300" />
+
+                    <div className="grid grid-cols-2 gap-4 mt-6">
+                        <div className="grid grid-cols-1 gap-4 max-w-md">
+                            <div className="max-w-xs">
+                                <ImageInput
+                                    id="nftImage"
+                                    label="Select Image"
+                                    image={nftImage}
+                                    imageOnChange={handleImageChange}
+                                />
+                            </div>
+
+                            <TextInput
+                                id="nftName"
+                                label="NFT Name"
+                                type={TextInputTypes.TEXT}
+                                value={nftName}
+                                setValue={setNftName}
+                            />
+                            <TextInput
+                                id="nftDescription"
+                                label="Description"
+                                type={TextInputTypes.TEXT}
+                                value={nftDescription}
+                                setValue={setNftDescription}
+                            />
+
+                            <TextInput
+                                id="nftExternalUrl"
+                                label="External URL"
+                                type={TextInputTypes.TEXT}
+                                value={nftExternalUrl}
+                                setValue={setNftExternalUrl}
+                            />
+
+                            <Button
+                                title="Mint"
+                                onClick={() => {
+                                    handleStep2Submit();
+                                }}
+                                size="sm"
+                            />
+                        </div>
+                    </div>
+                </details>
             </div>
         </div>
     );
@@ -143,3 +225,8 @@ export default SingleMint;
     }
 }
  */
+
+// "description": "Friendly OpenSea Creature that enjoys long swims in the ocean.",
+// "external_url": "https://openseacreatures.io/3",
+// "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/3.png",
+// "name": "Dave Starbelly",

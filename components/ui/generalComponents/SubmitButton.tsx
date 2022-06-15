@@ -5,12 +5,13 @@ interface SubmitButtonProps {
     disabled?: boolean;
     leftIcon?: JSX.Element;
     rightIcon?: JSX.Element;
+    id: string;
 }
 
-const SubmitButton = ({ title, leftIcon, rightIcon, disabled = false }: SubmitButtonProps) => {
+const SubmitButton = ({ title, leftIcon, rightIcon, disabled = false, id }: SubmitButtonProps) => {
     return (
         <div className="relative block">
-            <label htmlFor="submitbtn">
+            <label htmlFor={id}>
                 <div className="group cursor-pointer w-full h-full">
                     <span className="absolute inset-0 border-2 border-black border-dashed"></span>
 
@@ -28,7 +29,15 @@ const SubmitButton = ({ title, leftIcon, rightIcon, disabled = false }: SubmitBu
                 </div>
             </label>
 
-            <input className="hidden" id="submitbtn" name="submitbtn" type="submit" />
+            <input
+                className="hidden"
+                id={id}
+                name={id}
+                type="submit"
+                onClick={() => {
+                    console.log('tttttttt');
+                }}
+            />
         </div>
     );
 };
