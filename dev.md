@@ -111,3 +111,13 @@ console.log(contractDetails);
       confirmationLink: 'https://mumbai.polygonscan.com/tx/0x0cdd1eec4ad7471d5cf87455ea30b22c56425e1625f6ca1278a4404f668e4711'
     }*/
 ```
+
+### Error Fixes
+
+```txt
+ERROR:
+Type 'IterableIterator<Parent>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+
+SOLUTION:
+https://github.com/Microsoft/TypeScript/issues/15446#issuecomment-391010337
+```
