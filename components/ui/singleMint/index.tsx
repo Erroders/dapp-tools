@@ -14,7 +14,7 @@ const SingleMint = () => {
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState('');
 
-    const [nftImage, setNftImage] = useState('');
+    const [nftImage, setNftImage] = useState<File>();
     const [nftName, setNftName] = useState('');
     const [nftDescription, setNftDescription] = useState('');
     const [nftExternalUrl, setNftExternalUrl] = useState('');
@@ -23,7 +23,7 @@ const SingleMint = () => {
     const [step2Open, setStep2Open] = useState(false);
 
     const handleImageChange = (imageFile: File) => {
-        // setNftImage(imageUrl);
+        setNftImage(imageFile);
         // TODO: Upload Image on NFT Storage
     };
 

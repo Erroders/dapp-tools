@@ -4,7 +4,7 @@ import imagePlaceholder from '../../../assets/imagePlaceholder.svg';
 interface ImageInputProps {
     id: string;
     label: string;
-    image?: string;
+    image?: File;
     imageOnChange?: (imageFile: File) => void;
 }
 
@@ -14,7 +14,10 @@ const ImageInput = ({ id, label, image, imageOnChange }: ImageInputProps) => {
             <div className="relative">
                 <p className="block text-xs font-medium text-gray-500">{label}</p>
                 <label className="block" htmlFor={id}>
-                    <img src={image || imagePlaceholder.src} alt="" className="object-center w-full" />
+                    <img
+                        src={image ? URL.createObjectURL(image) : imagePlaceholder.src}
+                        className="object-center w-full"
+                    />
                 </label>
 
                 <input
