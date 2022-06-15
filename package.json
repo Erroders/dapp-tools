@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "contractgen": "npm i @openzeppelin/wizard-cairo && npm i git+https://github.com/OpenZeppelin/contracts-wizard.git && cd node_modules/root/ && npm i && npm run prepare && cd ../../"
+        "contractgen": "npm i https://github.com/OpenZeppelin/contracts-wizard.git && cd node_modules/root/ && npm i && npm run prepare && cd ../../"
     },
     "dependencies": {
         "@openzeppelin/contracts": "^4.6.0",

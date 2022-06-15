@@ -7,6 +7,7 @@
 
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+// @ts-ignore
 import solc from 'solc';
 
 // returns OpenZeppelin's contracts from node_modules as required to compile the custom contract
