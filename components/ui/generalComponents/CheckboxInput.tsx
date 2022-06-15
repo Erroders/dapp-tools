@@ -15,7 +15,7 @@ const CheckboxInput = ({ id, label, setValue, value }: CheckboxInputProps) => {
                 id={id}
                 type="checkbox"
                 checked={value}
-                onClick={(e) => {
+                onChange={(e) => {
                     setValue(e.currentTarget.checked);
                 }}
             />
