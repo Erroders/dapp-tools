@@ -108,6 +108,7 @@ const Profile = () => {
                                             logoUrl={obj.logo_url}
                                             ercSupports={obj.supports_erc}
                                             type={'nonDust'}
+                                            provider={provider}
                                         />
                                     );
                                 })}
@@ -125,6 +126,7 @@ const Profile = () => {
                                             logoUrl={obj.logo_url}
                                             ercSupports={obj.supports_erc}
                                             type={'dust'}
+                                            provider={provider}
                                         />
                                     );
                                 })}
