@@ -25,18 +25,29 @@ const SingleMint = () => {
 
     const handleImageChange = (imageFile: File) => {
         setNftImage(imageFile);
-        // TODO: Upload Image on NFT Storage
     };
 
-    // TODO: Submit Form
     const handleStep1Submit = () => {
         console.log('Clicked Next');
+
+        if (!name || !symbol || !access || !securityContract || !license) {
+            return;
+        }
 
         setStep1Open(false);
         setStep2Open(true);
     };
     const handleStep2Submit = () => {
         console.log('Clicked Mint');
+
+        if (!nftImage || !nftName || !nftDescription || !nftExternalUrl) {
+            return;
+        }
+
+        // TODO: Upload Image on NFT Storage
+        // TODO: Upload Data on NFT Storage
+        // TODO: Generate Contract
+        // TODO: Mint NFT
     };
 
     return (
