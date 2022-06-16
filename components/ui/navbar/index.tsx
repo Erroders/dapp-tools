@@ -32,8 +32,10 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
             <div className="max-w-screen-xl p-4 mx-auto">
                 <div className="flex items-center justify-between space-x-4 lg:space-x-10">
                     <div className="flex lg:w-0 lg:flex-1 text-xl font-medium cursor-pointer">
-                        <Link href={'/'}>
-                            <Image src={'/logo.svg'} width="100" height="70" layout="fixed" alt="dapp tools logo" />
+                        <Link href={'/'} passHref>
+                            <a>
+                                <Image src={'/logo.svg'} width="100" height="60" layout="fixed" alt="dapp tools logo" />
+                            </a>
                         </Link>
                     </div>
 

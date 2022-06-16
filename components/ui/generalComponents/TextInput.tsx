@@ -26,10 +26,10 @@ interface TextInputProps {
     setValue: React.Dispatch<React.SetStateAction<string>>;
     minNum?: number;
     maxNum?: number;
-    defaultValue?: string | number;
+    disabled?: boolean;
 }
 
-const TextInput = ({ id, label, type, value, setValue, minNum, maxNum, defaultValue }: TextInputProps) => {
+const TextInput = ({ id, label, type, value, setValue, minNum, maxNum, disabled = false }: TextInputProps) => {
     return (
         <div className="relative">
             <label className="block text-xs font-medium text-gray-500" htmlFor={id}>
@@ -46,7 +46,7 @@ const TextInput = ({ id, label, type, value, setValue, minNum, maxNum, defaultVa
                 }}
                 min={minNum}
                 max={maxNum}
-                defaultValue={defaultValue}
+                disabled={disabled}
             />
         </div>
     );

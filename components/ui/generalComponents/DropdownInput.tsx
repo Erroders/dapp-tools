@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface RadioInputProps {
+interface DropdownInputProps {
     id: string;
     label: string;
     value: string;
@@ -12,14 +12,33 @@ interface RadioInputProps {
     disabled?: boolean;
 }
 
-const RadioInput = ({ id, label, setValue, value, valueOptions, disabled = false }: RadioInputProps) => {
+const DropdownInput = ({ id, label, setValue, value, valueOptions, disabled = false }: DropdownInputProps) => {
     return (
         <div className="relative">
-            <label className="block text-xs font-medium text-gray-500" htmlFor={id}>
+            <label className="block text-xs font-medium text-gray-500 mb-1" htmlFor={id}>
                 {label}
             </label>
 
-            <div className="pl-1 pt-1 mt-1 w-full space-y-2">
+            <select
+                name={id}
+                id={id}
+                disabled={disabled}
+                onChange={(e) => {
+                    setValue(e.currentTarget.value);
+                }}
+                defaultValue={value}
+                className="pl-1 mt-1 w-full space-y-2 block focus:border-gray-500 focus:bg-white focus:ring-1 focus:ring-black"
+            >
+                {valueOptions.map((valueOption, index) => {
+                    return (
+                        <option key={index} value={valueOption.value}>
+                            {valueOption.label}
+                        </option>
+                    );
+                })}
+            </select>
+
+            {/* <div className="pl-1 pt-1 mt-1 w-full space-y-2">
                 {valueOptions.map((value, index) => {
                     return (
                         <div key={index} className="flex">
@@ -41,14 +60,9 @@ const RadioInput = ({ id, label, setValue, value, valueOptions, disabled = false
                         </div>
                     );
                 })}
-            </div>
+            </div> */}
         </div>
     );
 };
 
-export default RadioInput;
-
-{
-    /* <input type="radio" id="age1" name="age" value="30">
-<label for="age1">0 - 30</label> */
-}
+export default DropdownInput;

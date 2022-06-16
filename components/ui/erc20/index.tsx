@@ -1,23 +1,45 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { WalletContext } from '../../../pages/_app';
 import { Button, CheckboxInput, TextInput, TextInputTypes } from '../generalComponents';
-import RadioInput from '../generalComponents/RadioInput';
+import DropdownInput from '../generalComponents/DropdownInput';
 
 const MintErc20 = () => {
     const [name, setName] = useState('');
     const [symbol, setSymbol] = useState('');
-    const [burnable, setBurnable] = useState(true);
-    const [pausable, setPausable] = useState(true);
+    const [burnable, setBurnable] = useState(false);
+    const [snapshots, setSnapshots] = useState(false);
+    const [pausable, setPausable] = useState(false);
     const [premint, setPremint] = useState('');
-    const [mintable, setMintable] = useState(true);
+    const [mintable, setMintable] = useState(false);
     const [permit, setPermit] = useState(false);
-    const [access, setAccess] = useState('Ownable');
+    const [votes, setVotes] = useState(false);
+    const [flashmint, setFlashmint] = useState(false);
+    const [access, setAccess] = useState('ownable');
+    const [upgradeable, setUpgradeable] = useState('false');
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState('');
+    const [network, setNetwork] = useState('');
+
+    const walletContext = useContext(WalletContext);
+    walletContext.web3Provider?.getNetwork().then((v) => {
+        setNetwork(v.name);
+    });
+
+    // useEffect(() => {
+    //     walletContext.web3Provider?.getNetwork().then((v) => {
+    //         console.log(v);
+    //         setNetwork(v.name);
+    //     });
+    // }, []);
 
     const handleStep1Submit = () => {
-        console.log('Clicked Next');
+        console.log('Clicked Mint');
 
-        if (!name || !symbol || !premint || !access || !securityContract || !license) {
+        if (!name || !symbol || !premint || !access || !upgradeable || !securityContract || !license) {
+            return;
+        }
+
+        if (Number.parseInt(premint) < 1) {
             return;
         }
 
@@ -32,8 +54,13 @@ const MintErc20 = () => {
                 <div className="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:px-8">
                     <div className="sm:justify-between sm:items-center sm:flex">
                         <div className="text-center sm:text-left">
-                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">ERC 20</h1>
-                            <p className="mt-1.5 text-sm tracking-wide text-gray-500">Mint a ERC-20 Token</p>
+                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">ERC20</h1>
+                            <p className="mt-1.5 text-sm tracking-wide text-gray-500">
+                                An ERC20 token contract keeps track of fungible tokens: any one token is exactly equal
+                                to any other token; no tokens have special rights or behavior associated with them. This
+                                makes ERC20 tokens useful for things like a medium of exchange currency, voting rights,
+                                staking, and more.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -48,8 +75,8 @@ const MintErc20 = () => {
                         }}
                     >
                         <div>
-                            <h2 className="text-xl font-semibold">Token Details</h2>
-                            <p className="text-sm ml-0.5">Enter token details and choose your network</p>
+                            <h2 className="text-xl font-semibold">Contract Details</h2>
+                            <p className="text-sm ml-0.5">Enter Contract Details and choose your Network</p>
                         </div>
                     </summary>
 
@@ -79,16 +106,29 @@ const MintErc20 = () => {
                                 value={premint}
                                 setValue={setPremint}
                                 minNum={1}
-                                defaultValue={1}
                             />
 
                             <div className="grid grid-cols-2 gap-4">
                                 <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
+                                <CheckboxInput
+                                    id="snapshots"
+                                    label="Snapshots"
+                                    value={snapshots}
+                                    setValue={setSnapshots}
+                                />
                                 <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
                                 <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
                                 <CheckboxInput id="permit" label="Permit" value={permit} setValue={setPermit} />
-
-                                <RadioInput
+                                <CheckboxInput id="votes" label="Votes" value={votes} setValue={setVotes} />
+                                <CheckboxInput
+                                    id="flashmint"
+                                    label="Flashmint"
+                                    value={flashmint}
+                                    setValue={setFlashmint}
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <DropdownInput
                                     id="accesss"
                                     label="Access Control"
                                     value={access}
@@ -103,6 +143,27 @@ const MintErc20 = () => {
                                             label: 'Roles',
                                         },
                                     ]}
+                                />
+                                <DropdownInput
+                                    id="upgradeable"
+                                    label="Upgradeable"
+                                    value={upgradeable}
+                                    setValue={setUpgradeable}
+                                    valueOptions={[
+                                        {
+                                            value: 'false',
+                                            label: 'False',
+                                        },
+                                        {
+                                            value: 'transparent',
+                                            label: 'Transparent',
+                                        },
+                                        {
+                                            value: 'uups',
+                                            label: 'Uups',
+                                        },
+                                    ]}
+                                    disabled
                                 />
                             </div>
 
@@ -121,8 +182,17 @@ const MintErc20 = () => {
                                 setValue={setLicense}
                             />
 
+                            <TextInput
+                                id="network"
+                                label="Network"
+                                type={TextInputTypes.TEXT}
+                                value={network}
+                                setValue={setNetwork}
+                                disabled={true}
+                            />
+
                             <Button
-                                title="Mint"
+                                title="Deploy"
                                 onClick={() => {
                                     handleStep1Submit();
                                 }}
@@ -137,18 +207,3 @@ const MintErc20 = () => {
 };
 
 export default MintErc20;
-
-// {
-//     "name": "TestToken",
-//     "symbol": "TST",
-//     "burnable": true,
-//     "pausable": true,
-//     "premint": "", # any interger value as string
-//     "mintable": true,
-//     "permit": false,
-//     "access": "ownable",
-//     "info": {
-//       "securityContact": "rg@email.com",
-//       "license": "MIT"
-//     }
-// }
