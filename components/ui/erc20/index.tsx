@@ -82,123 +82,111 @@ const MintErc20 = () => {
 
                     <hr className="my-3 border-gray-300" />
 
-                    <div className="grid grid-cols-2 gap-4 mt-6">
-                        <div className="grid grid-cols-1 gap-4 max-w-md">
-                            <TextInput
-                                id="name"
-                                label="Token Name"
-                                type={TextInputTypes.TEXT}
-                                value={name}
-                                setValue={setName}
-                            />
-                            <TextInput
-                                id="symbol"
-                                label="Token Symbol"
-                                type={TextInputTypes.TEXT}
-                                value={symbol}
-                                setValue={setSymbol}
-                            />
+                    <div className="grid grid-cols-1 mt-6 gap-4 max-w-md">
+                        <TextInput
+                            id="name"
+                            label="Token Name"
+                            type={TextInputTypes.TEXT}
+                            value={name}
+                            setValue={setName}
+                        />
+                        <TextInput
+                            id="symbol"
+                            label="Token Symbol"
+                            type={TextInputTypes.TEXT}
+                            value={symbol}
+                            setValue={setSymbol}
+                        />
 
-                            <TextInput
-                                id="premint"
-                                label="Premint"
-                                type={TextInputTypes.NUMBER}
-                                value={premint}
-                                setValue={setPremint}
-                                minNum={1}
-                            />
+                        <TextInput
+                            id="premint"
+                            label="Premint"
+                            type={TextInputTypes.NUMBER}
+                            value={premint}
+                            setValue={setPremint}
+                            minNum={1}
+                        />
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
-                                <CheckboxInput
-                                    id="snapshots"
-                                    label="Snapshots"
-                                    value={snapshots}
-                                    setValue={setSnapshots}
-                                />
-                                <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
-                                <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
-                                <CheckboxInput id="permit" label="Permit" value={permit} setValue={setPermit} />
-                                <CheckboxInput id="votes" label="Votes" value={votes} setValue={setVotes} />
-                                <CheckboxInput
-                                    id="flashmint"
-                                    label="Flashmint"
-                                    value={flashmint}
-                                    setValue={setFlashmint}
-                                />
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <DropdownInput
-                                    id="accesss"
-                                    label="Access Control"
-                                    value={access}
-                                    setValue={setAccess}
-                                    valueOptions={[
-                                        {
-                                            value: 'ownable',
-                                            label: 'Ownable',
-                                        },
-                                        {
-                                            value: 'roles',
-                                            label: 'Roles',
-                                        },
-                                    ]}
-                                />
-                                <DropdownInput
-                                    id="upgradeable"
-                                    label="Upgradeable"
-                                    value={upgradeable}
-                                    setValue={setUpgradeable}
-                                    valueOptions={[
-                                        {
-                                            value: 'false',
-                                            label: 'False',
-                                        },
-                                        {
-                                            value: 'transparent',
-                                            label: 'Transparent',
-                                        },
-                                        {
-                                            value: 'uups',
-                                            label: 'Uups',
-                                        },
-                                    ]}
-                                    disabled
-                                />
-                            </div>
-
-                            <TextInput
-                                id="securityContact"
-                                label="Security Contact"
-                                type={TextInputTypes.TEXT}
-                                value={securityContract}
-                                setValue={setSecurityContract}
+                        <div className="grid grid-cols-2 gap-4">
+                            <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
+                            <CheckboxInput id="snapshots" label="Snapshots" value={snapshots} setValue={setSnapshots} />
+                            <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
+                            <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
+                            <CheckboxInput id="permit" label="Permit" value={permit} setValue={setPermit} />
+                            <CheckboxInput id="votes" label="Votes" value={votes} setValue={setVotes} />
+                            <CheckboxInput id="flashmint" label="Flashmint" value={flashmint} setValue={setFlashmint} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <DropdownInput
+                                id="accesss"
+                                label="Access Control"
+                                value={access}
+                                setValue={setAccess}
+                                valueOptions={[
+                                    {
+                                        value: 'ownable',
+                                        label: 'Ownable',
+                                    },
+                                    {
+                                        value: 'roles',
+                                        label: 'Roles',
+                                    },
+                                ]}
                             />
-                            <TextInput
-                                id="license"
-                                label="License"
-                                type={TextInputTypes.TEXT}
-                                value={license}
-                                setValue={setLicense}
-                            />
-
-                            <TextInput
-                                id="network"
-                                label="Network"
-                                type={TextInputTypes.TEXT}
-                                value={network}
-                                setValue={setNetwork}
-                                disabled={true}
-                            />
-
-                            <Button
-                                title="Deploy"
-                                onClick={() => {
-                                    handleStep1Submit();
-                                }}
-                                size="sm"
+                            <DropdownInput
+                                id="upgradeable"
+                                label="Upgradeable"
+                                value={upgradeable}
+                                setValue={setUpgradeable}
+                                valueOptions={[
+                                    {
+                                        value: 'false',
+                                        label: 'False',
+                                    },
+                                    {
+                                        value: 'transparent',
+                                        label: 'Transparent',
+                                    },
+                                    {
+                                        value: 'uups',
+                                        label: 'Uups',
+                                    },
+                                ]}
+                                disabled
                             />
                         </div>
+
+                        <TextInput
+                            id="securityContact"
+                            label="Security Contact"
+                            type={TextInputTypes.TEXT}
+                            value={securityContract}
+                            setValue={setSecurityContract}
+                        />
+                        <TextInput
+                            id="license"
+                            label="License"
+                            type={TextInputTypes.TEXT}
+                            value={license}
+                            setValue={setLicense}
+                        />
+
+                        <TextInput
+                            id="network"
+                            label="Network"
+                            type={TextInputTypes.TEXT}
+                            value={network}
+                            setValue={setNetwork}
+                            disabled={true}
+                        />
+
+                        <Button
+                            title="Deploy"
+                            onClick={() => {
+                                handleStep1Submit();
+                            }}
+                            size="sm"
+                        />
                     </div>
                 </details>
             </div>
