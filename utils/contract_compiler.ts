@@ -51,7 +51,10 @@ export default function compile(contract_code: string, contract_name: string, cb
                     import: findImports,
                 }),
             );
+
+            // console.log(output.contracts[`${contract_name}.sol`]);
             // console.log(output);
+
             const abi_ = output.contracts[`${contract_name}.sol`][contract_name].abi;
             const bytecode_ = output.contracts[`${contract_name}.sol`][contract_name].evm.bytecode;
             cb({ abi: abi_, bytecode: bytecode_, contract: contract_code });

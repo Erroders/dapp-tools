@@ -9,6 +9,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Access, erc20 as ERC20, GenericOptions } from '@openzeppelin/wizard';
 import compile from '../../../utils/contract_compiler';
+import { formatContractName } from '../../../utils/string_formatter';
 
 // type for user provided data for ERC20 contract
 export type ERC20Data = {
@@ -49,6 +50,7 @@ export default function handler(
 // generate ERC20 contract using OpenZeppelin wizard solidity API
 // then pass it to compile method to generate ABI and bytecode
 function erc20(opts: ERC20Data, cb: any): { contract: string; abi: any; bytecode: any } | void {
+    opts.name = formatContractName(opts.name);
     const erc20_opts: GenericOptions = {
         kind: 'ERC20',
         ...opts,
