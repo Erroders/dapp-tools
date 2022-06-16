@@ -38,7 +38,7 @@ export async function deployContract(
     kind: ERCs,
     provider: ethers.providers.Web3Provider | null,
     chainId: keyof typeof networks,
-): Promise<{ contractAddress: string; confirmationLink: string } | void> {
+): Promise<{ contractAddress: string; confirmationLink: string; abi: any } | void> {
     // will compile the contract and return the abi and bytecode
     const data = await compileContract(opts, kind);
 
@@ -64,6 +64,10 @@ export async function deployContract(
             `Deployment successful !... \nContract Address: ${contract.address} \nExplorerLink : ${networkExplorerLink}tx/${txHash}`,
         );
 
-        return { contractAddress: contract.address, confirmationLink: `${networkExplorerLink}tx/${txHash}` };
+        return {
+            contractAddress: contract.address,
+            confirmationLink: `${networkExplorerLink}tx/${txHash}`,
+            abi: data.abi,
+        };
     }
 }
