@@ -3,7 +3,7 @@ import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
 import { Button, CheckboxInput, ImageInput, TextInput, TextInputTypes } from '../generalComponents';
 import RadioInput from '../generalComponents/RadioInput';
 
-const CollectionMint = () => {
+const MintErc1155 = () => {
     const [name, setName] = useState('');
     // const [uriStorage, setUriStorage] = useState(true);
     const [burnable, setBurnable] = useState(false);
@@ -211,7 +211,7 @@ const CollectionMint = () => {
     );
 };
 
-export default CollectionMint;
+export default MintErc1155;
 
 // {
 //     "name": "TestNFTCollection",
