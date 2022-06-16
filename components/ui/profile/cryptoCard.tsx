@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-import { getBlockExplorerUrl } from '../../../utils/contract_deployer';
+import networks from '../../../data/networks.json';
+import { WalletContext } from '../../../pages/_app';
 
 interface ICard {
     balance: string;
@@ -17,6 +18,7 @@ interface ICard {
 }
 
 const CryptoCard = (props: ICard) => {
+    const walletContext = useContext(WalletContext);
     return (
         <div className="relative block group h-48">
             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
@@ -95,9 +97,11 @@ const CryptoCard = (props: ICard) => {
                     <div
                         className="flex text-xs mt-1 font-semibold items-center gap-1 justify-end text-gray-700 cursor-pointer"
                         onClick={async () => {
-                            const explorerUrl = await getBlockExplorerUrl(props.provider);
-                            const link = `${explorerUrl}address/${props.contractAddress}`;
-                            window.open(link, '_newtab');
+                            if (walletContext.chainId) {
+                                const explorerUrl = networks[walletContext.chainId].blockExplorerURL;
+                                const link = `${explorerUrl}address/${props.contractAddress}`;
+                                window.open(link, '_newtab');
+                            }
                         }}
                     >
                         <span>Know More</span>

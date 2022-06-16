@@ -2,15 +2,16 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ethers } from 'ethers';
 import { createContext, useState } from 'react';
+import networks from '../data/networks.json';
 
 interface WalletContextProps {
     walletAddress: string;
     connectWalletModalVisibility: boolean;
-    chainId: number;
+    chainId: keyof typeof networks | null;
     web3Provider: ethers.providers.Web3Provider | null;
     toggleConnectWalletModalVisibility: () => void;
     updateWalletAddress: (walletAddress: string) => void;
-    updateChainid: (chainId: number) => void;
+    updateChainid: (chainId: keyof typeof networks | null) => void;
     updateConnectWalletModalVisibility: (visibilty: boolean) => void;
     updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => void;
 }
@@ -18,10 +19,10 @@ interface WalletContextProps {
 export const WalletContext = createContext<WalletContextProps>({
     web3Provider: null, //# not needed
     walletAddress: '', //# from signer
-    chainId: 0x0, //# from signer
+    chainId: null, //# from signer
     updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => {}, // !
     updateWalletAddress: (walletAddress: string) => {}, // !
-    updateChainid: (chainId: number) => {}, // !
+    updateChainid: (chainId: keyof typeof networks | null) => {}, // !
     connectWalletModalVisibility: false, // ?
     toggleConnectWalletModalVisibility: () => {},
     updateConnectWalletModalVisibility: (visibilty: boolean) => {},
@@ -31,7 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const [connectWalletModalVisibility, setConnectWalletModalVisibility] = useState(false);
     const [walletAddress, setWalletAddress] = useState('');
     const [web3Provider, setWeb3Provider] = useState<ethers.providers.Web3Provider | null>(null);
-    const [chainId, setChainId] = useState<number>(0x0);
+    const [chainId, setChainId] = useState<keyof typeof networks | null>(null);
 
     function toggleConnectWalletModalVisibility() {
         setConnectWalletModalVisibility(!connectWalletModalVisibility);
@@ -41,7 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         setConnectWalletModalVisibility(visibilty);
     }
 
-    function updateChainid(chainId: number) {
+    function updateChainid(chainId: keyof typeof networks | null) {
         setChainId(chainId);
     }
 
