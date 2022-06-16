@@ -7,7 +7,7 @@
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Access, buildGeneric, GenericOptions, printContract } from 'root/packages/core/dist/index';
+import { Access, erc721 as ERC721, GenericOptions } from '@openzeppelin/wizard';
 import compile from '../../../utils/contract_compiler';
 
 // type for user provided data for ERC721 contract
@@ -64,7 +64,6 @@ function erc721(opts: ERC721Data, cb: any): { contract: string; abi: any; byteco
         upgradeable: false, //-<
         info: opts.info,
     };
-    const erc721_contract = buildGeneric(erc721_opts);
-    const contract_code = printContract(erc721_contract);
+    const contract_code = ERC721.print(erc721_opts);
     compile(contract_code, opts.name, cb);
 }
