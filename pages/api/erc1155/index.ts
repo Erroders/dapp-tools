@@ -47,15 +47,8 @@ export default function handler(
 function erc1155(opts: ERC1155Data, cb: any): { contract: string; abi: any; bytecode: any } | void {
     const erc1155_opts: GenericOptions = {
         kind: 'ERC1155',
-        name: opts.name,
-        uri: opts.uri,
-        burnable: opts.burnable,
-        pausable: opts.pausable,
-        mintable: opts.mintable,
-        supply: opts.supply,
-        access: opts.accesss,
+        ...opts,
         upgradeable: false, //-<
-        info: opts.info,
     };
     const contract_code = ERC1155.print(erc1155_opts);
     compile(contract_code, opts.name, cb);
