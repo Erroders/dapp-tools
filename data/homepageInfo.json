@@ -1,9 +1,33 @@
 [
     {
+        "key": "erc20",
+        "title": "ERC20 Token",
+        "subtitle": "Allows you to launch your own (fungible) cryptocurrency following ERC20 token standards.",
+        "description": "An ERC20 token contract keeps track of fungible tokens: any one token is exactly equal to any other token; no tokens have special rights or behavior associated with them. This makes ERC20 tokens useful for things like a medium of exchange currency, voting rights, staking, and more.",
+        "icon": "/erc20.svg",
+        "link": "/erc20"
+    },
+    {
+        "key": "erc721",
+        "title": "ERC20 Token",
+        "subtitle": "Allows you to launch your own (fungible) cryptocurrency following ERC20 token standards.",
+        "description": "You can make a fungible token using ERC20, but what if not all tokens are alike? This comes up in situations like real estate, voting rights, or collectibles, where some items are valued more than others, due to their usefulness, rarity, etc. ERC721 is a standard for representing ownership of non-fungible tokens, that is, where each token is unique.",
+        "icon": "/erc20.svg",
+        "link": "/erc20"
+    },
+    {
+        "key": "erc1155",
+        "title": "ERC20 Token",
+        "subtitle": "Allows you to launch your own (fungible) cryptocurrency following ERC20 token standards.",
+        "description": "A standard interface for contracts that manage multiple token types. A single deployed contract may include any combination of fungible tokens, non-fungible tokens or other configurations (e.g. semi-fungible tokens). The idea is simple and seeks to create a smart contract interface that can represent and control any number of fungible and non-fungible token types. In this way, the ERC-1155 token can do the same functions as an ERC-20 and ERC-721 token, and even both at the same time. And best of all, improving the functionality of both standards, making it more efficient, and correcting obvious implementation errors on the ERC-20 and ERC-721 standards.",
+        "icon": "/erc20.svg",
+        "link": "/erc20"
+    },
+    {
         "key": "single-nft",
         "title": "Single NFT",
         "subtitle": "Allows you to mint a unique piece of art, one at a time.",
-        "description": "Allows you to mint a unique piece of art, one at a time. This is for you if have only one image(or any other media file) for now. But you can choose to expand this into a collection later or just mint one per contact. That's more than enough to be known to mint your own collection. However, developers who might be keen, you can choose between ERC721 and ERC1155 standards.",
+        "description": "Allows you to mint a unique piece of art, one at a time. This is for you if have only one image(or any other media file). But remember that you won't get to expand this into a collection later. That's more than enough to be known to mint your own NFT.",
         "icon": "/nft-single.svg",
         "link": "/mintNft"
     },
@@ -11,16 +35,16 @@
         "key": "batch-nft",
         "title": "NFT Collection",
         "subtitle": "Allows you to mint multiple, unique assets in batches.",
-        "description": "Allows you to mint multiple, unique assets in batches. Even if each item in the collection is the same image, suppose, it would still have a unique ID on chain for distinction. That's more than enough to be known to mint your own collection. However, developers who might be keen, you can choose between ERC721 and ERC1155 standards.",
+        "description": "Allows you to mint multiple assets in one go. Even if each item in the collection is the same image, suppose, it would still have a unique ID on chain for distinction. That's more than enough to be known to mint your own collection.",
         "icon": "/nft-collection.svg",
         "link": "/mintNftCollection"
     },
     {
-        "key": "erc20",
-        "title": "ERC20 Token",
+        "key": "erc20x",
+        "title": "Super ERC20 Token",
         "subtitle": "Allows you to launch your own (fungible) cryptocurrency following ERC20 token standards.",
-        "description": "Allows you to launch your own (fungible) cryptocurrency following ERC20 token standards. In a nutshell, this would be your own currency, you would have powers to create and destroy tokens (if you choose to have them). But remember, \"With great powers, comes great responsibilities!!\" There could be various reasons for having yur own currency, let's say, for govering the functioning of a school club or a DAO.",
-        "icon": "/erc20.svg",
-        "link": "/erc20"
+        "description": "Allows you to launch your own (fungible) cryptocurrency following ERC20 token standards. In a nutshell, this will be your own currency, you will have powers to create and destroy tokens (if you choose to have them). But remember, \"With great powers, comes great responsibilities!!\" There could be various reasons for having your own currency, let's say, for governing of a school club or a DAO.",
+        "icon": "/erc20x.svg",
+        "link": "/erc20x"
     }
 ]
