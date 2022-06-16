@@ -66,7 +66,7 @@ const SingleMint = () => {
                 <div className="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:px-8">
                     <div className="sm:justify-between sm:items-center sm:flex">
                         <div className="text-center sm:text-left">
-                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Single Mint</h1>
+                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Single NFT</h1>
                             <p className="mt-1.5 text-sm tracking-wide text-gray-500">Mint a Unique ERC-721 NFT</p>
                         </div>
                     </div>
