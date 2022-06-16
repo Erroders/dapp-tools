@@ -21,7 +21,7 @@ const RadioInput = ({ id, label, setValue, value, valueOptions }: RadioInputProp
             <div className="pl-1 pt-1 mt-1 w-full space-y-2">
                 {valueOptions.map((value, index) => {
                     return (
-                        <div className="flex">
+                        <div key={index} className="flex">
                             <input
                                 className="ml-0.5 h-5 w-5 block focus:border-gray-500 focus:bg-white focus:ring-1 focus:ring-black"
                                 type="radio"
