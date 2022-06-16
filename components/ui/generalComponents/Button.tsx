@@ -5,9 +5,10 @@ interface ButtonProps {
     leftIcon?: JSX.Element;
     rightIcon?: JSX.Element;
     onClick?: VoidFunction;
+    size?: 'sm' | 'lg';
 }
 
-const Button = ({ title, leftIcon, rightIcon, onClick }: ButtonProps) => {
+const Button = ({ title, leftIcon, rightIcon, onClick, size = 'lg' }: ButtonProps) => {
     return (
         <button className="relative block group cursor-pointer w-full h-full" onClick={onClick}>
             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
@@ -17,7 +18,11 @@ const Button = ({ title, leftIcon, rightIcon, onClick }: ButtonProps) => {
                     {leftIcon}
 
                     <div className="text-center w-full items-center flex justify-center">
-                        <h2 className="text-2xl font-medium">{title}</h2>
+                        <h2
+                            className={'font-medium' + (size == 'sm' && ' text-base ') + (size == 'lg' && ' text-2xl ')}
+                        >
+                            {title}
+                        </h2>
                     </div>
 
                     {rightIcon}

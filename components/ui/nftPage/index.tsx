@@ -1,3 +1,4 @@
+import { getIPFSImageURl } from '../../../utils/nft/getNftImage';
 import Collection from './Collection';
 import Description from './Description';
 import Details from './Details';
@@ -23,7 +24,21 @@ const NftPage = ({ nftMetadata, nftTransactions, nftCollectionTokens, chainId }:
             <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-2">
                     <div className="border-2 border-black relative">
-                        <img src={nftMetadata.nft_data[0].external_data.image} />
+                        {/* <img src={nftMetadata.nft_data[0].external_data.image} /> */}
+                        <img
+                            src={
+                                nftMetadata.nft_data[0].external_data.image
+                                    ? nftMetadata.nft_data[0].external_data.image
+                                    : ''
+                            }
+                            onError={async (target) => {
+                                target.currentTarget.onerror = null;
+                                if (nftMetadata.nft_data[0].token_url) {
+                                    const newSrc = await getIPFSImageURl(nftMetadata.nft_data[0].token_url);
+                                    newSrc && newSrc.length > 0 && (target.currentTarget.src = newSrc);
+                                }
+                            }}
+                        />
                     </div>
 
                     <Description description={nftMetadata.nft_data[0].external_data.description} />
