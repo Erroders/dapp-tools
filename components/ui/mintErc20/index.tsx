@@ -1,7 +1,11 @@
 import React, { useContext, useState } from 'react';
+import { ERC20Data } from '../../../pages/api/erc20';
 import { WalletContext } from '../../../pages/_app';
+import { deployContract } from '../../../utils/contract_deployer';
+import { ERCs } from '../../../utils/types';
 import { Button, CheckboxInput, TextInput, TextInputTypes } from '../generalComponents';
 import DropdownInput from '../generalComponents/DropdownInput';
+import networksData from '../../../data/networks.json';
 
 const MintErc20 = () => {
     const [name, setName] = useState('');
@@ -18,11 +22,11 @@ const MintErc20 = () => {
     const [upgradeable, setUpgradeable] = useState('false');
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState('');
-    const [network, setNetwork] = useState('');
+    const [networkName, setNetworkName] = useState('');
 
     const walletContext = useContext(WalletContext);
     walletContext.web3Provider?.getNetwork().then((v) => {
-        setNetwork(v.name);
+        setNetworkName(v.name);
     });
 
     // useEffect(() => {
@@ -32,7 +36,7 @@ const MintErc20 = () => {
     //     });
     // }, []);
 
-    const handleStep1Submit = () => {
+    const handleStep1Submit = async () => {
         console.log('Clicked Mint');
 
         if (!name || !symbol || !premint || !access || !upgradeable || !securityContract || !license) {
@@ -43,7 +47,53 @@ const MintErc20 = () => {
             return;
         }
 
-        // TODO: Generate Contract
+        if (!(access == 'ownable' || access == 'roles' || access == undefined)) {
+            return;
+        }
+
+        const erc20Opts: ERC20Data = {
+            name: name,
+            symbol: symbol,
+            burnable: burnable,
+            pausable: pausable,
+            premint: premint,
+            mintable: mintable,
+            permit: permit,
+            accesss: access,
+            flashmint: flashmint,
+            snapshots: snapshots,
+            votes: votes,
+            info: {
+                securityContact: securityContract,
+                license: license,
+            },
+        };
+
+        const nets = Object.values(networksData).map((n) => {
+            return n.network;
+        });
+
+        const currentNetwork = await walletContext.web3Provider?.getNetwork();
+        if (!currentNetwork) {
+            return;
+        }
+
+        const currentChainId = currentNetwork.chainId.toString();
+        const currentNetworkName = currentNetwork.name;
+
+        if (!nets.includes(currentNetworkName)) {
+            return;
+        }
+
+        // TODO: ERROR: Temporary solution for deployContract
+        if (!(currentChainId == '80001' || currentChainId == '137')) {
+            return;
+        }
+
+        const contractDetails = await deployContract(erc20Opts, ERCs.ERC20, walletContext.web3Provider, currentChainId);
+        console.log(contractDetails);
+
+        // TODO: Show Deployement Details
         // setStep1Open(false);
         // setStep2Open(true);
     };
@@ -175,8 +225,8 @@ const MintErc20 = () => {
                             id="network"
                             label="Network"
                             type={TextInputTypes.TEXT}
-                            value={network}
-                            setValue={setNetwork}
+                            value={networkName}
+                            setValue={setNetworkName}
                             disabled={true}
                         />
 
