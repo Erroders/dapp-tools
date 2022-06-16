@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../../../pages/_app';
@@ -27,17 +28,18 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
     };
 
     return (
-        <header className="shadow-md sticky top-0 w-full bg-white z-30">
+        <nav className="sticky top-0 w-full bg-white z-30 py-10 backdrop-blur-md bg-white/60">
             <div className="max-w-screen-xl p-4 mx-auto">
                 <div className="flex items-center justify-between space-x-4 lg:space-x-10">
-                    <div className="flex lg:w-0 lg:flex-1 text-xl font-medium">
-                        <Link href={'/'}>{title}</Link>
+                    <div className="flex lg:w-0 lg:flex-1 text-xl font-medium cursor-pointer">
+                        <Link href={'/'}>
+                            <Image src={'/logo.svg'} width="100" height="60" layout="fixed" alt="dapp tools logo" />
+                        </Link>
                     </div>
 
                     <div className="items-center justify-end flex space-x-4">
                         <div className="relative block group">
-                            <span className="absolute inset-0 border-2 border-black border-dashed"></span>
-                            <button className="relative p-2 text-xs cursor-default flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-1 group-hover:-translate-y-1">
+                            <button className="relative p-2 text-xs cursor-default flex items-end h-full transition-transform transform bg-white border-2 border-black">
                                 {networkName || 'Not Connected'}
                             </button>
                         </div>
@@ -45,16 +47,19 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
                         <div className="relative block group">
                             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
                             <button
-                                className="relative p-2 text-xs flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-1.5 group-hover:-translate-y-1.5"
+                                className={`relative p-2 text-xs flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2 ${
+                                    dropdownOpen && '-translate-x-1.5 -translate-y-1.5'
+                                }`}
                                 onClick={handleWalletBtnClick}
                             >
                                 {walletContext.walletAddress || 'Connect Wallet'}
                             </button>
 
                             {dropdownOpen && (
-                                <div className="h-auto w-full absolute bg-white mt-1.5">
-                                    <span className="absolute inset-0 border-2 border-black border-dashed"></span>
-                                    <ul className="text-right px-3 py-1.5 bg-white border-2 border-black group-hover:-translate-x-1 group-hover:-translate-y-1">
+                                <div className="h-auto w-full absolute bg-white mt-2">
+                                    {/* <span className="absolute inset-0 border-2 border-black border-dashed"></span> */}
+                                    {/* <ul className="text-right px-3 py-1.5 bg-white border-2 border-black group-hover:-translate-x-1 group-hover:-translate-y-1"> */}
+                                    <ul className="text-right px-3 py-1.5 bg-white border-2 border-black">
                                         <li className="hover:font-semibold cursor-pointer">
                                             <Link href={'/profile'}>Profile</Link>
                                         </li>
@@ -76,7 +81,7 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
                     </div>
                 </div>
             </div>
-        </header>
+        </nav>
     );
 };
 
