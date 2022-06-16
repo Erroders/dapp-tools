@@ -18,7 +18,7 @@ const Homepage = () => {
 
     return (
         <div className="p-6 max-w-screen-xl mx-auto">
-            <section className="mt-20 mb-32">
+            <section className="mt-20 mb-24">
                 <h1 className="text-3xl text-center my-5">
                     Launch your NFTs or cryptocurrencies on any EVM supported chain in just few clicks
                 </h1>
@@ -28,7 +28,7 @@ const Homepage = () => {
                     }
                 </p>
             </section>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-3 gap-4">
                 {homepageInfo.map((value) => {
                     return (
                         <div

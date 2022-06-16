@@ -28,12 +28,12 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
     };
 
     return (
-        <nav className="sticky top-0 w-full bg-white z-30 py-10 backdrop-blur-md bg-white/60">
+        <nav className="sticky top-0 w-full bg-white z-30 py-5 backdrop-blur-md bg-white/60">
             <div className="max-w-screen-xl p-4 mx-auto">
                 <div className="flex items-center justify-between space-x-4 lg:space-x-10">
                     <div className="flex lg:w-0 lg:flex-1 text-xl font-medium cursor-pointer">
                         <Link href={'/'}>
-                            <Image src={'/logo.svg'} width="100" height="60" layout="fixed" alt="dapp tools logo" />
+                            <Image src={'/logo.svg'} width="100" height="70" layout="fixed" alt="dapp tools logo" />
                         </Link>
                     </div>
 
