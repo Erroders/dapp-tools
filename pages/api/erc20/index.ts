@@ -7,7 +7,7 @@
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Access, buildGeneric, GenericOptions, printContract } from 'root/packages/core/dist/index';
+import { Access, erc20 as ERC20, GenericOptions } from '@openzeppelin/wizard';
 import compile from '../../../utils/contract_compiler';
 
 // type for user provided data for ERC20 contract
@@ -15,10 +15,13 @@ export type ERC20Data = {
     name: string;
     symbol: string;
     burnable?: boolean;
+    snapshots?: boolean;
     pausable?: boolean;
     premint?: string;
     mintable?: boolean;
     permit?: boolean;
+    votes?: boolean;
+    flashmint?: boolean;
     accesss?: Access;
     info?: {
         securityContact?: string;
@@ -48,21 +51,10 @@ export default function handler(
 function erc20(opts: ERC20Data, cb: any): { contract: string; abi: any; bytecode: any } | void {
     const erc20_opts: GenericOptions = {
         kind: 'ERC20',
-        name: opts.name,
-        symbol: opts.symbol,
-        burnable: opts.burnable,
-        snapshots: false, //-<
-        pausable: opts.pausable,
-        premint: opts.premint,
-        mintable: opts.mintable,
-        permit: opts.permit,
-        votes: false, //-<
-        flashmint: false, //-<
-        access: opts.accesss,
+        ...opts,
         upgradeable: false, //-<
-        info: opts.info,
     };
-    const erc20_contract = buildGeneric(erc20_opts);
-    const contract_code = printContract(erc20_contract);
+    ERC20.defaults;
+    const contract_code = ERC20.print(erc20_opts);
     compile(contract_code, opts.name, cb);
 }

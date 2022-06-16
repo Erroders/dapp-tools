@@ -1,0 +1,16 @@
+{
+    "80001": {
+        "network": "maticmum",
+        "networkName": "Mumbai",
+        "tokenName": "MATIC",
+        "rpcURL": "https://matic-mumbai.chainstacklabs.com/",
+        "blockExplorerURL": "https://mumbai.polygonscan.com/"
+    },
+    "137": {
+        "network": "matic",
+        "networkName": "Polygon",
+        "tokenName": "MATIC",
+        "rpcURL": "https://rpc-mainnet.maticvigil.com/",
+        "blockExplorerURL": "https://polygonscan.com/"
+    }
+}
