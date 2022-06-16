@@ -6,6 +6,7 @@ import { ERCs } from '../../../utils/types';
 import { Button, CheckboxInput, TextInput, TextInputTypes } from '../generalComponents';
 import DropdownInput from '../generalComponents/DropdownInput';
 import networksData from '../../../data/networks.json';
+import path from 'path';
 
 const MintErc20 = () => {
     const [name, setName] = useState('');
@@ -23,6 +24,11 @@ const MintErc20 = () => {
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState('');
     const [networkName, setNetworkName] = useState('');
+
+    const [afterDeploymentDesc, setAfterDeploymentDesc] = useState('');
+
+    const [step1Open, setStep1Open] = useState(true);
+    const [step2Open, setStep2Open] = useState(false);
 
     const walletContext = useContext(WalletContext);
     walletContext.web3Provider?.getNetwork().then((v) => {
@@ -90,12 +96,39 @@ const MintErc20 = () => {
             return;
         }
 
-        const contractDetails = await deployContract(erc20Opts, ERCs.ERC20, walletContext.web3Provider, currentChainId);
-        console.log(contractDetails);
+        setStep1Open(false);
+        setStep2Open(true);
 
-        // TODO: Show Deployement Details
-        // setStep1Open(false);
-        // setStep2Open(true);
+        setAfterDeploymentDesc('Generating Contarct . . .\n');
+
+        const contractDetailsPromise = deployContract(
+            erc20Opts,
+            ERCs.ERC20,
+            walletContext.web3Provider,
+            currentChainId,
+        );
+
+        setAfterDeploymentDesc(afterDeploymentDesc + 'Deploying Contarct . . .\nAwaiting Wallet Confirmation . . .\n');
+
+        const contractDetails = await contractDetailsPromise;
+
+        if (contractDetails) {
+            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
+            setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
+            setAfterDeploymentDesc(
+                afterDeploymentDesc + 'Contarct Address: ' + contractDetails.contractAddress + ' \n',
+            );
+
+            const conrtractExplorerUrl =
+                new URL(
+                    path.join('tx', contractDetails.contractAddress.split('tx/')[1]),
+                    networksData[currentChainId].blockExplorerURL,
+                ).toString() + '/';
+
+            setAfterDeploymentDesc(afterDeploymentDesc + 'View Details on: ' + conrtractExplorerUrl + ' \n');
+        } else {
+            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
+        }
     };
 
     return (
@@ -117,7 +150,7 @@ const MintErc20 = () => {
             </header>
 
             <div className="p-6 max-w-screen-xl mx-auto space-y-4">
-                <details id="step1" className="bg-white border border-black divide-gray-200 p-6" open={true}>
+                <details id="step1" className="bg-white border border-black divide-gray-200 p-6" open={step1Open}>
                     <summary
                         className="flex cursor-pointer"
                         onClick={(e) => {
@@ -238,6 +271,24 @@ const MintErc20 = () => {
                             size="sm"
                         />
                     </div>
+                </details>
+
+                <details id="step2" className="bg-white border border-black divide-gray-200 p-6" open={step2Open}>
+                    <summary
+                        className="flex cursor-pointer"
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        <div>
+                            <h2 className="text-xl font-semibold">Deployment Details</h2>
+                            <p className="text-sm ml-0.5">Find Contarct Deployment details</p>
+                        </div>
+                    </summary>
+
+                    <hr className="my-3 border-gray-300" />
+
+                    <p className="whitespace-pre-line">{afterDeploymentDesc}</p>
                 </details>
             </div>
         </div>

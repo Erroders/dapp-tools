@@ -9,18 +9,9 @@ import { TextInput, TextInputTypes, ImageInput, CheckboxInput, Button } from '..
 import DropdownInput from '../generalComponents/DropdownInput';
 import networksData from '../../../data/networks.json';
 
-const MintErc721 = () => {
+const MintSingleNft = () => {
     const [name, setName] = useState('');
     const [symbol, setSymbol] = useState('');
-    const [enumerable, setEnumerable] = useState(false);
-    const [uriStorage, setUriStorage] = useState(false);
-    const [burnable, setBurnable] = useState(false);
-    const [pausable, setPausable] = useState(false);
-    const [mintable, setMintable] = useState(false);
-    const [incremental, setIncremental] = useState(false);
-    const [votes, setVotes] = useState(false);
-    const [access, setAccess] = useState('ownable');
-    const [upgradeable, setUpgradeable] = useState('false');
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState('');
     const [networkName, setNetworkName] = useState('');
@@ -46,9 +37,9 @@ const MintErc721 = () => {
     };
 
     const handleStep1Submit = () => {
-        console.log('Clicked Deploy');
+        console.log('Clicked Next');
 
-        if (!name || !symbol || !access || !upgradeable || !securityContract || !license) {
+        if (!nftImage || !nftName || !nftDescription) {
             return;
         }
 
@@ -57,13 +48,9 @@ const MintErc721 = () => {
     };
 
     const handleStep2Submit = async () => {
-        console.log('Clicked Mint');
+        console.log('Clicked Deploy');
 
-        if (!nftImage || !nftName || !nftDescription) {
-            return;
-        }
-
-        if (!(access == 'ownable' || access == 'roles' || access == undefined)) {
+        if (!name || !symbol || !securityContract || !license) {
             return;
         }
 
@@ -100,20 +87,12 @@ const MintErc721 = () => {
             image: nftImage,
         });
 
-        // console.log(metadata.url);
+        console.log(metadata.url);
 
         const erc721pts: ERC721Data = {
             name: name,
             symbol: symbol,
             baseUri: metadata.url,
-            burnable: burnable,
-            pausable: pausable,
-            mintable: mintable,
-            accesss: access,
-            votes: votes,
-            enumerable: enumerable,
-            incremental: incremental,
-            uriStorage: uriStorage,
             info: {
                 securityContact: securityContract,
                 license: license,
@@ -160,13 +139,11 @@ const MintErc721 = () => {
                 <div className="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:px-8">
                     <div className="sm:justify-between sm:items-center sm:flex">
                         <div className="text-center sm:text-left">
-                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">ERC721</h1>
+                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Single NFT</h1>
                             <p className="mt-1.5 text-sm tracking-wide text-gray-500">
-                                You can make a fungible token using ERC20, but what if not all tokens are alike? This
-                                comes up in situations like real estate, voting rights, or collectibles, where some
-                                items are valued more than others, due to their usefulness, rarity, etc. ERC721 is a
-                                standard for representing ownership of non-fungible tokens, that is, where each token is
-                                unique.
+                                Allows you to mint a unique piece of art, one at a time. This is for you if have only
+                                one image(or any other media file). But remember that you won't get to expand this into
+                                a collection later. That's more than enough to be known to mint your own unique NFT.
                             </p>
                         </div>
                     </div>
@@ -182,138 +159,8 @@ const MintErc721 = () => {
                         }}
                     >
                         <div>
-                            <h2 className="text-xl font-semibold">Contract Details</h2>
-                            <p className="text-sm ml-0.5">Enter Contract Details and choose your Network</p>
-                        </div>
-                    </summary>
-
-                    <hr className="my-3 border-gray-300" />
-
-                    <div className="grid grid-cols-1 mt-6 gap-4 max-w-md">
-                        <TextInput
-                            id="name"
-                            label="Token Name"
-                            type={TextInputTypes.TEXT}
-                            value={name}
-                            setValue={setName}
-                        />
-                        <TextInput
-                            id="symbol"
-                            label="Token Symbol"
-                            type={TextInputTypes.TEXT}
-                            value={symbol}
-                            setValue={setSymbol}
-                        />
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <CheckboxInput
-                                id="enumerable"
-                                label="Enumerable"
-                                value={enumerable}
-                                setValue={setEnumerable}
-                            />
-                            <CheckboxInput
-                                id="uriStorage"
-                                label="URI Storage"
-                                value={uriStorage}
-                                setValue={setUriStorage}
-                            />
-                            <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
-                            <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
-                            <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
-                            <CheckboxInput
-                                id="incremental"
-                                label="Incremental"
-                                value={incremental}
-                                setValue={setIncremental}
-                            />
-                            <CheckboxInput id="votes" label="Votes" value={votes} setValue={setVotes} />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <DropdownInput
-                                id="accesss"
-                                label="Access Control"
-                                value={access}
-                                setValue={setAccess}
-                                valueOptions={[
-                                    {
-                                        value: 'ownable',
-                                        label: 'Ownable',
-                                    },
-                                    {
-                                        value: 'roles',
-                                        label: 'Roles',
-                                    },
-                                ]}
-                            />
-                            <DropdownInput
-                                id="upgradeable"
-                                label="Upgradeable"
-                                value={upgradeable}
-                                setValue={setUpgradeable}
-                                valueOptions={[
-                                    {
-                                        value: 'false',
-                                        label: 'False',
-                                    },
-                                    {
-                                        value: 'transparent',
-                                        label: 'Transparent',
-                                    },
-                                    {
-                                        value: 'uups',
-                                        label: 'Uups',
-                                    },
-                                ]}
-                                disabled
-                            />
-                        </div>
-
-                        <TextInput
-                            id="securityContact"
-                            label="Security Contact"
-                            type={TextInputTypes.TEXT}
-                            value={securityContract}
-                            setValue={setSecurityContract}
-                        />
-                        <TextInput
-                            id="license"
-                            label="License"
-                            type={TextInputTypes.TEXT}
-                            value={license}
-                            setValue={setLicense}
-                        />
-
-                        <TextInput
-                            id="network"
-                            label="Network"
-                            type={TextInputTypes.TEXT}
-                            value={networkName}
-                            setValue={setNetworkName}
-                            disabled={true}
-                        />
-
-                        <Button
-                            title="Deploy"
-                            onClick={() => {
-                                handleStep1Submit();
-                            }}
-                            size="sm"
-                        />
-                    </div>
-                </details>
-
-                <details id="step2" className="bg-white border border-black divide-gray-200 p-6" open={step2Open}>
-                    <summary
-                        className="flex cursor-pointer"
-                        onClick={(e) => {
-                            e.preventDefault();
-                        }}
-                    >
-                        <div>
-                            <h2 className="text-xl font-semibold">Token Details</h2>
-                            <p className="text-sm ml-0.5">Upload image and enter Token Details</p>
+                            <h2 className="text-xl font-semibold">NFT Details</h2>
+                            <p className="text-sm ml-0.5">Upload image and enter NFT Details</p>
                         </div>
                     </summary>
 
@@ -353,7 +200,72 @@ const MintErc721 = () => {
                         />
 
                         <Button
-                            title="Mint"
+                            title="Next"
+                            onClick={() => {
+                                handleStep1Submit();
+                            }}
+                            size="sm"
+                        />
+                    </div>
+                </details>
+
+                <details id="step2" className="bg-white border border-black divide-gray-200 p-6" open={step2Open}>
+                    <summary
+                        className="flex cursor-pointer"
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        <div>
+                            <h2 className="text-xl font-semibold">Contract Details</h2>
+                            <p className="text-sm ml-0.5">Enter Contract Details and choose your Network</p>
+                        </div>
+                    </summary>
+
+                    <hr className="my-3 border-gray-300" />
+
+                    <div className="grid grid-cols-1 mt-6 gap-4 max-w-md">
+                        <TextInput
+                            id="name"
+                            label="Token Name"
+                            type={TextInputTypes.TEXT}
+                            value={name}
+                            setValue={setName}
+                        />
+                        <TextInput
+                            id="symbol"
+                            label="Token Symbol"
+                            type={TextInputTypes.TEXT}
+                            value={symbol}
+                            setValue={setSymbol}
+                        />
+
+                        <TextInput
+                            id="securityContact"
+                            label="Security Contact"
+                            type={TextInputTypes.TEXT}
+                            value={securityContract}
+                            setValue={setSecurityContract}
+                        />
+                        <TextInput
+                            id="license"
+                            label="License"
+                            type={TextInputTypes.TEXT}
+                            value={license}
+                            setValue={setLicense}
+                        />
+
+                        <TextInput
+                            id="network"
+                            label="Network"
+                            type={TextInputTypes.TEXT}
+                            value={networkName}
+                            setValue={setNetworkName}
+                            disabled={true}
+                        />
+
+                        <Button
+                            title="Deploy"
                             onClick={() => {
                                 handleStep2Submit();
                             }}
@@ -384,4 +296,4 @@ const MintErc721 = () => {
     );
 };
 
-export default MintErc721;
+export default MintSingleNft;

@@ -27,7 +27,7 @@ const DropdownInput = ({ id, label, setValue, value, valueOptions, disabled = fa
                     setValue(e.currentTarget.value);
                 }}
                 defaultValue={value}
-                className="pl-1 mt-1 w-full space-y-2 block focus:border-gray-500 focus:bg-white focus:ring-1 focus:ring-black"
+                className="pl-2 mt-1 w-full space-y-2 block focus:border-gray-500 focus:bg-white focus:ring-1 focus:ring-black"
             >
                 {valueOptions.map((valueOption, index) => {
                     return (
