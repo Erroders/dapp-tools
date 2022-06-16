@@ -12,19 +12,19 @@ interface WalletContextProps {
     updateWalletAddress: (walletAddress: string) => void;
     updateChainid: (chainId: number) => void;
     updateConnectWalletModalVisibility: (visibilty: boolean) => void;
-    updateWeb3Provider: (provider: ethers.providers.Web3Provider) => void;
+    updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => void;
 }
 
 export const WalletContext = createContext<WalletContextProps>({
-    walletAddress: '',
-    connectWalletModalVisibility: false,
-    chainId: 0x0,
-    web3Provider: null,
+    web3Provider: null, //# not needed
+    walletAddress: '', //# from signer
+    chainId: 0x0, //# from signer
+    updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => {}, // !
+    updateWalletAddress: (walletAddress: string) => {}, // !
+    updateChainid: (chainId: number) => {}, // !
+    connectWalletModalVisibility: false, // ?
     toggleConnectWalletModalVisibility: () => {},
-    updateWalletAddress: (walletAddress: string) => {},
-    updateChainid: (chainId: number) => {},
     updateConnectWalletModalVisibility: (visibilty: boolean) => {},
-    updateWeb3Provider: (provider: ethers.providers.Web3Provider) => {},
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         setWalletAddress(walletAddress);
     }
 
-    function updateWeb3Provider(provider: ethers.providers.Web3Provider) {
+    function updateWeb3Provider(provider: ethers.providers.Web3Provider | null) {
         setWeb3Provider(provider);
     }
 

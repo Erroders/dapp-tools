@@ -1,0 +1,26 @@
+[
+    {
+        "img": "/nonit.png",
+        "name": "Nonit Mittal",
+        "twitter": "nonitmital",
+        "github": "nonitmittal",
+        "linkedin": "nonitmittal",
+        "about": "nonitmittal"
+    },
+    {
+        "img": "/sparsh.png",
+        "name": "Sparsh Agarwal",
+        "twitter": "akathecoder",
+        "github": "akathecoder",
+        "linkedin": "akathecoder",
+        "about": "akathecoder"
+    },
+    {
+        "img": "/raghav.png",
+        "name": "Raghav Goyal",
+        "twitter": "rg12301",
+        "github": "rg12301",
+        "linkedin": "rg12301",
+        "about": "rg12301"
+    }
+]

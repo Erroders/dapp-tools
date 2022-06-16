@@ -3,7 +3,7 @@
 
 import { ethers } from 'ethers';
 import connectWalletInternal, { ConnectWalletCallbackFunctionsProps } from './connectWalletInternal';
-import { wallets, networks } from './enums';
+import { wallets } from './enums';
 
 async function connectWallet(
     wallet: wallets,
@@ -22,4 +22,4 @@ async function connectWallet(
 }
 
 export default connectWallet;
-export { wallets, networks };
+export { wallets };
