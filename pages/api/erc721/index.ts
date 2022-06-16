@@ -14,13 +14,14 @@ import compile from '../../../utils/contract_compiler';
 export type ERC721Data = {
     name: string;
     symbol: string;
-    baseUri: string;
-    enumerable: boolean;
-    uriStorage: boolean;
-    burnable: boolean;
-    pausable: boolean;
-    mintable: boolean;
-    incremental: boolean;
+    baseUri?: string;
+    enumerable?: boolean;
+    uriStorage?: boolean;
+    burnable?: boolean;
+    pausable?: boolean;
+    mintable?: boolean;
+    incremental?: boolean;
+    votes?: boolean;
     accesss?: Access;
     info?: {
         securityContact?: string;
@@ -50,19 +51,8 @@ export default function handler(
 function erc721(opts: ERC721Data, cb: any): { contract: string; abi: any; bytecode: any } | void {
     const erc721_opts: GenericOptions = {
         kind: 'ERC721',
-        name: opts.name,
-        symbol: opts.symbol,
-        baseUri: opts.baseUri,
-        enumerable: opts.enumerable,
-        uriStorage: opts.uriStorage,
-        burnable: opts.burnable,
-        pausable: opts.pausable,
-        mintable: opts.mintable,
-        incremental: opts.incremental,
-        votes: false,
-        access: opts.accesss,
+        ...opts,
         upgradeable: false, //-<
-        info: opts.info,
     };
     const contract_code = ERC721.print(erc721_opts);
     compile(contract_code, opts.name, cb);

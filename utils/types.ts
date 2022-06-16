@@ -3,6 +3,9 @@ export enum ERCs {
     ERC20 = 'erc20',
     ERC721 = 'erc721',
     ERC1155 = 'erc1155',
+    SingleNFT = 'single-nft',
+    NFTCollection = 'nft-collection',
+    // ERC20x = 'erc20x',
 }
 
 // type for compiled contract
@@ -14,21 +17,11 @@ export type compiledContract = {
 
 // different chains details
 // source : https://docs.polygon.technology/docs/develop/network-details/network/
-export const chainDetails = {
-    chains: [
-        {
-            networkName: 'Mumbai',
-            chainId: 80001,
-            tokenName: 'MATIC',
-            rpcURL: 'https://matic-mumbai.chainstacklabs.com/',
-            blockExplorerURL: 'https://mumbai.polygonscan.com/',
-        },
-        {
-            networkName: 'Polygon',
-            chainId: 137,
-            tokenName: 'MATIC',
-            rpcURL: 'https://rpc-mainnet.maticvigil.com/',
-            blockExplorerURL: 'https://polygonscan.com/',
-        },
-    ],
+export type Network = {
+    network: string;
+    networkName: string;
+    tokenName: string;
+    rpcURL: string;
+    blockExplorerURL: string;
+    factory?: string;
 };

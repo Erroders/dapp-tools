@@ -16,15 +16,15 @@ interface WalletContextProps {
 }
 
 export const WalletContext = createContext<WalletContextProps>({
-    walletAddress: '',
-    connectWalletModalVisibility: false,
-    chainId: 0x0,
-    web3Provider: null,
+    web3Provider: null, //# not needed
+    walletAddress: '', //# from signer
+    chainId: 0x0, //# from signer
+    updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => {}, // !
+    updateWalletAddress: (walletAddress: string) => {}, // !
+    updateChainid: (chainId: number) => {}, // !
+    connectWalletModalVisibility: false, // ?
     toggleConnectWalletModalVisibility: () => {},
-    updateWalletAddress: (walletAddress: string) => {},
-    updateChainid: (chainId: number) => {},
     updateConnectWalletModalVisibility: (visibilty: boolean) => {},
-    updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => {},
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
