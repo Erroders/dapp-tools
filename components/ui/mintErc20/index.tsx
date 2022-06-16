@@ -121,7 +121,7 @@ const MintErc20 = () => {
 
             const conrtractExplorerUrl =
                 new URL(
-                    path.join('tx', contractDetails.contractAddress),
+                    path.join('tx', contractDetails.contractAddress.split('tx/')[1]),
                     networksData[currentChainId].blockExplorerURL,
                 ).toString() + '/';
 
@@ -129,10 +129,6 @@ const MintErc20 = () => {
         } else {
             setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
         }
-
-        // TODO: Show Deployement Details
-        // setStep1Open(false);
-        // setStep2Open(true);
     };
 
     return (
