@@ -1,18 +1,18 @@
 import type { NextPage } from 'next';
 import WalletModal from '../components/ui/modal';
 import Navbar from '../components/ui/navbar';
-import SingleMint from '../components/ui/singleMint';
+import MintErc721 from '../components/ui/mintErc721';
 
-const MintNft: NextPage = () => {
+const Erc721: NextPage = () => {
     return (
         <>
             <Navbar />
             <main>
-                <SingleMint />
+                <MintErc721 />
             </main>
             <WalletModal />
         </>
     );
 };
 
-export default MintNft;
+export default Erc721;

@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import MintErc20 from '../components/ui/erc20';
+import MintErc20 from '../components/ui/mintErc20';
 import WalletModal from '../components/ui/modal';
 import Navbar from '../components/ui/navbar';
 
