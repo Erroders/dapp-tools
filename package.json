@@ -6,13 +6,13 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
-        "contractgen": "npm i @openzeppelin/wizard-cairo && npm i git+https://github.com/OpenZeppelin/contracts-wizard.git && cd node_modules/root/ && npm i && npm run prepare && cd ../../"
+        "lint": "next lint"
     },
     "dependencies": {
         "@openzeppelin/contracts": "^4.6.0",
         "@openzeppelin/wizard-cairo": "^0.1.0",
         "@tailwindcss/forms": "^0.5.2",
+        "@openzeppelin/wizard": "^0.1.0",
         "@walletconnect/web3-provider": "^1.7.8",
         "axios": "^0.27.2",
         "bignumber.js": "^9.0.2",
@@ -22,7 +22,6 @@
         "nft.storage": "^6.3.0",
         "react": "18.1.0",
         "react-dom": "18.1.0",
-        "root": "github:OpenZeppelin/contracts-wizard",
         "solc": "^0.8.14-fixed",
         "web3modal": "^1.9.7"
     },
