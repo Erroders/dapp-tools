@@ -108,6 +108,7 @@ const Profile = () => {
                                             logoUrl={obj.logo_url}
                                             ercSupports={obj.supports_erc}
                                             type={'nonDust'}
+                                            provider={provider}
                                         />
                                     );
                                 })}
@@ -125,6 +126,7 @@ const Profile = () => {
                                             logoUrl={obj.logo_url}
                                             ercSupports={obj.supports_erc}
                                             type={'dust'}
+                                            provider={provider}
                                         />
                                     );
                                 })}
@@ -144,7 +146,12 @@ const Profile = () => {
                         <>
                             {nftData.length > 0 &&
                                 nftData.map((obj, index1) => {
-                                    if (obj.contract_name === null || obj.nft_data.length === 0) {
+                                    if (
+                                        !obj ||
+                                        obj.contract_name === null ||
+                                        !obj.nft_data ||
+                                        obj.nft_data.length === 0
+                                    ) {
                                         nftFlag = nftFlag + 1;
                                         return;
                                     }

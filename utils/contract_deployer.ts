@@ -66,7 +66,7 @@ export async function deployContract(
 
 // function to get network Block Explorer URL
 // requires provider object and returm URL
-async function getBlockExplorerUrl(provider: ethers.providers.Web3Provider | null): Promise<string | void> {
+export async function getBlockExplorerUrl(provider: ethers.providers.Web3Provider | null): Promise<string | void> {
     if (provider) {
         const networkChainID = (await provider.getNetwork()).chainId;
         const networkDetails = chainDetails.chains.find((chain) => {
