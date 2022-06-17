@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { getIPFSImageURl } from '../../../utils/nft/getNftImage';
 import Collection from './Collection';
 import Description from './Description';
@@ -17,28 +18,32 @@ interface NftPageProps {
 }
 
 const NftPage = ({ nftMetadata, nftTransactions, nftCollectionTokens, chainId }: NftPageProps) => {
-    // console.log(nftMetadata);
+    const [image, setImage] = useState('');
+    const fetchImage = async (): Promise<string> => {
+        if (nftMetadata.nft_data[0].token_url) {
+            const newSrc = await getIPFSImageURl(nftMetadata.nft_data[0].token_url);
+            if (newSrc && newSrc.length > 0) {
+                setImage(newSrc);
+                return newSrc;
+            }
+        }
+        setImage('/logo.svg');
+        return '/logo.svg';
+    };
+
+    useEffect(() => {
+        nftMetadata.nft_data[0].external_data.image
+            ? setImage(nftMetadata.nft_data[0].external_data.image)
+            : fetchImage();
+    }, []);
 
     return (
         <div className="p-6 max-w-screen-xl mx-auto">
             <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-2">
                     <div className="border-2 border-black relative">
-                        {/* <img src={nftMetadata.nft_data[0].external_data.image} /> */}
-                        <img
-                            src={
-                                nftMetadata.nft_data[0].external_data.image
-                                    ? nftMetadata.nft_data[0].external_data.image
-                                    : ''
-                            }
-                            onError={async (target) => {
-                                target.currentTarget.onerror = null;
-                                if (nftMetadata.nft_data[0].token_url) {
-                                    const newSrc = await getIPFSImageURl(nftMetadata.nft_data[0].token_url);
-                                    newSrc && newSrc.length > 0 && (target.currentTarget.src = newSrc);
-                                }
-                            }}
-                        />
+                        {/*  eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={image} alt={nftMetadata.contract_name} />
                     </div>
 
                     <Description description={nftMetadata.nft_data[0].external_data.description} />

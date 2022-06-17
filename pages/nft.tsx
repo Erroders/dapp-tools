@@ -14,24 +14,18 @@ interface NFTProps {
 
 const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions, nftCollectionTokens, chainId }) => {
     if (!nftMetadata) {
-        return (
-            <>
-                <main>Invalid</main>
-            </>
-        );
+        return <main>Invalid</main>;
     }
 
     return (
-        <>
-            <main>
-                <NftPage
-                    nftMetadata={nftMetadata}
-                    nftTransactions={nftTransactions}
-                    nftCollectionTokens={nftCollectionTokens}
-                    chainId={chainId}
-                />
-            </main>
-        </>
+        <main>
+            <NftPage
+                nftMetadata={nftMetadata}
+                nftTransactions={nftTransactions}
+                nftCollectionTokens={nftCollectionTokens}
+                chainId={chainId}
+            />
+        </main>
     );
 };
 

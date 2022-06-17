@@ -3,11 +3,9 @@ import MintErc721 from '../components/ui/mintErc721';
 
 const Erc721: NextPage = () => {
     return (
-        <>
-            <main>
-                <MintErc721 />
-            </main>
-        </>
+        <main>
+            <MintErc721 />
+        </main>
     );
 };
 

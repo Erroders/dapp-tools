@@ -20,7 +20,9 @@ export async function getWalletTokenDetails(
         const url = new URL(
             `${baseURL}/${chainId}/address/${walletAddress}/balances_v2/?key=${API_KEY}&format=json&nft=true&no-nft-fetch=false`,
         );
+        console.log('fetch start');
         const response = await fetch(url);
+        console.log('fetch end');
         if (response.ok) {
             const result = await response.json();
             const data = result.data.items;

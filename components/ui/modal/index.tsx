@@ -9,9 +9,7 @@ const WalletModal = () => {
     const { updateSigner, modalVisibility, setModalVisibility } = useContext(WalletContext);
 
     const connect = (wallet: wallets) => {
-        connectWallet(wallet, (provider) => {
-            updateSigner(provider);
-        }).then((provider) => {
+        connectWallet(wallet, updateSigner).then((provider) => {
             updateSigner(provider);
         });
     };

@@ -3,11 +3,9 @@ import MintErc20 from '../components/ui/mintErc20';
 
 const Erc20: NextPage = () => {
     return (
-        <>
-            <main>
-                <MintErc20 />
-            </main>
-        </>
+        <main>
+            <MintErc20 />
+        </main>
     );
 };
 

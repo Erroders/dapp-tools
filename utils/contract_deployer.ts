@@ -44,7 +44,7 @@ export async function deployContract(
 
     if (signer && data && chainId) {
         // get the networkExplorerLink object from the networks
-        const networkExplorerLink = networks[chainId];
+        const networkExplorerLink = networks[chainId].blockExplorerURL;
 
         // Set gas limit and gas price, using the signer
         const price = ethers.utils.formatUnits(await signer.getGasPrice(), 'gwei');

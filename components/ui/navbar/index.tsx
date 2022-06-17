@@ -70,14 +70,16 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
                                     {/* <span className="absolute inset-0 border-2 border-black border-dashed"></span> */}
                                     {/* <ul className="text-right px-3 py-1.5 bg-white border-2 border-black group-hover:-translate-x-1 group-hover:-translate-y-1"> */}
                                     <ul className="text-right px-3 py-1.5 bg-white border-2 border-black">
-                                        <li
-                                            className="hover:font-semibold cursor-pointer"
-                                            onClick={() => {
-                                                setDropdownOpen(false);
-                                            }}
-                                        >
-                                            <Link href={'/profile'}>Profile</Link>
-                                        </li>
+                                        <Link href={'/profile'}>
+                                            <li
+                                                className="hover:font-semibold cursor-pointer"
+                                                onClick={() => {
+                                                    setDropdownOpen(false);
+                                                }}
+                                            >
+                                                Profile
+                                            </li>
+                                        </Link>
                                         <li
                                             className="hover:font-semibold cursor-pointer"
                                             onClick={() => {

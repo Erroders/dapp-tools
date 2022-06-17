@@ -3,11 +3,9 @@ import Profile from '../components/ui/profile';
 
 const profile = () => {
     return (
-        <>
-            <main>
-                <Profile />
-            </main>
-        </>
+        <main>
+            <Profile />
+        </main>
     );
 };
 

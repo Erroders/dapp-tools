@@ -17,7 +17,7 @@ const NftCard = ({ token_id, contract_address, contract_name, logo_url, chainId 
             contractAddress: contract_address,
             tokenId: token_id,
         }).then((value) => {
-            setImageUrl(value);
+            setImageUrl(value ? value : '');
         });
     }, []);
 

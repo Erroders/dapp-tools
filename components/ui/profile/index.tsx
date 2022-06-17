@@ -5,8 +5,7 @@ import CryptoCard from './cryptoCard';
 import NFTCard from './nftCard';
 
 const Profile = () => {
-    const { signer, walletAddress, chainId } = useContext(WalletContext);
-
+    const { signer, walletAddress, chainId, profileDataFetch, setProfileDataFetch } = useContext(WalletContext);
     const [hideDustToggle, setHideDustToggle] = useState<boolean>(false);
     const [nftData, setNftData] = useState<any[]>([]);
     const [dustCryptocurrencyData, setDustCryptocurrencyData] = useState<any[]>([]);
@@ -14,26 +13,32 @@ const Profile = () => {
     const [tab, setTab] = useState<'Cryptocurrencies' | 'NFTs'>('Cryptocurrencies');
     let nftFlag = 0;
 
+    const fetchData = async () => {
+        if (walletAddress && chainId && !profileDataFetch) {
+            setProfileDataFetch(true);
+            const data = await getWalletTokenDetails(walletAddress, chainId);
+            setProfileDataFetch(false);
+            if (data) {
+                console.log(data);
+                setDustCryptocurrencyData(data.dustCryptocurrencyData);
+                setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
+                setNftData(data.nftData);
+            }
+            nftFlag = 0;
+        }
+    };
+
     useEffect(() => {
         setDustCryptocurrencyData([]);
         setNonDustCryptocurrencyData([]);
         setNftData([]);
-        const fetchData = async () => {
-            if (walletAddress && chainId) {
-                const data = await getWalletTokenDetails(walletAddress, chainId);
-                data && setDustCryptocurrencyData(data.dustCryptocurrencyData);
-                data && setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
-                data && setNftData(data.nftData);
-                nftFlag = 0;
-            }
-        };
         if (signer)
             fetchData()
-                .then(() => {
-                    console.log(nonDustCryptocurrencyData, dustCryptocurrencyData, nftData);
-                })
+                // .then(() => {
+                //     console.log(nonDustCryptocurrencyData, dustCryptocurrencyData, nftData);
+                // })
                 .catch(console.error);
-    }, [chainId, walletAddress]);
+    }, [signer, walletAddress, chainId]);
 
     return (
         <div className="py-10 px-4 max-w-screen-xl mx-auto">
@@ -80,18 +85,18 @@ const Profile = () => {
                     {tab === 'Cryptocurrencies' ? (
                         <>
                             <div className="flex col-span-4 justify-end cursor-pointer">
-                                <label className="relative flex justify-between items-center group text-base font-medium">
+                                <label className="relative flex justify-between items-center group text-base font-medium cursor-pointer">
                                     Hide Zero Balance Tokens
                                     <input
                                         type="checkbox"
-                                        className="absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md"
+                                        className="absolute left-1/2 invisible -translate-x-1/2 w-full h-full peer appearance-none rounded-md"
                                         checked={hideDustToggle}
                                         onClick={() => {
                                             setHideDustToggle(!hideDustToggle);
                                         }}
                                         onChange={() => {}}
                                     />
-                                    <span className="w-12 h-6 flex items-center flex-shrink-0 ml-2 p-1 rounded-full duration-300 ease-in-out peer-checked:bg-gray-600 after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-5"></span>
+                                    <span className="w-12 h-6 flex items-center flex-shrink-0 ml-2 p-1 rounded-full duration-300 ease-in-out border-2 border-black after:border-2 after:border-black peer-checked:bg-gray-600 after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-5"></span>
                                 </label>
                             </div>
                             {nonDustCryptocurrencyData.length > 0 &&
@@ -130,7 +135,7 @@ const Profile = () => {
                                     );
                                 })}
                             {(nonDustCryptocurrencyData.length === 0 && dustCryptocurrencyData.length === 0) ||
-                                (nonDustCryptocurrencyData.length === 0 && hideDustToggle && (
+                                (hideDustToggle && nonDustCryptocurrencyData.length === 0 && (
                                     <>
                                         <div className="w-full col-span-4 text-center py-44">
                                             <div className="flex flex-col gap-2 text-2xl">
@@ -178,7 +183,7 @@ const Profile = () => {
                                 <>
                                     <div className="w-full col-span-4 text-center py-44">
                                         <div className="flex flex-col gap-2 text-2xl">
-                                            <span>No NFTs found in the wallet with address</span>
+                                            <span>No NFTs found in the Wallet</span>
                                             <span className="text-xl italic font-mono font-semibold">
                                                 {walletAddress}
                                             </span>
