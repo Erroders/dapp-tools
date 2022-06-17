@@ -36,18 +36,17 @@ async function compileContract(
 export async function deployContract(
     opts: ERC20Data | ERC721Data | ERC1155Data | SingleNFTData | NFTCollectionData,
     kind: ERCs,
-    provider: ethers.providers.Web3Provider | null,
+    signer: ethers.Signer | null,
     chainId: keyof typeof networks,
 ): Promise<{ contractAddress: string; confirmationLink: string; abi: any } | void> {
     // will compile the contract and return the abi and bytecode
     const data = await compileContract(opts, kind);
 
-    if (provider && data && chainId) {
-        // get the signer object from the provider
-        const signer = provider.getSigner();
+    if (signer && data && chainId) {
+        // get the networkExplorerLink object from the networks
         const networkExplorerLink = networks[chainId];
 
-        // Set gas limit and gas price, using the provider
+        // Set gas limit and gas price, using the signer
         const price = ethers.utils.formatUnits(await signer.getGasPrice(), 'gwei');
         const options = { gasPrice: ethers.utils.parseUnits(price, 'gwei') };
 
