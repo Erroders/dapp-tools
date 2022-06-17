@@ -14,11 +14,11 @@ interface ICard {
     logoUrl: string;
     ercSupports: string[];
     type: 'dust' | 'nonDust';
-    provider: ethers.providers.Web3Provider | null;
+    signer: ethers.Signer | null;
 }
 
 const CryptoCard = (props: ICard) => {
-    const walletContext = useContext(WalletContext);
+    const { chainId } = useContext(WalletContext);
     return (
         <div className="relative block group h-48">
             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
@@ -97,8 +97,8 @@ const CryptoCard = (props: ICard) => {
                     <div
                         className="flex text-xs mt-1 font-semibold items-center gap-1 justify-end text-gray-700 cursor-pointer"
                         onClick={async () => {
-                            if (walletContext.chainId) {
-                                const explorerUrl = networks[walletContext.chainId].blockExplorerURL;
+                            if (chainId) {
+                                const explorerUrl = networks[chainId].blockExplorerURL;
                                 const link = `${explorerUrl}address/${props.contractAddress}`;
                                 window.open(link, '_newtab');
                             }

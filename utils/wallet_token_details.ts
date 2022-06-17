@@ -5,7 +5,8 @@ import { ethers } from 'ethers';
 //- https://emailsaluja.medium.com/how-to-use-covalent-apis-700a971598af
 //- https://www.covalenthq.com/docs/api/#/0/Get%20token%20balances%20for%20address/USD/1
 export async function getWalletTokenDetails(
-    provider: ethers.providers.Web3Provider | null,
+    walletAddress: string,
+    chainId: string,
 ): Promise<{ dustCryptocurrencyData: any[]; nonDustCryptocurrencyData: any[]; nftData: any[] } | undefined> {
     // covalent api key and base endpoint URL
     const API_KEY = process.env.NEXT_PUBLIC_COVALENT_API_KEY;
@@ -15,14 +16,10 @@ export async function getWalletTokenDetails(
     let nonDustCryptocurrencyData: any[] = [];
     let nftData: any[] = [];
 
-    if (provider) {
-        const chainId = (await provider.getNetwork()).chainId;
-        const address = await (await provider.getSigner()).getAddress();
-
+    if (walletAddress && chainId) {
         const url = new URL(
-            `${baseURL}/${chainId}/address/${address}/balances_v2/?key=${API_KEY}&format=json&nft=true&no-nft-fetch=false`,
+            `${baseURL}/${chainId}/address/${walletAddress}/balances_v2/?key=${API_KEY}&format=json&nft=true&no-nft-fetch=false`,
         );
-
         const response = await fetch(url);
         if (response.ok) {
             const result = await response.json();

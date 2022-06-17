@@ -24,10 +24,8 @@ interface IIPFSdata {
 
 const NFTCard = (props: ICard) => {
     const router = useRouter();
-    const walletContext = useContext(WalletContext);
-
+    const { signer, chainId } = useContext(WalletContext);
     const [ipfsData, setIpfsData] = useState<IIPFSdata>();
-    const [chainId, setChainId] = useState<number>();
 
     useEffect(() => {
         const fetchData = async (tokenUrl: string) => {
@@ -51,18 +49,7 @@ const NFTCard = (props: ICard) => {
             }
         };
         fetchData(props.nftData.tokenUrl);
-    }, []);
-
-    useEffect(() => {
-        const getChainId = async () => {
-            if (walletContext.web3Provider) {
-                const network = await walletContext.web3Provider.getNetwork();
-                const chainId = network.chainId;
-                setChainId(chainId);
-            }
-        };
-        getChainId();
-    }, [walletContext]);
+    }, [signer]);
 
     return (
         <div className="relative block group h-72">
