@@ -47,6 +47,10 @@ const MintMultipleNft = () => {
         }
     }, [signer]);
 
+    useEffect(() => {
+        setAfterDeploymentDesc(new Array(10).fill(false));
+    }, []);
+
     const updateAfterDeploymentDescByIndex = (index: number, value: boolean) => {
         setAfterDeploymentDesc(
             afterDeploymentDesc.map((v, i) => {
@@ -63,7 +67,7 @@ const MintMultipleNft = () => {
     };
 
     const handleStep1Submit = async () => {
-        console.log('Clicked Next');
+        console.log('Clicked Deployed');
 
         if (!chainId) return;
 
@@ -104,14 +108,14 @@ const MintMultipleNft = () => {
     };
 
     const handleStep3Submit = async () => {
-        console.log('Clicked Deploy');
+        console.log('Clicked Mint');
 
         if (!nftImage || !nftName || !nftDescription) {
             return;
         }
 
-        // setStep2Open(false);
-        // setStep3Open(true);
+        setStep3Open(false);
+        setStep4Open(true);
 
         updateAfterDeploymentDescByIndex(7, true);
 
@@ -126,11 +130,12 @@ const MintMultipleNft = () => {
             console.log(metadata.url);
 
             if (contractDetails && signer) {
+                updateAfterDeploymentDescByIndex(8, true);
                 const contract = new ethers.Contract(contractDetails.contractAddress, contractDetails.abi, signer);
                 await contract.safeMint(walletAddress, metadata.url);
-                updateAfterDeploymentDescByIndex(8, true);
-            } else {
                 updateAfterDeploymentDescByIndex(9, true);
+            } else {
+                updateAfterDeploymentDescByIndex(10, true);
             }
         }
     };
@@ -321,8 +326,8 @@ const MintMultipleNft = () => {
                         }}
                     >
                         <div>
-                            <h2 className="text-xl font-semibold">Deployment Details</h2>
-                            <p className="text-sm ml-0.5">Find Contract Deployment details</p>
+                            <h2 className="text-xl font-semibold">Minting Details</h2>
+                            <p className="text-sm ml-0.5">Find NFT Minting details</p>
                         </div>
                     </summary>
 
@@ -331,16 +336,20 @@ const MintMultipleNft = () => {
                     <p className={(afterDeploymentDesc[7] ? '' : ' hidden ') + 'whitespace-pre-line'}>
                         {'Uploading NFT data . . .'}
                     </p>
+
+                    <p className={(afterDeploymentDesc[8] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Minting NFT . . .'}
+                    </p>
                     <p
                         className={
-                            (afterDeploymentDesc[8] ? '' : ' hidden ') + 'whitespace-pre-line text-green-500 font-bold'
+                            (afterDeploymentDesc[9] ? '' : ' hidden ') + 'whitespace-pre-line text-green-500 font-bold'
                         }
                     >
                         {'Minting Successful . . .'}
                     </p>
                     <p
                         className={
-                            (afterDeploymentDesc[9] ? '' : ' hidden ') + 'whitespace-pre-line text-red-500 font-bold'
+                            (afterDeploymentDesc[10] ? '' : ' hidden ') + 'whitespace-pre-line text-red-500 font-bold'
                         }
                     >
                         {'Minting Failed . . .'}

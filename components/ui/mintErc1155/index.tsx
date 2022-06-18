@@ -37,6 +37,10 @@ const MintErc1155 = () => {
         }
     }, [signer]);
 
+    useEffect(() => {
+        setAfterDeploymentDesc(new Array(10).fill(false));
+    }, []);
+
     const updateAfterDeploymentDescByIndex = (index: number, value: boolean) => {
         setAfterDeploymentDesc(
             afterDeploymentDesc.map((v, i) => {
