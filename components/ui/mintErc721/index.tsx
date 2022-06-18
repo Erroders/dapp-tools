@@ -1,14 +1,11 @@
-import path from 'path';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ERC721Data } from '../../../pages/api/erc721';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
-import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
-import { ERCs } from '../../../utils/types';
-import { TextInput, TextInputTypes, ImageInput, CheckboxInput, Button } from '../generalComponents';
-import DropdownInput from '../generalComponents/DropdownInput';
-import networksData from '../../../data/networks.json';
 import getLicences from '../../../utils/getLicences';
+import { ERCs } from '../../../utils/types';
+import { Button, CheckboxInput, TextInput, TextInputTypes } from '../generalComponents';
+import DropdownInput from '../generalComponents/DropdownInput';
 
 const MintErc721 = () => {
     const [name, setName] = useState('');
@@ -26,16 +23,10 @@ const MintErc721 = () => {
     const [license, setLicense] = useState(getLicences()[0].value);
     const [networkName, setNetworkName] = useState('');
 
-    const [nftImage, setNftImage] = useState<File>();
-    const [nftName, setNftName] = useState('');
-    const [nftDescription, setNftDescription] = useState('');
-    const [nftExternalUrl, setNftExternalUrl] = useState('');
-
     const [afterDeploymentDesc, setAfterDeploymentDesc] = useState('');
 
     const [step1Open, setStep1Open] = useState(true);
     const [step2Open, setStep2Open] = useState(false);
-    const [step3Open, setStep3Open] = useState(false);
 
     const { signer, chainId } = useContext(WalletContext);
 
@@ -47,44 +38,12 @@ const MintErc721 = () => {
         }
     }, [signer]);
 
-    const handleImageChange = (imageFile: File) => {
-        setNftImage(imageFile);
-    };
-
-    const handleStep1Submit = () => {
+    const handleStep1Submit = async () => {
         console.log('Clicked Deploy');
-
-        console.log({
-            name: name,
-            symbol: symbol,
-            enumerable: enumerable,
-            uriStorage: uriStorage,
-            burnable: burnable,
-            pausable: pausable,
-            mintable: mintable,
-            incremental: incremental,
-            votes: votes,
-            access: access,
-            upgradeable: upgradeable,
-            securityContract: securityContract,
-            license: license,
-            networkName: networkName,
-        });
-
-        if (!name || !symbol || !access || !upgradeable || !securityContract || !license) {
-            return;
-        }
-
-        setStep1Open(false);
-        setStep2Open(true);
-    };
-
-    const handleStep2Submit = async () => {
-        console.log('Clicked Mint');
 
         if (!chainId) return;
 
-        if (!nftImage || !nftName || !nftDescription) {
+        if (!name || !symbol || !access || !upgradeable || !securityContract || !license) {
             return;
         }
 
@@ -92,68 +51,46 @@ const MintErc721 = () => {
             return;
         }
 
-        const nets = Object.values(networksData).map((n) => {
-            return n.network;
-        });
+        setStep1Open(false);
+        setStep2Open(true);
 
-        setStep2Open(false);
-        setStep3Open(true);
+        const erc721pts: ERC721Data = {
+            name: name,
+            symbol: symbol,
+            burnable: burnable,
+            pausable: pausable,
+            mintable: mintable,
+            accesss: access,
+            votes: votes,
+            enumerable: enumerable,
+            incremental: incremental,
+            uriStorage: uriStorage,
+            info: {
+                securityContact: securityContract,
+                license: license,
+            },
+        };
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Uploading NFT data . . .\n');
+        setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
 
-        const metadata = await uploadIpfsData({
-            name: nftName,
-            description: nftDescription,
-            externalUrl: nftExternalUrl,
-            image: nftImage,
-        });
+        const contractDetailsPromise = deployContract(erc721pts, ERCs.ERC721, signer, chainId);
 
-        if (metadata) {
-            console.log(metadata.url);
+        setAfterDeploymentDesc(afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n');
 
-            const erc721pts: ERC721Data = {
-                name: name,
-                symbol: symbol,
-                baseUri: metadata.url,
-                burnable: burnable,
-                pausable: pausable,
-                mintable: mintable,
-                accesss: access,
-                votes: votes,
-                enumerable: enumerable,
-                incremental: incremental,
-                uriStorage: uriStorage,
-                info: {
-                    securityContact: securityContract,
-                    license: license,
-                },
-            };
+        const contractDetails = await contractDetailsPromise;
 
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
-
-            const contractDetailsPromise = deployContract(erc721pts, ERCs.ERC721, signer, chainId);
-
+        if (contractDetails) {
+            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
+            setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
             setAfterDeploymentDesc(
-                afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n',
+                afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
             );
 
-            const contractDetails = await contractDetailsPromise;
-
-            // console.log(contractDetails);
-
-            if (contractDetails) {
-                setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
-                setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
-                setAfterDeploymentDesc(
-                    afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
-                );
-
-                setAfterDeploymentDesc(
-                    afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
-                );
-            } else {
-                setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
-            }
+            setAfterDeploymentDesc(
+                afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
+            );
+        } else {
+            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
         }
     };
 
@@ -308,64 +245,6 @@ const MintErc721 = () => {
                 </details>
 
                 <details id="step2" className="bg-white border border-black divide-gray-200 p-6" open={step2Open}>
-                    <summary
-                        className="flex cursor-pointer"
-                        onClick={(e) => {
-                            e.preventDefault();
-                        }}
-                    >
-                        <div>
-                            <h2 className="text-xl font-semibold">Token Details</h2>
-                            <p className="text-sm ml-0.5">Upload image and enter Token Details</p>
-                        </div>
-                    </summary>
-
-                    <hr className="my-3 border-gray-300" />
-
-                    <div className="grid grid-cols-1 mt-6 gap-4 max-w-md">
-                        <div className="max-w-xs">
-                            <ImageInput
-                                id="nftImage"
-                                label="Select Image"
-                                image={nftImage}
-                                imageOnChange={handleImageChange}
-                            />
-                        </div>
-
-                        <TextInput
-                            id="nftName"
-                            label="NFT Name"
-                            type={TextInputTypes.TEXT}
-                            value={nftName}
-                            setValue={setNftName}
-                        />
-                        <TextInput
-                            id="nftDescription"
-                            label="Description"
-                            type={TextInputTypes.TEXT}
-                            value={nftDescription}
-                            setValue={setNftDescription}
-                        />
-
-                        <TextInput
-                            id="nftExternalUrl"
-                            label="External URL"
-                            type={TextInputTypes.TEXT}
-                            value={nftExternalUrl}
-                            setValue={setNftExternalUrl}
-                        />
-
-                        <Button
-                            title="Mint"
-                            onClick={() => {
-                                handleStep2Submit();
-                            }}
-                            size="sm"
-                        />
-                    </div>
-                </details>
-
-                <details id="step3" className="bg-white border border-black divide-gray-200 p-6" open={step3Open}>
                     <summary
                         className="flex cursor-pointer"
                         onClick={(e) => {

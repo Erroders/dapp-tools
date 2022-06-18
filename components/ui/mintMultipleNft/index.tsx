@@ -1,15 +1,14 @@
-import path from 'path';
-import React, { useContext, useEffect, useState } from 'react';
-import { NFTCollectionData } from '../../../utils/nft_collection';
+import { ethers } from 'ethers';
+import { useContext, useEffect, useState } from 'react';
+import networksData from '../../../data/networks.json';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
-import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
-import { ERCs } from '../../../utils/types';
-import { TextInput, TextInputTypes, ImageInput, CheckboxInput, Button } from '../generalComponents';
-import networksData from '../../../data/networks.json';
-import { ethers } from 'ethers';
-import DropdownInput from '../generalComponents/DropdownInput';
 import getLicences from '../../../utils/getLicences';
+import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
+import { NFTCollectionData } from '../../../utils/nft_collection';
+import { ERCs } from '../../../utils/types';
+import { Button, ImageInput, TextInput, TextInputTypes } from '../generalComponents';
+import DropdownInput from '../generalComponents/DropdownInput';
 
 const MintMultipleNft = () => {
     const [name, setName] = useState('');

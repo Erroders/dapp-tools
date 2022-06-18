@@ -1,14 +1,13 @@
-import path from 'path';
-import React, { useContext, useEffect, useState } from 'react';
-import { SingleNFTData } from '../../../utils/single_nft';
+import { useContext, useEffect, useState } from 'react';
+import networksData from '../../../data/networks.json';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
-import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
-import { ERCs } from '../../../utils/types';
-import { TextInput, TextInputTypes, ImageInput, CheckboxInput, Button } from '../generalComponents';
-import DropdownInput from '../generalComponents/DropdownInput';
-import networksData from '../../../data/networks.json';
 import getLicences from '../../../utils/getLicences';
+import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
+import { SingleNFTData } from '../../../utils/single_nft';
+import { ERCs } from '../../../utils/types';
+import { Button, ImageInput, TextInput, TextInputTypes } from '../generalComponents';
+import DropdownInput from '../generalComponents/DropdownInput';
 
 const MintSingleNft = () => {
     const [name, setName] = useState('');

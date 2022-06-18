@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import networksData from '../../../data/networks.json';
 import { ERC20Data } from '../../../pages/api/erc20';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
+import getLicences from '../../../utils/getLicences';
 import { ERCs } from '../../../utils/types';
 import { Button, CheckboxInput, TextInput, TextInputTypes } from '../generalComponents';
 import DropdownInput from '../generalComponents/DropdownInput';
-import networksData from '../../../data/networks.json';
-import path from 'path';
-import getLicences from '../../../utils/getLicences';
 
 const MintErc20 = () => {
     const [name, setName] = useState('');
