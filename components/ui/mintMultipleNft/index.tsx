@@ -48,7 +48,7 @@ const MintMultipleNft = () => {
     }, [signer]);
 
     useEffect(() => {
-        setAfterDeploymentDesc(new Array(10).fill(false));
+        setAfterDeploymentDesc(new Array(20).fill(false));
     }, []);
 
     const updateAfterDeploymentDescByIndex = (index: number, value: boolean) => {
@@ -138,6 +138,18 @@ const MintMultipleNft = () => {
                 updateAfterDeploymentDescByIndex(10, true);
             }
         }
+
+        updateAfterDeploymentDescByIndex(20, true);
+    };
+
+    const handleMintMoreSubmit = () => {
+        setNftImage(undefined);
+        setNftName('');
+        setNftDescription('');
+        setNftExternalUrl('');
+
+        setStep3Open(true);
+        setStep4Open(false);
     };
 
     return (
@@ -318,7 +330,7 @@ const MintMultipleNft = () => {
                     </div>
                 </details>
 
-                <details id="step4" className="bg-white border border-black divide-gray-200 p-6" open={step4Open}>
+                <details id="step4" className="bg-white border border-black divide-gray-200 p-6" open={true}>
                     <summary
                         className="flex cursor-pointer"
                         onClick={(e) => {
@@ -354,6 +366,19 @@ const MintMultipleNft = () => {
                     >
                         {'Minting Failed . . .'}
                     </p>
+                    <p>qqqqqqqqqqq qqqqqqqqqqqq</p>
+
+                    <div
+                        className={(afterDeploymentDesc[20] ? '' : ' hidden ') + 'grid grid-cols-1 mt-6 gap-4 max-w-md'}
+                    >
+                        <Button
+                            title="Mint More"
+                            onClick={() => {
+                                handleMintMoreSubmit();
+                            }}
+                            size="sm"
+                        />
+                    </div>
                 </details>
             </div>
         </div>
