@@ -8,6 +8,7 @@ import { ERC1155Data } from '../../../pages/api/erc1155';
 import { deployContract } from '../../../utils/contract_deployer';
 import { ERCs } from '../../../utils/types';
 import path from 'path';
+import getLicences from '../../../utils/getLicences';
 
 const MintErc1155 = () => {
     const [name, setName] = useState('');
@@ -234,10 +235,10 @@ const MintErc1155 = () => {
                                 value={securityContract}
                                 setValue={setSecurityContract}
                             />
-                            <TextInput
+                            <DropdownInput
                                 id="license"
                                 label="License"
-                                type={TextInputTypes.TEXT}
+                                valueOptions={getLicences()}
                                 value={license}
                                 setValue={setLicense}
                             />

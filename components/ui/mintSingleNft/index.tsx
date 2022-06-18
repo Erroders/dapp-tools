@@ -8,6 +8,7 @@ import { ERCs } from '../../../utils/types';
 import { TextInput, TextInputTypes, ImageInput, CheckboxInput, Button } from '../generalComponents';
 import DropdownInput from '../generalComponents/DropdownInput';
 import networksData from '../../../data/networks.json';
+import getLicences from '../../../utils/getLicences';
 
 const MintSingleNft = () => {
     const [name, setName] = useState('');
@@ -230,10 +231,10 @@ const MintSingleNft = () => {
                             value={securityContract}
                             setValue={setSecurityContract}
                         />
-                        <TextInput
+                        <DropdownInput
                             id="license"
                             label="License"
-                            type={TextInputTypes.TEXT}
+                            valueOptions={getLicences()}
                             value={license}
                             setValue={setLicense}
                         />

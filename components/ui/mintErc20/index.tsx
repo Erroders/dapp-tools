@@ -7,6 +7,7 @@ import { Button, CheckboxInput, TextInput, TextInputTypes } from '../generalComp
 import DropdownInput from '../generalComponents/DropdownInput';
 import networksData from '../../../data/networks.json';
 import path from 'path';
+import getLicences from '../../../utils/getLicences';
 
 const MintErc20 = () => {
     const [name, setName] = useState('');
@@ -220,10 +221,10 @@ const MintErc20 = () => {
                             value={securityContract}
                             setValue={setSecurityContract}
                         />
-                        <TextInput
+                        <DropdownInput
                             id="license"
                             label="License"
-                            type={TextInputTypes.TEXT}
+                            valueOptions={getLicences()}
                             value={license}
                             setValue={setLicense}
                         />
