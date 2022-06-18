@@ -1,12 +1,13 @@
 import path from 'path';
 import React, { useContext, useEffect, useState } from 'react';
-import { ERC721Data } from '../../../pages/api/erc721';
+import { NFTCollectionData } from '../../../utils/nft_collection';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
 import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
 import { ERCs } from '../../../utils/types';
 import { TextInput, TextInputTypes, ImageInput, CheckboxInput, Button } from '../generalComponents';
 import networksData from '../../../data/networks.json';
+import { ethers } from 'ethers';
 
 const MintMultipleNft = () => {
     const [name, setName] = useState('');
@@ -26,7 +27,7 @@ const MintMultipleNft = () => {
     const [step2Open, setStep2Open] = useState(false);
     const [step3Open, setStep3Open] = useState(false);
 
-    const { signer, chainId } = useContext(WalletContext);
+    const { signer, chainId, walletAddress } = useContext(WalletContext);
 
     useEffect(() => {
         if (signer) {
@@ -79,19 +80,16 @@ const MintMultipleNft = () => {
         if (metadata) {
             console.log(metadata.url);
 
-            const erc721pts: ERC721Data = {
+            const nftCollectionOpts: NFTCollectionData = {
                 name: name,
                 symbol: symbol,
-                baseUri: metadata.url,
-                info: {
-                    securityContact: securityContract,
-                    license: license,
-                },
+                securityContact: securityContract,
+                license: license,
             };
 
             setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
 
-            const contractDetailsPromise = deployContract(erc721pts, ERCs.ERC721, signer, chainId);
+            const contractDetailsPromise = deployContract(nftCollectionOpts, ERCs.NFTCollection, signer, chainId);
 
             setAfterDeploymentDesc(
                 afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n',
@@ -101,7 +99,9 @@ const MintMultipleNft = () => {
 
             // console.log(contractDetails);
 
-            if (contractDetails) {
+            if (contractDetails && signer) {
+                const contract = new ethers.Contract(contractDetails.contractAddress, contractDetails.abi, signer);
+                await contract.safeMint(walletAddress, metadata.url);
                 setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
                 setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
                 setAfterDeploymentDesc(

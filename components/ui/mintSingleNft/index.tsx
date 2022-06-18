@@ -1,6 +1,6 @@
 import path from 'path';
 import React, { useContext, useEffect, useState } from 'react';
-import { ERC721Data } from '../../../pages/api/erc721';
+import { SingleNFTData } from '../../../utils/single_nft';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
 import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
@@ -80,18 +80,17 @@ const MintSingleNft = () => {
         if (metadata) {
             console.log(metadata.url);
 
-            const erc721pts: ERC721Data = {
+            const singleNftOpts: SingleNFTData = {
                 name: name,
                 symbol: symbol,
-                baseUri: metadata.url,
-                info: {
-                    securityContact: securityContract,
-                    license: license,
-                },
+                tokenId: 1,
+                uri: metadata.url,
+                securityContact: securityContract,
+                license: license,
             };
             setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
 
-            const contractDetailsPromise = deployContract(erc721pts, ERCs.ERC721, signer, chainId);
+            const contractDetailsPromise = deployContract(singleNftOpts, ERCs.SingleNFT, signer, chainId);
 
             setAfterDeploymentDesc(
                 afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n',
@@ -101,7 +100,7 @@ const MintSingleNft = () => {
 
             // console.log(contractDetails);
 
-            if (contractDetails) {
+            if (contractDetails && signer) {
                 setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
                 setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
                 setAfterDeploymentDesc(

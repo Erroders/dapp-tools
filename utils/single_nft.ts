@@ -12,6 +12,7 @@ import { formatContractName, stringFormat } from './string_formatter';
 export type SingleNFTData = {
     name: string;
     symbol: string;
+    tokenId: number;
     uri: string;
     securityContact?: string;
     license?: string;
@@ -19,9 +20,12 @@ export type SingleNFTData = {
 
 // generate SingleNFT contract using OpenZeppelin wizard solidity API
 // then pass it to compile method to generate ABI and bytecode
-export function singleNft(opts: SingleNFTData, cb: any): { contract: string; abi: any; bytecode: any } | void {
+export function singleNft(
+    opts: SingleNFTData,
+    cb: any,
+): { abi: any; bytecode: any; contract: string; metadata: any } | void {
     opts.name = formatContractName(opts.name);
     let file: string = readFileSync(`./utils/contracts/SingleNFT.sol`, { encoding: 'utf-8' });
-    file = stringFormat(file, opts.name, opts.symbol, opts.uri, opts.securityContact, opts.license);
+    file = stringFormat(file, opts.name, opts.symbol, opts.tokenId, opts.uri, opts.securityContact, opts.license);
     compile(file, opts.name, cb);
 }

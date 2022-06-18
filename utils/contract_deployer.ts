@@ -47,12 +47,12 @@ export async function deployContract(
         const networkExplorerLink = networks[chainId].blockExplorerURL;
 
         // Set gas limit and gas price, using the signer
-        const price = ethers.utils.formatUnits(await signer.getGasPrice(), 'gwei');
-        const options = { gasPrice: ethers.utils.parseUnits(price, 'gwei') };
+        // const price = ethers.utils.formatUnits(await signer.getGasPrice(), 'gwei');
+        // const options = { gasPrice: ethers.utils.parseUnits(price, 'gwei') };
 
         // Deploy the contract
-        const factory = new ethers.ContractFactory(data.abi, data.bytecode.object, signer);
-        const contract = await factory.deploy(options);
+        const factory = new ethers.ContractFactory(data.abi, data.bytecode, signer);
+        const contract = await factory.deploy();
 
         // get transaction details
         const receipt = await contract.deployTransaction.wait();
