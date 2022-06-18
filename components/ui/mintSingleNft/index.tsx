@@ -16,6 +16,7 @@ const MintSingleNft = () => {
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState('');
     const [networkName, setNetworkName] = useState('');
+    const [tokenId, setTokenId] = useState('1');
 
     const [nftImage, setNftImage] = useState<File>();
     const [nftName, setNftName] = useState('');
@@ -58,7 +59,7 @@ const MintSingleNft = () => {
 
         if (!chainId) return;
 
-        if (!name || !symbol || !securityContract || !license) {
+        if (!name || !symbol || !securityContract || !tokenId || !license) {
             return;
         }
 
@@ -84,7 +85,7 @@ const MintSingleNft = () => {
             const singleNftOpts: SingleNFTData = {
                 name: name,
                 symbol: symbol,
-                tokenId: 1,
+                tokenId: Number.parseInt(tokenId),
                 uri: metadata.url,
                 securityContact: securityContract,
                 license: license,
@@ -231,6 +232,16 @@ const MintSingleNft = () => {
                             value={securityContract}
                             setValue={setSecurityContract}
                         />
+
+                        <TextInput
+                            id="tokenId"
+                            label="Token ID"
+                            type={TextInputTypes.NUMBER}
+                            value={tokenId}
+                            setValue={setTokenId}
+                            minNum={1}
+                        />
+
                         <DropdownInput
                             id="license"
                             label="License"
