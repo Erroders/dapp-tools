@@ -14,7 +14,7 @@ const MintSingleNft = () => {
     const [name, setName] = useState('');
     const [symbol, setSymbol] = useState('');
     const [securityContract, setSecurityContract] = useState('');
-    const [license, setLicense] = useState('');
+    const [license, setLicense] = useState(getLicences()[0].value);
     const [networkName, setNetworkName] = useState('');
     const [tokenId, setTokenId] = useState('1');
 

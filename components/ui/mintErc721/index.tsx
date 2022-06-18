@@ -23,7 +23,7 @@ const MintErc721 = () => {
     const [access, setAccess] = useState('ownable');
     const [upgradeable, setUpgradeable] = useState('false');
     const [securityContract, setSecurityContract] = useState('');
-    const [license, setLicense] = useState('');
+    const [license, setLicense] = useState(getLicences()[0].value);
     const [networkName, setNetworkName] = useState('');
 
     const [nftImage, setNftImage] = useState<File>();
@@ -53,6 +53,23 @@ const MintErc721 = () => {
 
     const handleStep1Submit = () => {
         console.log('Clicked Deploy');
+
+        console.log({
+            name: name,
+            symbol: symbol,
+            enumerable: enumerable,
+            uriStorage: uriStorage,
+            burnable: burnable,
+            pausable: pausable,
+            mintable: mintable,
+            incremental: incremental,
+            votes: votes,
+            access: access,
+            upgradeable: upgradeable,
+            securityContract: securityContract,
+            license: license,
+            networkName: networkName,
+        });
 
         if (!name || !symbol || !access || !upgradeable || !securityContract || !license) {
             return;

@@ -19,7 +19,7 @@ const MintErc1155 = () => {
     const [access, setAccess] = useState('Ownable');
     const [upgradeable, setUpgradeable] = useState('false');
     const [securityContract, setSecurityContract] = useState('');
-    const [license, setLicense] = useState('');
+    const [license, setLicense] = useState(getLicences()[0].value);
     const [networkName, setNetworkName] = useState('');
 
     const [nftImage, setNftImage] = useState<File>();

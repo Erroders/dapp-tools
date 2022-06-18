@@ -23,7 +23,7 @@ const MintErc20 = () => {
     const [access, setAccess] = useState('ownable');
     const [upgradeable, setUpgradeable] = useState('false');
     const [securityContract, setSecurityContract] = useState('');
-    const [license, setLicense] = useState('');
+    const [license, setLicense] = useState(getLicences()[0].value);
     const [networkName, setNetworkName] = useState('');
 
     const [afterDeploymentDesc, setAfterDeploymentDesc] = useState('');
