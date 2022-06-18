@@ -6,6 +6,7 @@ import getLicences from '../../../utils/getLicences';
 import { ERCs } from '../../../utils/types';
 import { Button, CheckboxInput, TextInput, TextInputTypes } from '../generalComponents';
 import DropdownInput from '../generalComponents/DropdownInput';
+import Heading from './Heading';
 
 const MintErc721 = () => {
     const [name, setName] = useState('');
@@ -23,7 +24,9 @@ const MintErc721 = () => {
     const [license, setLicense] = useState(getLicences()[0].value);
     const [networkName, setNetworkName] = useState('');
 
-    const [afterDeploymentDesc, setAfterDeploymentDesc] = useState('');
+    const [afterDeploymentDesc, setAfterDeploymentDesc] = useState<Array<boolean>>([]);
+    const [contractAddress, setContractAddress] = useState('');
+    const [confirmationLink, setConfirmationLink] = useState('');
 
     const [step1Open, setStep1Open] = useState(true);
     const [step2Open, setStep2Open] = useState(false);
@@ -37,6 +40,17 @@ const MintErc721 = () => {
             });
         }
     }, [signer]);
+
+    const updateAfterDeploymentDescByIndex = (index: number, value: boolean) => {
+        setAfterDeploymentDesc(
+            afterDeploymentDesc.map((v, i) => {
+                if (i == index) {
+                    return value;
+                }
+                return v;
+            }),
+        );
+    };
 
     const handleStep1Submit = async () => {
         console.log('Clicked Deploy');
@@ -71,47 +85,29 @@ const MintErc721 = () => {
             },
         };
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
+        updateAfterDeploymentDescByIndex(0, true);
 
         const contractDetailsPromise = deployContract(erc721pts, ERCs.ERC721, signer, chainId);
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n');
+        updateAfterDeploymentDescByIndex(1, true);
+        updateAfterDeploymentDescByIndex(2, true);
 
         const contractDetails = await contractDetailsPromise;
 
         if (contractDetails) {
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
-            setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
-            setAfterDeploymentDesc(
-                afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
-            );
-
-            setAfterDeploymentDesc(
-                afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
-            );
+            updateAfterDeploymentDescByIndex(3, true);
+            setContractAddress(contractDetails.contractAddress);
+            updateAfterDeploymentDescByIndex(4, true);
+            setConfirmationLink(contractDetails.confirmationLink);
+            updateAfterDeploymentDescByIndex(5, true);
         } else {
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
+            updateAfterDeploymentDescByIndex(6, true);
         }
     };
 
     return (
         <div>
-            <header className="bg-gray-100">
-                <div className="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:px-8">
-                    <div className="sm:justify-between sm:items-center sm:flex">
-                        <div className="text-center sm:text-left">
-                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">ERC721</h1>
-                            <p className="mt-1.5 text-sm tracking-wide text-gray-500">
-                                You can make a fungible token using ERC20, but what if not all tokens are alike? This
-                                comes up in situations like real estate, voting rights, or collectibles, where some
-                                items are valued more than others, due to their usefulness, rarity, etc. ERC721 is a
-                                standard for representing ownership of non-fungible tokens, that is, where each token is
-                                unique.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <Heading />
 
             <div className="p-6 max-w-screen-xl mx-auto space-y-4">
                 <details id="step1" className="bg-white border border-black divide-gray-200 p-6" open={step1Open}>
@@ -259,7 +255,39 @@ const MintErc721 = () => {
 
                     <hr className="my-3 border-gray-300" />
 
-                    <p className="whitespace-pre-line">{afterDeploymentDesc}</p>
+                    <p className={(afterDeploymentDesc[0] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Generating Contract . . .'}
+                    </p>
+                    <p className={(afterDeploymentDesc[1] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Deploying Contract . . .'}
+                    </p>
+                    <p className={(afterDeploymentDesc[2] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Awaiting Wallet Confirmation . . .'}
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[3] ? '' : ' hidden ') + 'whitespace-pre-line text-green-500 font-bold'
+                        }
+                    >
+                        {'Deplyoment Successful . . .'}
+                    </p>
+                    <br />
+                    <p className={(afterDeploymentDesc[4] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Contract Address: ' + contractAddress}
+                    </p>
+                    <p className={(afterDeploymentDesc[5] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'View Details on: '}{' '}
+                        <a href={confirmationLink} target="_blank" className="text-blue-500 font-semibold">
+                            {'confirmationLink'}
+                        </a>
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[6] ? '' : ' hidden ') + 'whitespace-pre-line text-red-500 font-bold'
+                        }
+                    >
+                        {'Deplyoment Failed . . .'}
+                    </p>
                 </details>
             </div>
         </div>

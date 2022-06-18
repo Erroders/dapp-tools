@@ -8,6 +8,7 @@ import { NFTCollectionData } from '../../../utils/nft_collection';
 import { ERCs } from '../../../utils/types';
 import { Button, ImageInput, TextInput, TextInputTypes } from '../generalComponents';
 import DropdownInput from '../generalComponents/DropdownInput';
+import Heading from './Heading';
 
 const MintMultipleNft = () => {
     const [name, setName] = useState('');
@@ -27,11 +28,14 @@ const MintMultipleNft = () => {
     const [nftDescription, setNftDescription] = useState('');
     const [nftExternalUrl, setNftExternalUrl] = useState('');
 
-    const [afterDeploymentDesc, setAfterDeploymentDesc] = useState('');
+    const [afterDeploymentDesc, setAfterDeploymentDesc] = useState<Array<boolean>>([]);
+    const [contractAddress, setContractAddress] = useState('');
+    const [confirmationLink, setConfirmationLink] = useState('');
 
     const [step1Open, setStep1Open] = useState(true);
     const [step2Open, setStep2Open] = useState(false);
     const [step3Open, setStep3Open] = useState(false);
+    const [step4Open, setStep4Open] = useState(false);
 
     const { signer, chainId, walletAddress } = useContext(WalletContext);
 
@@ -42,6 +46,17 @@ const MintMultipleNft = () => {
             });
         }
     }, [signer]);
+
+    const updateAfterDeploymentDescByIndex = (index: number, value: boolean) => {
+        setAfterDeploymentDesc(
+            afterDeploymentDesc.map((v, i) => {
+                if (i == index) {
+                    return value;
+                }
+                return v;
+            }),
+        );
+    };
 
     const handleImageChange = (imageFile: File) => {
         setNftImage(imageFile);
@@ -66,26 +81,23 @@ const MintMultipleNft = () => {
             license: license,
         };
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
+        updateAfterDeploymentDescByIndex(0, true);
 
         const contractDetailsPromise = deployContract(nftCollectionOpts, ERCs.NFTCollection, signer, chainId);
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n');
+        updateAfterDeploymentDescByIndex(1, true);
+        updateAfterDeploymentDescByIndex(2, true);
 
         setContractDetails(await contractDetailsPromise);
 
-        if (contractDetails && signer) {
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
-            setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
-            setAfterDeploymentDesc(
-                afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
-            );
-
-            setAfterDeploymentDesc(
-                afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
-            );
+        if (contractDetails) {
+            updateAfterDeploymentDescByIndex(3, true);
+            setContractAddress(contractDetails.contractAddress);
+            updateAfterDeploymentDescByIndex(4, true);
+            setConfirmationLink(contractDetails.confirmationLink);
+            updateAfterDeploymentDescByIndex(5, true);
         } else {
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
+            updateAfterDeploymentDescByIndex(6, true);
         }
 
         setStep3Open(true);
@@ -101,7 +113,7 @@ const MintMultipleNft = () => {
         // setStep2Open(false);
         // setStep3Open(true);
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Uploading NFT data . . .\n');
+        updateAfterDeploymentDescByIndex(7, true);
 
         const metadata = await uploadIpfsData({
             name: nftName,
@@ -116,29 +128,16 @@ const MintMultipleNft = () => {
             if (contractDetails && signer) {
                 const contract = new ethers.Contract(contractDetails.contractAddress, contractDetails.abi, signer);
                 await contract.safeMint(walletAddress, metadata.url);
-                setAfterDeploymentDesc(afterDeploymentDesc + 'Minting Successful . . .\n');
+                updateAfterDeploymentDescByIndex(8, true);
             } else {
-                setAfterDeploymentDesc(afterDeploymentDesc + 'Minting Failed . . .\n');
+                updateAfterDeploymentDescByIndex(9, true);
             }
         }
     };
 
     return (
         <div>
-            <header className="bg-gray-100">
-                <div className="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:px-8">
-                    <div className="sm:justify-between sm:items-center sm:flex">
-                        <div className="text-center sm:text-left">
-                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">NFT Collection</h1>
-                            <p className="mt-1.5 text-sm tracking-wide text-gray-500">
-                                {
-                                    "Allows you to mint multiple assets in one go. Even if each item in the collection is the same image, suppose, it would still have a unique ID on chain for distinction. That's more than enough to be known to mint your own collection."
-                                }
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <Heading />
 
             <div className="p-6 max-w-screen-xl mx-auto space-y-4">
                 <details id="step1" className="bg-white border border-black divide-gray-200 p-6" open={step1Open}>
@@ -221,7 +220,39 @@ const MintMultipleNft = () => {
 
                     <hr className="my-3 border-gray-300" />
 
-                    <p className="whitespace-pre-line">{afterDeploymentDesc}</p>
+                    <p className={(afterDeploymentDesc[0] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Generating Contract . . .'}
+                    </p>
+                    <p className={(afterDeploymentDesc[1] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Deploying Contract . . .'}
+                    </p>
+                    <p className={(afterDeploymentDesc[2] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Awaiting Wallet Confirmation . . .'}
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[3] ? '' : ' hidden ') + 'whitespace-pre-line text-green-500 font-bold'
+                        }
+                    >
+                        {'Deplyoment Successful . . .'}
+                    </p>
+                    <br />
+                    <p className={(afterDeploymentDesc[4] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Contract Address: ' + contractAddress}
+                    </p>
+                    <p className={(afterDeploymentDesc[5] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'View Details on: '}{' '}
+                        <a href={confirmationLink} target="_blank" className="text-blue-500 font-semibold">
+                            {'confirmationLink'}
+                        </a>
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[6] ? '' : ' hidden ') + 'whitespace-pre-line text-red-500 font-bold'
+                        }
+                    >
+                        {'Deplyoment Failed . . .'}
+                    </p>
                 </details>
 
                 <details id="step3" className="bg-white border border-black divide-gray-200 p-6" open={step3Open}>
@@ -280,6 +311,40 @@ const MintMultipleNft = () => {
                             size="sm"
                         />
                     </div>
+                </details>
+
+                <details id="step4" className="bg-white border border-black divide-gray-200 p-6" open={step4Open}>
+                    <summary
+                        className="flex cursor-pointer"
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        <div>
+                            <h2 className="text-xl font-semibold">Deployment Details</h2>
+                            <p className="text-sm ml-0.5">Find Contract Deployment details</p>
+                        </div>
+                    </summary>
+
+                    <hr className="my-3 border-gray-300" />
+
+                    <p className={(afterDeploymentDesc[7] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Uploading NFT data . . .'}
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[8] ? '' : ' hidden ') + 'whitespace-pre-line text-green-500 font-bold'
+                        }
+                    >
+                        {'Minting Successful . . .'}
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[9] ? '' : ' hidden ') + 'whitespace-pre-line text-red-500 font-bold'
+                        }
+                    >
+                        {'Minting Failed . . .'}
+                    </p>
                 </details>
             </div>
         </div>
