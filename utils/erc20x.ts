@@ -22,7 +22,7 @@ export type ERC20xData = {
 
 // generate ERC20x contract using OpenZeppelin wizard solidity API
 // then pass it to compile method to generate ABI and bytecode
-export function erc20x(opts: ERC20xData, cb: any): { contract: string; abi: any; bytecode: any } | void {
+export function erc20x(opts: ERC20xData, cb: any): { abi: any; bytecode: any; contract: string; metadata: any } | void {
     opts.name = formatContractName(opts.name);
     let file: string = readFileSync(`./utils/contracts/${opts.type}SuperToken.sol`, { encoding: 'utf-8' });
     switch (opts.type) {

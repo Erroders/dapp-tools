@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ERC20Data } from '../../../pages/api/erc20';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
@@ -30,20 +30,20 @@ const MintErc20 = () => {
     const [step1Open, setStep1Open] = useState(true);
     const [step2Open, setStep2Open] = useState(false);
 
-    const walletContext = useContext(WalletContext);
-    walletContext.web3Provider?.getNetwork().then((v) => {
-        setNetworkName(v.name);
-    });
+    const { signer, chainId } = useContext(WalletContext);
 
-    // useEffect(() => {
-    //     walletContext.web3Provider?.getNetwork().then((v) => {
-    //         console.log(v);
-    //         setNetwork(v.name);
-    //     });
-    // }, []);
+    useEffect(() => {
+        if (signer) {
+            signer.provider?.getNetwork().then((v) => {
+                setNetworkName(v.name);
+            });
+        }
+    }, [signer]);
 
     const handleStep1Submit = async () => {
         console.log('Clicked Mint');
+
+        if (!chainId) return;
 
         if (!name || !symbol || !premint || !access || !upgradeable || !securityContract || !license) {
             return;
@@ -79,36 +79,14 @@ const MintErc20 = () => {
             return n.network;
         });
 
-        const currentNetwork = await walletContext.web3Provider?.getNetwork();
-        if (!currentNetwork) {
-            return;
-        }
-
-        const currentChainId = currentNetwork.chainId.toString();
-        const currentNetworkName = currentNetwork.name;
-
-        if (!nets.includes(currentNetworkName)) {
-            return;
-        }
-
-        // TODO: ERROR: Temporary solution for deployContract
-        if (!(currentChainId == '80001' || currentChainId == '137')) {
-            return;
-        }
-
         setStep1Open(false);
         setStep2Open(true);
 
-        setAfterDeploymentDesc('Generating Contarct . . .\n');
+        setAfterDeploymentDesc('Generating Contract . . .\n');
 
-        const contractDetailsPromise = deployContract(
-            erc20Opts,
-            ERCs.ERC20,
-            walletContext.web3Provider,
-            currentChainId,
-        );
+        const contractDetailsPromise = deployContract(erc20Opts, ERCs.ERC20, signer, chainId);
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Deploying Contarct . . .\nAwaiting Wallet Confirmation . . .\n');
+        setAfterDeploymentDesc(afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n');
 
         const contractDetails = await contractDetailsPromise;
 
@@ -116,16 +94,12 @@ const MintErc20 = () => {
             setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
             setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
             setAfterDeploymentDesc(
-                afterDeploymentDesc + 'Contarct Address: ' + contractDetails.contractAddress + ' \n',
+                afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
             );
 
-            const conrtractExplorerUrl =
-                new URL(
-                    path.join('tx', contractDetails.contractAddress.split('tx/')[1]),
-                    networksData[currentChainId].blockExplorerURL,
-                ).toString() + '/';
-
-            setAfterDeploymentDesc(afterDeploymentDesc + 'View Details on: ' + conrtractExplorerUrl + ' \n');
+            setAfterDeploymentDesc(
+                afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
+            );
         } else {
             setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
         }
@@ -282,7 +256,7 @@ const MintErc20 = () => {
                     >
                         <div>
                             <h2 className="text-xl font-semibold">Deployment Details</h2>
-                            <p className="text-sm ml-0.5">Find Contarct Deployment details</p>
+                            <p className="text-sm ml-0.5">Find Contract Deployment details</p>
                         </div>
                     </summary>
 

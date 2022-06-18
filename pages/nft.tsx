@@ -1,8 +1,6 @@
 import axios from 'axios';
 import type { GetServerSideProps, NextPage } from 'next';
 import path from 'path';
-import WalletModal from '../components/ui/modal';
-import Navbar from '../components/ui/navbar';
 import NftPage, { NftDataProps } from '../components/ui/nftPage';
 import NftCollectionTokenProps from '../components/ui/nftPage/NftCollectionTokenProps';
 import NftTransactionsProps from '../components/ui/nftPage/NftTransactionsProps';
@@ -16,28 +14,18 @@ interface NFTProps {
 
 const NFT: NextPage<NFTProps> = ({ nftMetadata, nftTransactions, nftCollectionTokens, chainId }) => {
     if (!nftMetadata) {
-        return (
-            <>
-                <Navbar />
-                <main>Invalid</main>
-                <WalletModal />
-            </>
-        );
+        return <main>Invalid</main>;
     }
 
     return (
-        <>
-            <Navbar />
-            <main>
-                <NftPage
-                    nftMetadata={nftMetadata}
-                    nftTransactions={nftTransactions}
-                    nftCollectionTokens={nftCollectionTokens}
-                    chainId={chainId}
-                />
-            </main>
-            <WalletModal />
-        </>
+        <main>
+            <NftPage
+                nftMetadata={nftMetadata}
+                nftTransactions={nftTransactions}
+                nftCollectionTokens={nftCollectionTokens}
+                chainId={chainId}
+            />
+        </main>
     );
 };
 

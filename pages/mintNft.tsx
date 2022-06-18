@@ -6,11 +6,9 @@ import MintSingleNft from '../components/ui/mintSingleNft';
 const MintNft: NextPage = () => {
     return (
         <>
-            <Navbar />
             <main>
                 <MintSingleNft />
             </main>
-            <WalletModal />
         </>
     );
 };

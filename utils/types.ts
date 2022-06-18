@@ -10,9 +10,10 @@ export enum ERCs {
 
 // type for compiled contract
 export type compiledContract = {
-    contract: string;
     abi: any;
     bytecode: any;
+    contract: string;
+    metadata: any;
 };
 
 // different chains details

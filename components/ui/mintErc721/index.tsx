@@ -1,5 +1,5 @@
 import path from 'path';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ERC721Data } from '../../../pages/api/erc721';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
@@ -36,10 +36,15 @@ const MintErc721 = () => {
     const [step2Open, setStep2Open] = useState(false);
     const [step3Open, setStep3Open] = useState(false);
 
-    const walletContext = useContext(WalletContext);
-    walletContext.web3Provider?.getNetwork().then((v) => {
-        setNetworkName(v.name);
-    });
+    const { signer, chainId } = useContext(WalletContext);
+
+    useEffect(() => {
+        if (signer) {
+            signer.provider?.getNetwork().then((v) => {
+                setNetworkName(v.name);
+            });
+        }
+    }, [signer]);
 
     const handleImageChange = (imageFile: File) => {
         setNftImage(imageFile);
@@ -59,6 +64,8 @@ const MintErc721 = () => {
     const handleStep2Submit = async () => {
         console.log('Clicked Mint');
 
+        if (!chainId) return;
+
         if (!nftImage || !nftName || !nftDescription) {
             return;
         }
@@ -70,23 +77,6 @@ const MintErc721 = () => {
         const nets = Object.values(networksData).map((n) => {
             return n.network;
         });
-
-        const currentNetwork = await walletContext.web3Provider?.getNetwork();
-        if (!currentNetwork) {
-            return;
-        }
-
-        const currentChainId = currentNetwork.chainId.toString();
-        const currentNetworkName = currentNetwork.name;
-
-        if (!nets.includes(currentNetworkName)) {
-            return;
-        }
-
-        // TODO: ERROR: Temporary solution for deployContract
-        if (!(currentChainId == '80001' || currentChainId == '137')) {
-            return;
-        }
 
         setStep2Open(false);
         setStep3Open(true);
@@ -100,57 +90,52 @@ const MintErc721 = () => {
             image: nftImage,
         });
 
-        // console.log(metadata.url);
+        if (metadata) {
+            console.log(metadata.url);
 
-        const erc721pts: ERC721Data = {
-            name: name,
-            symbol: symbol,
-            baseUri: metadata.url,
-            burnable: burnable,
-            pausable: pausable,
-            mintable: mintable,
-            accesss: access,
-            votes: votes,
-            enumerable: enumerable,
-            incremental: incremental,
-            uriStorage: uriStorage,
-            info: {
-                securityContact: securityContract,
-                license: license,
-            },
-        };
+            const erc721pts: ERC721Data = {
+                name: name,
+                symbol: symbol,
+                baseUri: metadata.url,
+                burnable: burnable,
+                pausable: pausable,
+                mintable: mintable,
+                accesss: access,
+                votes: votes,
+                enumerable: enumerable,
+                incremental: incremental,
+                uriStorage: uriStorage,
+                info: {
+                    securityContact: securityContract,
+                    license: license,
+                },
+            };
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contarct . . .\n');
+            setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
 
-        const contractDetailsPromise = deployContract(
-            erc721pts,
-            ERCs.ERC721,
-            walletContext.web3Provider,
-            currentChainId,
-        );
+            const contractDetailsPromise = deployContract(erc721pts, ERCs.ERC721, signer, chainId);
 
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Deploying Contarct . . .\nAwaiting Wallet Confirmation . . .\n');
-
-        const contractDetails = await contractDetailsPromise;
-
-        // console.log(contractDetails);
-
-        if (contractDetails) {
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
-            setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
             setAfterDeploymentDesc(
-                afterDeploymentDesc + 'Contarct Address: ' + contractDetails.contractAddress + ' \n',
+                afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n',
             );
 
-            const conrtractExplorerUrl =
-                new URL(
-                    path.join('tx', contractDetails.contractAddress.split('tx/')[1]),
-                    networksData[currentChainId].blockExplorerURL,
-                ).toString() + '/';
+            const contractDetails = await contractDetailsPromise;
 
-            setAfterDeploymentDesc(afterDeploymentDesc + 'View Details on: ' + conrtractExplorerUrl + ' \n');
-        } else {
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
+            // console.log(contractDetails);
+
+            if (contractDetails) {
+                setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
+                setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
+                setAfterDeploymentDesc(
+                    afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
+                );
+
+                setAfterDeploymentDesc(
+                    afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
+                );
+            } else {
+                setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
+            }
         }
     };
 
@@ -371,7 +356,7 @@ const MintErc721 = () => {
                     >
                         <div>
                             <h2 className="text-xl font-semibold">Deployment Details</h2>
-                            <p className="text-sm ml-0.5">Find Contarct Deployment details</p>
+                            <p className="text-sm ml-0.5">Find Contract Deployment details</p>
                         </div>
                     </summary>
 
