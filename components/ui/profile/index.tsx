@@ -5,10 +5,7 @@ import CryptoCard from './cryptoCard';
 import NFTCard from './nftCard';
 
 const Profile = () => {
-    const walletContext = useContext(WalletContext);
-    const walletAddress = walletContext.walletAddress;
-    const provider = walletContext.web3Provider;
-
+    const { signer, walletAddress, chainId, profileDataFetch, setProfileDataFetch } = useContext(WalletContext);
     const [hideDustToggle, setHideDustToggle] = useState<boolean>(false);
     const [nftData, setNftData] = useState<any[]>([]);
     const [dustCryptocurrencyData, setDustCryptocurrencyData] = useState<any[]>([]);
@@ -16,25 +13,32 @@ const Profile = () => {
     const [tab, setTab] = useState<'Cryptocurrencies' | 'NFTs'>('Cryptocurrencies');
     let nftFlag = 0;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getWalletTokenDetails(provider);
-            data && setDustCryptocurrencyData(data.dustCryptocurrencyData);
-            data && setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
-            data && setNftData(data.nftData);
+    const fetchData = async () => {
+        if (walletAddress && chainId && !profileDataFetch) {
+            setProfileDataFetch(true);
+            const data = await getWalletTokenDetails(walletAddress, chainId);
+            setProfileDataFetch(false);
+            if (data) {
+                console.log(data);
+                setDustCryptocurrencyData(data.dustCryptocurrencyData);
+                setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
+                setNftData(data.nftData);
+            }
             nftFlag = 0;
-        };
-
-        if (provider) {
-            fetchData()
-                .then(() => {
-                    console.log(nonDustCryptocurrencyData, dustCryptocurrencyData, nftData);
-                })
-                .catch(console.error);
-        } else {
-            walletContext.updateConnectWalletModalVisibility(true);
         }
-    }, [walletAddress, provider]);
+    };
+
+    useEffect(() => {
+        setDustCryptocurrencyData([]);
+        setNonDustCryptocurrencyData([]);
+        setNftData([]);
+        if (signer)
+            fetchData()
+                // .then(() => {
+                //     console.log(nonDustCryptocurrencyData, dustCryptocurrencyData, nftData);
+                // })
+                .catch(console.error);
+    }, [signer, walletAddress, chainId]);
 
     return (
         <div className="py-10 px-4 max-w-screen-xl mx-auto">
@@ -45,12 +49,12 @@ const Profile = () => {
                         tab === 'Cryptocurrencies' ? 'w-3/5' : 'w-2/5'
                     }`}
                 >
-                    <span className="absolute inset-0 border-2 border-black border-dashed bg-gray-300"></span>
+                    <span className="absolute inset-0 border-2 border-black border-dashed"></span>
                     <button
                         className={`relative p-2 flex text-center w-full items-center justify-center h-full transition-transform transform border-black ${
                             tab === 'Cryptocurrencies'
-                                ? '-translate-y-2 translate-x-2 bg-white border-2 text-xl font-medium'
-                                : 'bg-gray-200 border text-lg'
+                                ? '-translate-y-2 -translate-x-2 bg-white border-2 text-xl font-medium'
+                                : 'border-2 text-lg'
                         }`}
                         onClick={() => {
                             setTab('Cryptocurrencies');
@@ -60,12 +64,12 @@ const Profile = () => {
                     </button>
                 </div>
                 <div className={`relative transition-all transform duration-300 ${tab === 'NFTs' ? 'w-3/5' : 'w-2/5'}`}>
-                    <span className="absolute inset-0 border-2 border-black border-dashed bg-gray-300"></span>
+                    <span className="absolute inset-0 border-2 border-black border-dashed"></span>
                     <button
                         className={`relative p-2 flex text-center w-full items-center  justify-center h-full transition-transform transform border-black ${
                             tab === 'NFTs'
-                                ? '-translate-y-2 translate-x-2 bg-white border-2 text-xl font-medium'
-                                : 'bg-gray-200 border text-lg'
+                                ? '-translate-y-2 -translate-x-2 bg-white border-2 text-xl font-medium'
+                                : 'border-2 text-lg'
                         }`}
                         onClick={() => {
                             setTab('NFTs');
@@ -81,18 +85,18 @@ const Profile = () => {
                     {tab === 'Cryptocurrencies' ? (
                         <>
                             <div className="flex col-span-4 justify-end cursor-pointer">
-                                <label className="relative flex justify-between items-center group text-base font-medium text-gray-500">
+                                <label className="relative flex justify-between items-center group text-base font-medium cursor-pointer">
                                     Hide Zero Balance Tokens
                                     <input
                                         type="checkbox"
-                                        className="absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md"
+                                        className="absolute left-1/2 invisible -translate-x-1/2 w-full h-full peer appearance-none rounded-md"
                                         checked={hideDustToggle}
                                         onClick={() => {
                                             setHideDustToggle(!hideDustToggle);
                                         }}
                                         onChange={() => {}}
                                     />
-                                    <span className="w-12 h-6 flex items-center flex-shrink-0 ml-2 bg-gray-300 p-1 rounded-full duration-300 ease-in-out peer-checked:bg-gray-600 after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-5"></span>
+                                    <span className="w-12 h-6 flex items-center flex-shrink-0 ml-2 p-1 rounded-full duration-300 ease-in-out border-2 border-black after:border-2 after:border-black peer-checked:bg-gray-600 after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-5"></span>
                                 </label>
                             </div>
                             {nonDustCryptocurrencyData.length > 0 &&
@@ -108,7 +112,7 @@ const Profile = () => {
                                             logoUrl={obj.logo_url}
                                             ercSupports={obj.supports_erc}
                                             type={'nonDust'}
-                                            provider={provider}
+                                            signer={signer}
                                         />
                                     );
                                 })}
@@ -126,17 +130,19 @@ const Profile = () => {
                                             logoUrl={obj.logo_url}
                                             ercSupports={obj.supports_erc}
                                             type={'dust'}
-                                            provider={provider}
+                                            signer={signer}
                                         />
                                     );
                                 })}
                             {(nonDustCryptocurrencyData.length === 0 && dustCryptocurrencyData.length === 0) ||
-                                (nonDustCryptocurrencyData.length === 0 && hideDustToggle && (
+                                (hideDustToggle && nonDustCryptocurrencyData.length === 0 && (
                                     <>
-                                        <div className="w-full col-span-4 text-center py-20">
-                                            <div className="flex flex-col gap-2 text-2xl font-semibold text-gray-500">
-                                                <span>No Cryptocurrencies were found in the Wallet</span>
-                                                <span className="text-xl italic">{walletAddress}</span>
+                                        <div className="w-full col-span-4 text-center py-44">
+                                            <div className="flex flex-col gap-2 text-2xl">
+                                                <span>No Cryptocurrencies found in the Wallet</span>
+                                                <span className="text-xl italic font-mono font-semibold">
+                                                    {walletAddress}
+                                                </span>
                                             </div>
                                         </div>
                                     </>
@@ -175,10 +181,12 @@ const Profile = () => {
                                 })}
                             {(nftData.length === 0 || nftFlag === nftData.length) && (
                                 <>
-                                    <div className="w-full col-span-4 text-center py-20">
-                                        <div className="flex flex-col gap-2 text-2xl font-semibold text-gray-500">
-                                            <span>No NFTs were found in the Wallet</span>
-                                            <span className="text-xl italic">{walletAddress}</span>
+                                    <div className="w-full col-span-4 text-center py-44">
+                                        <div className="flex flex-col gap-2 text-2xl">
+                                            <span>No NFTs found in the Wallet</span>
+                                            <span className="text-xl italic font-mono font-semibold">
+                                                {walletAddress}
+                                            </span>
                                         </div>
                                     </div>
                                 </>

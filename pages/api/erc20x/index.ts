@@ -11,10 +11,10 @@ import { erc20x, ERC20xData } from '../../../utils/erc20x';
 // NOTE: logs "API resolved without sending a response for /api/erc20x, this may result in stalled requests."
 export default function handler(
     req: NextApiRequest,
-    res: NextApiResponse<{ abi: any; bytecode: any; contract: string } | string>,
+    res: NextApiResponse<{ abi: any; bytecode: any; contract: string; metadata: any } | string>,
 ) {
     const opts: ERC20xData = req.body;
-    const cb = (result: { abi: any; bytecode: any; contract: string }) => {
+    const cb = (result: { abi: any; bytecode: any; contract: string; metadata: any }) => {
         if (result) {
             res.status(200).send(result);
         } else {

@@ -36,24 +36,23 @@ async function compileContract(
 export async function deployContract(
     opts: ERC20Data | ERC721Data | ERC1155Data | SingleNFTData | NFTCollectionData,
     kind: ERCs,
-    provider: ethers.providers.Web3Provider | null,
+    signer: ethers.Signer | null,
     chainId: keyof typeof networks,
 ): Promise<{ contractAddress: string; confirmationLink: string; abi: any } | void> {
     // will compile the contract and return the abi and bytecode
     const data = await compileContract(opts, kind);
 
-    if (provider && data && chainId) {
-        // get the signer object from the provider
-        const signer = provider.getSigner();
-        const networkExplorerLink = networks[chainId];
+    if (signer && data && chainId) {
+        // get the networkExplorerLink object from the networks
+        const networkExplorerLink = networks[chainId].blockExplorerURL;
 
-        // Set gas limit and gas price, using the provider
-        const price = ethers.utils.formatUnits(await signer.getGasPrice(), 'gwei');
-        const options = { gasPrice: ethers.utils.parseUnits(price, 'gwei') };
+        // Set gas limit and gas price, using the signer
+        // const price = ethers.utils.formatUnits(await signer.getGasPrice(), 'gwei');
+        // const options = { gasPrice: ethers.utils.parseUnits(price, 'gwei') };
 
         // Deploy the contract
-        const factory = new ethers.ContractFactory(data.abi, data.bytecode.object, signer);
-        const contract = await factory.deploy(options);
+        const factory = new ethers.ContractFactory(data.abi, data.bytecode, signer);
+        const contract = await factory.deploy();
 
         // get transaction details
         const receipt = await contract.deployTransaction.wait();

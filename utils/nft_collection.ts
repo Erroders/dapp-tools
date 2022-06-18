@@ -18,7 +18,10 @@ export type NFTCollectionData = {
 
 // generate NFTCollection contract using OpenZeppelin wizard solidity API
 // then pass it to compile method to generate ABI and bytecode
-export function nftCollection(opts: NFTCollectionData, cb: any): { contract: string; abi: any; bytecode: any } | void {
+export function nftCollection(
+    opts: NFTCollectionData,
+    cb: any,
+): { abi: any; bytecode: any; contract: string; metadata: any } | void {
     opts.name = formatContractName(opts.name);
     let file: string = readFileSync(`./utils/contracts/NFTCollection.sol`, { encoding: 'utf-8' });
     file = stringFormat(file, opts.name, opts.symbol, opts.securityContact, opts.license);
