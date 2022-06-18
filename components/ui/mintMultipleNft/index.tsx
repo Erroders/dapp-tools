@@ -1,6 +1,5 @@
 import { ethers } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
-import networksData from '../../../data/networks.json';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
 import getLicences from '../../../utils/getLicences';
@@ -16,6 +15,12 @@ const MintMultipleNft = () => {
     const [securityContract, setSecurityContract] = useState('');
     const [license, setLicense] = useState(getLicences()[0].value);
     const [networkName, setNetworkName] = useState('');
+
+    const [contractDetails, setContractDetails] = useState<void | {
+        contractAddress: string;
+        confirmationLink: string;
+        abi: any;
+    }>();
 
     const [nftImage, setNftImage] = useState<File>();
     const [nftName, setNftName] = useState('');
@@ -42,8 +47,10 @@ const MintMultipleNft = () => {
         setNftImage(imageFile);
     };
 
-    const handleStep1Submit = () => {
+    const handleStep1Submit = async () => {
         console.log('Clicked Next');
+
+        if (!chainId) return;
 
         if (!name || !symbol || !securityContract || !license) {
             return;
@@ -51,23 +58,48 @@ const MintMultipleNft = () => {
 
         setStep1Open(false);
         setStep2Open(true);
+
+        const nftCollectionOpts: NFTCollectionData = {
+            name: name,
+            symbol: symbol,
+            securityContact: securityContract,
+            license: license,
+        };
+
+        setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
+
+        const contractDetailsPromise = deployContract(nftCollectionOpts, ERCs.NFTCollection, signer, chainId);
+
+        setAfterDeploymentDesc(afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n');
+
+        setContractDetails(await contractDetailsPromise);
+
+        if (contractDetails && signer) {
+            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
+            setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
+            setAfterDeploymentDesc(
+                afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
+            );
+
+            setAfterDeploymentDesc(
+                afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
+            );
+        } else {
+            setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
+        }
+
+        setStep3Open(true);
     };
 
-    const handleStep2Submit = async () => {
+    const handleStep3Submit = async () => {
         console.log('Clicked Deploy');
-
-        if (!chainId) return;
 
         if (!nftImage || !nftName || !nftDescription) {
             return;
         }
 
-        const nets = Object.values(networksData).map((n) => {
-            return n.network;
-        });
-
-        setStep2Open(false);
-        setStep3Open(true);
+        // setStep2Open(false);
+        // setStep3Open(true);
 
         setAfterDeploymentDesc(afterDeploymentDesc + 'Uploading NFT data . . .\n');
 
@@ -81,39 +113,12 @@ const MintMultipleNft = () => {
         if (metadata) {
             console.log(metadata.url);
 
-            const nftCollectionOpts: NFTCollectionData = {
-                name: name,
-                symbol: symbol,
-                securityContact: securityContract,
-                license: license,
-            };
-
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
-
-            const contractDetailsPromise = deployContract(nftCollectionOpts, ERCs.NFTCollection, signer, chainId);
-
-            setAfterDeploymentDesc(
-                afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n',
-            );
-
-            const contractDetails = await contractDetailsPromise;
-
-            // console.log(contractDetails);
-
             if (contractDetails && signer) {
                 const contract = new ethers.Contract(contractDetails.contractAddress, contractDetails.abi, signer);
                 await contract.safeMint(walletAddress, metadata.url);
-                setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
-                setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
-                setAfterDeploymentDesc(
-                    afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
-                );
-
-                setAfterDeploymentDesc(
-                    afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
-                );
+                setAfterDeploymentDesc(afterDeploymentDesc + 'Minting Successful . . .\n');
             } else {
-                setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
+                setAfterDeploymentDesc(afterDeploymentDesc + 'Minting Failed . . .\n');
             }
         }
     };
@@ -209,6 +214,24 @@ const MintMultipleNft = () => {
                         }}
                     >
                         <div>
+                            <h2 className="text-xl font-semibold">Deployment Details</h2>
+                            <p className="text-sm ml-0.5">Find Contract Deployment details</p>
+                        </div>
+                    </summary>
+
+                    <hr className="my-3 border-gray-300" />
+
+                    <p className="whitespace-pre-line">{afterDeploymentDesc}</p>
+                </details>
+
+                <details id="step3" className="bg-white border border-black divide-gray-200 p-6" open={step3Open}>
+                    <summary
+                        className="flex cursor-pointer"
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        <div>
                             <h2 className="text-xl font-semibold">NFT Details</h2>
                             <p className="text-sm ml-0.5">Upload image and enter NFT Details</p>
                         </div>
@@ -252,29 +275,11 @@ const MintMultipleNft = () => {
                         <Button
                             title="Mint"
                             onClick={() => {
-                                handleStep2Submit();
+                                handleStep3Submit();
                             }}
                             size="sm"
                         />
                     </div>
-                </details>
-
-                <details id="step3" className="bg-white border border-black divide-gray-200 p-6" open={step3Open}>
-                    <summary
-                        className="flex cursor-pointer"
-                        onClick={(e) => {
-                            e.preventDefault();
-                        }}
-                    >
-                        <div>
-                            <h2 className="text-xl font-semibold">Deployment Details</h2>
-                            <p className="text-sm ml-0.5">Find Contract Deployment details</p>
-                        </div>
-                    </summary>
-
-                    <hr className="my-3 border-gray-300" />
-
-                    <p className="whitespace-pre-line">{afterDeploymentDesc}</p>
                 </details>
             </div>
         </div>
