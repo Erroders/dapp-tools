@@ -1,73 +1,136 @@
-import '../styles/globals.css';
-import type { AppProps } from 'next/app';
 import { ethers } from 'ethers';
-import { createContext, useState } from 'react';
+import { isEqual } from 'lodash';
+import type { AppProps } from 'next/app';
+import { createContext, useEffect, useState } from 'react';
+import WalletModal from '../components/ui/modal';
+import Navbar from '../components/ui/navbar';
+import connectWallet from '../components/wallet/connectWallet';
+import { wallets } from '../components/wallet/connectWallet/enums';
+import { CryptoCurrency, NFT } from '../utils/types';
+import { getWalletTokenDetails } from '../utils/wallet_token_details';
+import networks from '../data/networks.json';
+import '../styles/globals.css';
 
 interface WalletContextProps {
+    profileDataFetch: boolean;
     walletAddress: string;
-    connectWalletModalVisibility: boolean;
-    chainId: number;
-    web3Provider: ethers.providers.Web3Provider | null;
-    toggleConnectWalletModalVisibility: () => void;
-    updateWalletAddress: (walletAddress: string) => void;
-    updateChainid: (chainId: number) => void;
-    updateConnectWalletModalVisibility: (visibilty: boolean) => void;
-    updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => void;
+    modalVisibility: boolean;
+    chainId: keyof typeof networks | null;
+    signer: ethers.Signer | null;
+    nftData: NFT[] | null;
+    dustCryptocurrencyData: CryptoCurrency[] | null;
+    nonDustCryptocurrencyData: CryptoCurrency[] | null;
+    fetchData: () => void;
+    setModalVisibility: (visibilty: boolean) => void;
+    updateSigner: (provider: ethers.providers.Web3Provider | null) => void;
 }
 
 export const WalletContext = createContext<WalletContextProps>({
-    web3Provider: null, //# not needed
-    walletAddress: '', //# from signer
-    chainId: 0x0, //# from signer
-    updateWeb3Provider: (provider: ethers.providers.Web3Provider | null) => {}, // !
-    updateWalletAddress: (walletAddress: string) => {}, // !
-    updateChainid: (chainId: number) => {}, // !
-    connectWalletModalVisibility: false, // ?
-    toggleConnectWalletModalVisibility: () => {},
-    updateConnectWalletModalVisibility: (visibilty: boolean) => {},
+    profileDataFetch: false,
+    signer: null,
+    walletAddress: '',
+    chainId: null,
+    modalVisibility: false,
+    nftData: null,
+    dustCryptocurrencyData: null,
+    nonDustCryptocurrencyData: null,
+    fetchData: async () => {},
+    setModalVisibility: (visibilty: boolean) => {},
+    updateSigner: (provider: ethers.providers.Web3Provider | null) => {},
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-    const [connectWalletModalVisibility, setConnectWalletModalVisibility] = useState(false);
+    const [modalVisibility, setModalVisibility] = useState(false);
     const [walletAddress, setWalletAddress] = useState('');
-    const [web3Provider, setWeb3Provider] = useState<ethers.providers.Web3Provider | null>(null);
-    const [chainId, setChainId] = useState<number>(0x0);
+    const [signer, setSigner] = useState<ethers.Signer | null>(null);
+    const [chainId, setChainId] = useState<keyof typeof networks | null>(null);
+    const [profileDataFetch, setProfileDataFetch] = useState<boolean>(false);
+    const [nftData, setNftData] = useState<NFT[] | null>(null);
+    const [dustCryptocurrencyData, setDustCryptocurrencyData] = useState<CryptoCurrency[] | null>(null);
+    const [nonDustCryptocurrencyData, setNonDustCryptocurrencyData] = useState<CryptoCurrency[] | null>(null);
 
-    function toggleConnectWalletModalVisibility() {
-        setConnectWalletModalVisibility(!connectWalletModalVisibility);
-    }
+    const fetchData = async () => {
+        if (walletAddress && chainId) {
+            setProfileDataFetch(true);
+            const data = await getWalletTokenDetails(walletAddress, chainId);
+            setProfileDataFetch(false);
+            if (data) {
+                console.log(data);
+                setDustCryptocurrencyData(data.dustCryptocurrencyData);
+                setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
+                setNftData(data.nftData);
+            }
+        } else {
+            setDustCryptocurrencyData(null);
+            setNonDustCryptocurrencyData(null);
+            setNftData(null);
+        }
+    };
 
-    function updateConnectWalletModalVisibility(visibilty: boolean) {
-        setConnectWalletModalVisibility(visibilty);
-    }
+    useEffect(() => {
+        fetchData();
+    }, [walletAddress, chainId]);
 
-    function updateChainid(chainId: number) {
-        setChainId(chainId);
-    }
+    useEffect(() => {
+        if (signer) {
+            console.log('signer updated', signer);
+            signer.getAddress().then((address) => {
+                if (address !== walletAddress) setWalletAddress(address);
+            });
+            signer.getChainId().then((chainId_) => {
+                const _chainId = chainId_.toString() as keyof typeof networks;
+                if (chainId !== _chainId) setChainId(_chainId);
+            });
+            setModalVisibility(false);
+        } else {
+            walletAddress && setWalletAddress('');
+            chainId && setChainId(null);
+            // !modalVisibility && setModalVisibility(true);
+            connectWallet(wallets.ANY, updateSigner).then((provider) => {
+                updateSigner(provider);
+            });
+        }
+    }, [signer]);
 
-    function updateWalletAddress(walletAddress: string) {
-        setWalletAddress(walletAddress);
-    }
+    const updateSigner = (provider: ethers.providers.Web3Provider | null) => {
+        if (provider) {
+            // TODO: from link
+            const signer_ = provider.getSigner();
+            if (!isEqual(signer, signer_)) {
+                setSigner(signer_);
+            } else {
+                signer && setSigner(null);
+            }
+        } else {
+            setSigner(null);
+        }
+    };
 
-    function updateWeb3Provider(provider: ethers.providers.Web3Provider | null) {
-        setWeb3Provider(provider);
-    }
+    useEffect(() => {
+        connectWallet(wallets.ANY, updateSigner).then((provider) => {
+            updateSigner(provider);
+        });
+    }, []);
 
     return (
         <WalletContext.Provider
             value={{
+                profileDataFetch: profileDataFetch,
                 walletAddress: walletAddress,
-                connectWalletModalVisibility: connectWalletModalVisibility,
+                modalVisibility: modalVisibility,
                 chainId: chainId,
-                web3Provider: web3Provider,
-                toggleConnectWalletModalVisibility: toggleConnectWalletModalVisibility,
-                updateWalletAddress: updateWalletAddress,
-                updateChainid: updateChainid,
-                updateConnectWalletModalVisibility: updateConnectWalletModalVisibility,
-                updateWeb3Provider: updateWeb3Provider,
+                signer: signer,
+                nftData: nftData,
+                dustCryptocurrencyData: dustCryptocurrencyData,
+                nonDustCryptocurrencyData: nonDustCryptocurrencyData,
+                fetchData: fetchData,
+                setModalVisibility: setModalVisibility,
+                updateSigner: updateSigner,
             }}
         >
+            <Navbar />
             <Component {...pageProps} />
+            <WalletModal />
         </WalletContext.Provider>
     );
 }

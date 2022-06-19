@@ -1,16 +1,14 @@
 import type { NextPage } from 'next';
 import WalletModal from '../components/ui/modal';
 import Navbar from '../components/ui/navbar';
-import SingleMint from '../components/ui/singleMint';
+import MintSingleNft from '../components/ui/mintSingleNft';
 
 const MintNft: NextPage = () => {
     return (
         <>
-            <Navbar />
             <main>
-                <SingleMint />
+                <MintSingleNft />
             </main>
-            <WalletModal />
         </>
     );
 };

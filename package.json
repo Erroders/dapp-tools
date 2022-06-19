@@ -9,11 +9,16 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@coinbase/wallet-sdk": "^3.3.0",
         "@openzeppelin/contracts": "^4.6.0",
-        "@openzeppelin/wizard-cairo": "^0.1.0",
-        "@tailwindcss/forms": "^0.5.2",
         "@openzeppelin/wizard": "^0.1.0",
+        "@tailwindcss/forms": "^0.5.2",
+        "@types/lodash": "^4.14.182",
+        "@uauth/dom-ui": "^1.1.0",
+        "@uauth/js": "^2.0.0",
+        "@uauth/web3modal": "^2.0.0",
         "@walletconnect/web3-provider": "^1.7.8",
+        "authereum": "^0.1.14",
         "axios": "^0.27.2",
         "bignumber.js": "^9.0.2",
         "ethereum-blockies-base64": "^1.0.2",
@@ -23,7 +28,7 @@
         "react": "18.1.0",
         "react-dom": "18.1.0",
         "solc": "^0.8.14-fixed",
-        "web3modal": "^1.9.7"
+        "web3modal": "^1.9.8"
     },
     "devDependencies": {
         "@types/node": "17.0.39",

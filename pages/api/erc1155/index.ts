@@ -9,6 +9,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Access, erc1155 as ERC1155, GenericOptions } from '@openzeppelin/wizard';
 import compile from '../../../utils/contract_compiler';
+import { formatContractName } from '../../../utils/string_formatter';
 
 // type for user provided data for ERC1155 contract
 export type ERC1155Data = {
@@ -29,10 +30,10 @@ export type ERC1155Data = {
 // NOTE: logs "API resolved without sending a response for /api/erc1155, this may result in stalled requests."
 export default function handler(
     req: NextApiRequest,
-    res: NextApiResponse<{ abi: any; bytecode: any; contract: string } | string>,
+    res: NextApiResponse<{ abi: any; bytecode: any; contract: string; metadata: any } | string>,
 ) {
     const opts: ERC1155Data = req.body;
-    const cb = (result: { abi: any; bytecode: any; contract: string }) => {
+    const cb = (result: { abi: any; bytecode: any; contract: string; metadata: any }) => {
         if (result) {
             res.status(200).send(result);
         } else {
@@ -44,18 +45,12 @@ export default function handler(
 
 // generate ERC1155 contract using OpenZeppelin wizard solidity API
 // then pass it to compile method to generate ABI and bytecode
-function erc1155(opts: ERC1155Data, cb: any): { contract: string; abi: any; bytecode: any } | void {
+function erc1155(opts: ERC1155Data, cb: any): { abi: any; bytecode: any; contract: string; metadata: any } | void {
+    opts.name = formatContractName(opts.name);
     const erc1155_opts: GenericOptions = {
         kind: 'ERC1155',
-        name: opts.name,
-        uri: opts.uri,
-        burnable: opts.burnable,
-        pausable: opts.pausable,
-        mintable: opts.mintable,
-        supply: opts.supply,
-        access: opts.accesss,
+        ...opts,
         upgradeable: false, //-<
-        info: opts.info,
     };
     const contract_code = ERC1155.print(erc1155_opts);
     compile(contract_code, opts.name, cb);

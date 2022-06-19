@@ -2,7 +2,8 @@
 const nextConfig = {
     reactStrictMode: true,
     images: {
-        domains: ['ipfs.io'],
+        domains: ['ipfs.io', 'metadata.unstoppabledomains.com'],
+        minimumCacheTTL: 60,
     },
 };
 
