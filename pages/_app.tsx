@@ -1,15 +1,15 @@
-import '../styles/globals.css';
-import type { AppProps } from 'next/app';
 import { ethers } from 'ethers';
+import { isEqual } from 'lodash';
+import type { AppProps } from 'next/app';
 import { createContext, useEffect, useState } from 'react';
-import networks from '../data/networks.json';
 import WalletModal from '../components/ui/modal';
+import Navbar from '../components/ui/navbar';
 import connectWallet from '../components/wallet/connectWallet';
 import { wallets } from '../components/wallet/connectWallet/enums';
-import Navbar from '../components/ui/navbar';
-import { isEqual } from 'lodash';
 import { CryptoCurrency, NFT } from '../utils/types';
 import { getWalletTokenDetails } from '../utils/wallet_token_details';
+import networks from '../data/networks.json';
+import '../styles/globals.css';
 
 interface WalletContextProps {
     profileDataFetch: boolean;
@@ -85,12 +85,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         } else {
             walletAddress && setWalletAddress('');
             chainId && setChainId(null);
-            !modalVisibility && setModalVisibility(true);
+            // !modalVisibility && setModalVisibility(true);
+            connectWallet(wallets.ANY, updateSigner).then((provider) => {
+                updateSigner(provider);
+            });
         }
     }, [signer]);
 
     const updateSigner = (provider: ethers.providers.Web3Provider | null) => {
         if (provider) {
+            // TODO: from link
             const signer_ = provider.getSigner();
             if (!isEqual(signer, signer_)) {
                 setSigner(signer_);

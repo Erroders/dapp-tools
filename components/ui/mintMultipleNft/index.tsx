@@ -1,31 +1,40 @@
-import path from 'path';
-import React, { useContext, useEffect, useState } from 'react';
-import { NFTCollectionData } from '../../../utils/nft_collection';
+import { ethers } from 'ethers';
+import { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../../../pages/_app';
 import { deployContract } from '../../../utils/contract_deployer';
+import getLicences from '../../../utils/getLicences';
 import uploadIpfsData from '../../../utils/nft/uploadIpfsData';
+import { NFTCollectionData } from '../../../utils/nft_collection';
 import { ERCs } from '../../../utils/types';
-import { TextInput, TextInputTypes, ImageInput, CheckboxInput, Button } from '../generalComponents';
-import networksData from '../../../data/networks.json';
-import { ethers } from 'ethers';
+import { Button, ImageInput, TextInput, TextInputTypes } from '../generalComponents';
+import DropdownInput from '../generalComponents/DropdownInput';
+import Heading from './Heading';
 
 const MintMultipleNft = () => {
     const [name, setName] = useState('');
     const [symbol, setSymbol] = useState('');
     const [securityContract, setSecurityContract] = useState('');
-    const [license, setLicense] = useState('');
+    const [license, setLicense] = useState(getLicences()[0].value);
     const [networkName, setNetworkName] = useState('');
+
+    const [contractDetails, setContractDetails] = useState<void | {
+        contractAddress: string;
+        confirmationLink: string;
+        abi: any;
+    }>();
 
     const [nftImage, setNftImage] = useState<File>();
     const [nftName, setNftName] = useState('');
     const [nftDescription, setNftDescription] = useState('');
-    const [nftExternalUrl, setNftExternalUrl] = useState('');
 
-    const [afterDeploymentDesc, setAfterDeploymentDesc] = useState('');
+    const [afterDeploymentDesc, setAfterDeploymentDesc] = useState<Array<boolean>>([]);
+    const [contractAddress, setContractAddress] = useState('');
+    const [confirmationLink, setConfirmationLink] = useState('');
 
     const [step1Open, setStep1Open] = useState(true);
     const [step2Open, setStep2Open] = useState(false);
     const [step3Open, setStep3Open] = useState(false);
+    const [step4Open, setStep4Open] = useState(false);
 
     const { signer, chainId, walletAddress } = useContext(WalletContext);
 
@@ -37,12 +46,30 @@ const MintMultipleNft = () => {
         }
     }, [signer]);
 
+    useEffect(() => {
+        setAfterDeploymentDesc(new Array(30).fill(false));
+    }, []);
+
+    const updateAfterDeploymentDescByIndex = (index: number, value: boolean) => {
+        setAfterDeploymentDesc(
+            afterDeploymentDesc.map((v, i) => {
+                if (i == index) {
+                    return value;
+                }
+                return v;
+            }),
+        );
+        console.log(afterDeploymentDesc);
+    };
+
     const handleImageChange = (imageFile: File) => {
         setNftImage(imageFile);
     };
 
-    const handleStep1Submit = () => {
-        console.log('Clicked Next');
+    const handleStep1Submit = async () => {
+        console.log('Clicked Deployed');
+
+        if (!chainId) return;
 
         if (!name || !symbol || !securityContract || !license) {
             return;
@@ -50,89 +77,85 @@ const MintMultipleNft = () => {
 
         setStep1Open(false);
         setStep2Open(true);
+
+        const nftCollectionOpts: NFTCollectionData = {
+            name: name,
+            symbol: symbol,
+            securityContact: securityContract,
+            license: license,
+        };
+
+        updateAfterDeploymentDescByIndex(0, true);
+        updateAfterDeploymentDescByIndex(1, true);
+
+        const contractDetailsLocal = await deployContract(nftCollectionOpts, ERCs.NFTCollection, signer, chainId);
+
+        updateAfterDeploymentDescByIndex(2, true);
+
+        setContractDetails(contractDetailsLocal);
+
+        console.log(contractDetailsLocal);
+        console.log(contractDetails);
+
+        if (contractDetailsLocal) {
+            updateAfterDeploymentDescByIndex(3, true);
+            setContractAddress(contractDetailsLocal.contractAddress);
+            updateAfterDeploymentDescByIndex(4, true);
+            setConfirmationLink(contractDetailsLocal.confirmationLink);
+            updateAfterDeploymentDescByIndex(5, true);
+        } else {
+            updateAfterDeploymentDescByIndex(6, true);
+        }
+
+        setStep3Open(true);
     };
 
-    const handleStep2Submit = async () => {
-        console.log('Clicked Deploy');
-
-        if (!chainId) return;
+    const handleStep3Submit = async () => {
+        console.log('Clicked Mint');
 
         if (!nftImage || !nftName || !nftDescription) {
             return;
         }
 
-        const nets = Object.values(networksData).map((n) => {
-            return n.network;
-        });
+        setStep3Open(false);
+        setStep4Open(true);
 
-        setStep2Open(false);
-        setStep3Open(true);
-
-        setAfterDeploymentDesc(afterDeploymentDesc + 'Uploading NFT data . . .\n');
+        updateAfterDeploymentDescByIndex(7, true);
 
         const metadata = await uploadIpfsData({
             name: nftName,
             description: nftDescription,
-            externalUrl: nftExternalUrl,
             image: nftImage,
         });
 
         if (metadata) {
             console.log(metadata.url);
 
-            const nftCollectionOpts: NFTCollectionData = {
-                name: name,
-                symbol: symbol,
-                securityContact: securityContract,
-                license: license,
-            };
-
-            setAfterDeploymentDesc(afterDeploymentDesc + 'Generating Contract . . .\n');
-
-            const contractDetailsPromise = deployContract(nftCollectionOpts, ERCs.NFTCollection, signer, chainId);
-
-            setAfterDeploymentDesc(
-                afterDeploymentDesc + 'Deploying Contract . . .\nAwaiting Wallet Confirmation . . .\n',
-            );
-
-            const contractDetails = await contractDetailsPromise;
-
-            // console.log(contractDetails);
-
             if (contractDetails && signer) {
+                updateAfterDeploymentDescByIndex(8, true);
                 const contract = new ethers.Contract(contractDetails.contractAddress, contractDetails.abi, signer);
                 await contract.safeMint(walletAddress, metadata.url);
-                setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Successful . . .\n');
-                setAfterDeploymentDesc(afterDeploymentDesc + '\n\n');
-                setAfterDeploymentDesc(
-                    afterDeploymentDesc + 'Contract Address: ' + contractDetails.contractAddress + ' \n',
-                );
-
-                setAfterDeploymentDesc(
-                    afterDeploymentDesc + 'View Details on: ' + contractDetails.confirmationLink + ' \n',
-                );
+                updateAfterDeploymentDescByIndex(9, true);
             } else {
-                setAfterDeploymentDesc(afterDeploymentDesc + 'Deplyoment Failed . . .\n');
+                updateAfterDeploymentDescByIndex(10, true);
             }
         }
+
+        updateAfterDeploymentDescByIndex(20, true);
+    };
+
+    const handleMintMoreSubmit = () => {
+        setNftImage(undefined);
+        setNftName('');
+        setNftDescription('');
+
+        setStep3Open(true);
+        setStep4Open(false);
     };
 
     return (
         <div>
-            <header className="bg-gray-100">
-                <div className="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:px-8">
-                    <div className="sm:justify-between sm:items-center sm:flex">
-                        <div className="text-center sm:text-left">
-                            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">NFT Collection</h1>
-                            <p className="mt-1.5 text-sm tracking-wide text-gray-500">
-                                {
-                                    "Allows you to mint multiple assets in one go. Even if each item in the collection is the same image, suppose, it would still have a unique ID on chain for distinction. That's more than enough to be known to mint your own collection."
-                                }
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <Heading />
 
             <div className="p-6 max-w-screen-xl mx-auto space-y-4">
                 <details id="step1" className="bg-white border border-black divide-gray-200 p-6" open={step1Open}>
@@ -153,14 +176,14 @@ const MintMultipleNft = () => {
                     <div className="grid grid-cols-1 mt-6 gap-4 max-w-md">
                         <TextInput
                             id="name"
-                            label="Token Name"
+                            label="Token Name*"
                             type={TextInputTypes.TEXT}
                             value={name}
                             setValue={setName}
                         />
                         <TextInput
                             id="symbol"
-                            label="Token Symbol"
+                            label="Token Symbol*"
                             type={TextInputTypes.TEXT}
                             value={symbol}
                             setValue={setSymbol}
@@ -168,22 +191,22 @@ const MintMultipleNft = () => {
 
                         <TextInput
                             id="securityContact"
-                            label="Security Contact"
+                            label="Security Contact*"
                             type={TextInputTypes.TEXT}
                             value={securityContract}
                             setValue={setSecurityContract}
                         />
-                        <TextInput
+                        <DropdownInput
                             id="license"
-                            label="License"
-                            type={TextInputTypes.TEXT}
+                            label="License*"
+                            valueOptions={getLicences()}
                             value={license}
                             setValue={setLicense}
                         />
 
                         <TextInput
                             id="network"
-                            label="Network"
+                            label="Network*"
                             type={TextInputTypes.TEXT}
                             value={networkName}
                             setValue={setNetworkName}
@@ -208,6 +231,56 @@ const MintMultipleNft = () => {
                         }}
                     >
                         <div>
+                            <h2 className="text-xl font-semibold">Deployment Details</h2>
+                            <p className="text-sm ml-0.5">Find Contract Deployment details</p>
+                        </div>
+                    </summary>
+
+                    <hr className="my-3 border-gray-300" />
+
+                    <p className={(afterDeploymentDesc[0] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Generating Contract . . .'}
+                    </p>
+                    <p className={(afterDeploymentDesc[1] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Deploying Contract . . .'}
+                    </p>
+                    <p className={(afterDeploymentDesc[2] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Awaiting Wallet Confirmation . . .'}
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[3] ? '' : ' hidden ') + 'whitespace-pre-line text-green-500 font-bold'
+                        }
+                    >
+                        {'Deplyoment Successful . . .'}
+                    </p>
+                    <br />
+                    <p className={(afterDeploymentDesc[4] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Contract Address: ' + contractAddress}
+                    </p>
+                    <p className={(afterDeploymentDesc[5] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'View Details on: '}{' '}
+                        <a href={confirmationLink} target="_blank" className="text-blue-500 font-semibold">
+                            {'confirmationLink'}
+                        </a>
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[6] ? '' : ' hidden ') + 'whitespace-pre-line text-red-500 font-bold'
+                        }
+                    >
+                        {'Deplyoment Failed . . .'}
+                    </p>
+                </details>
+
+                <details id="step3" className="bg-white border border-black divide-gray-200 p-6" open={step3Open}>
+                    <summary
+                        className="flex cursor-pointer"
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        <div>
                             <h2 className="text-xl font-semibold">NFT Details</h2>
                             <p className="text-sm ml-0.5">Upload image and enter NFT Details</p>
                         </div>
@@ -219,7 +292,7 @@ const MintMultipleNft = () => {
                         <div className="max-w-xs">
                             <ImageInput
                                 id="nftImage"
-                                label="Select Image"
+                                label="Select Image*"
                                 image={nftImage}
                                 imageOnChange={handleImageChange}
                             />
@@ -227,38 +300,30 @@ const MintMultipleNft = () => {
 
                         <TextInput
                             id="nftName"
-                            label="NFT Name"
+                            label="NFT Name*"
                             type={TextInputTypes.TEXT}
                             value={nftName}
                             setValue={setNftName}
                         />
                         <TextInput
                             id="nftDescription"
-                            label="Description"
+                            label="Description*"
                             type={TextInputTypes.TEXT}
                             value={nftDescription}
                             setValue={setNftDescription}
                         />
 
-                        <TextInput
-                            id="nftExternalUrl"
-                            label="External URL"
-                            type={TextInputTypes.TEXT}
-                            value={nftExternalUrl}
-                            setValue={setNftExternalUrl}
-                        />
-
                         <Button
                             title="Mint"
                             onClick={() => {
-                                handleStep2Submit();
+                                handleStep3Submit();
                             }}
                             size="sm"
                         />
                     </div>
                 </details>
 
-                <details id="step3" className="bg-white border border-black divide-gray-200 p-6" open={step3Open}>
+                <details id="step4" className="bg-white border border-black divide-gray-200 p-6" open={step4Open}>
                     <summary
                         className="flex cursor-pointer"
                         onClick={(e) => {
@@ -266,14 +331,46 @@ const MintMultipleNft = () => {
                         }}
                     >
                         <div>
-                            <h2 className="text-xl font-semibold">Deployment Details</h2>
-                            <p className="text-sm ml-0.5">Find Contract Deployment details</p>
+                            <h2 className="text-xl font-semibold">Minting Details</h2>
+                            <p className="text-sm ml-0.5">Find NFT Minting details</p>
                         </div>
                     </summary>
 
                     <hr className="my-3 border-gray-300" />
 
-                    <p className="whitespace-pre-line">{afterDeploymentDesc}</p>
+                    <p className={(afterDeploymentDesc[7] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Uploading NFT data . . .'}
+                    </p>
+
+                    <p className={(afterDeploymentDesc[8] ? '' : ' hidden ') + 'whitespace-pre-line'}>
+                        {'Minting NFT . . .'}
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[9] ? '' : ' hidden ') + 'whitespace-pre-line text-green-500 font-bold'
+                        }
+                    >
+                        {'Minting Successful . . .'}
+                    </p>
+                    <p
+                        className={
+                            (afterDeploymentDesc[10] ? '' : ' hidden ') + 'whitespace-pre-line text-red-500 font-bold'
+                        }
+                    >
+                        {'Minting Failed . . .'}
+                    </p>
+
+                    <div
+                        className={(afterDeploymentDesc[20] ? '' : ' hidden ') + 'grid grid-cols-1 mt-6 gap-4 max-w-md'}
+                    >
+                        <Button
+                            title="Mint More"
+                            onClick={() => {
+                                handleMintMoreSubmit();
+                            }}
+                            size="sm"
+                        />
+                    </div>
                 </details>
             </div>
         </div>
