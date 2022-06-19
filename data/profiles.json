@@ -1,26 +1,27 @@
 [
     {
-        "img": "/nonit.png",
+        "img": "/profile/Nonit.png",
         "name": "Nonit Mittal",
-        "twitter": "nonitmital",
-        "github": "nonitmittal",
-        "linkedin": "nonitmittal",
-        "about": "nonitmittal"
+        "twitter": "https://twitter.com/nonit_mittal",
+        "github": "https://github.com/nonitmittal/",
+        "gmail": "mailto:nonitmittal@gmail.com",
+        "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
     },
     {
-        "img": "/sparsh.png",
+        "img": "/profile/Sparsh.png",
         "name": "Sparsh Agarwal",
-        "twitter": "akathecoder",
-        "github": "akathecoder",
-        "linkedin": "akathecoder",
-        "about": "akathecoder"
+        "twitter": "https://twitter.com/akathecoder",
+        "github": "https://github.com/akathecoder",
+        "gmail": "sparshaga25@gmail.com",
+        "about": "Wisdom comes from experience, experience comes from mistakes."
     },
     {
-        "img": "/raghav.png",
+        "img": "/profile/Raghav.png",
         "name": "Raghav Goyal",
-        "twitter": "rg12301",
-        "github": "rg12301",
-        "linkedin": "rg12301",
-        "about": "rg12301"
+        "twitter": "https://twitter.com/rg12301",
+        "github": "https://github.com/rg12301",
+        "linkedin": "https://www.linkedin.com/in/rg12301/",
+        "gmail": "mailto:12301raghavgoyal@gmail.com",
+        "about": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     }
 ]

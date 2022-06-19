@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import imagePlaceholder from '../../../assets/imagePlaceholder.svg';
 
@@ -17,6 +18,7 @@ const ImageInput = ({ id, label, image, imageOnChange }: ImageInputProps) => {
                     <img
                         src={image ? URL.createObjectURL(image) : imagePlaceholder.src}
                         className="object-center w-full"
+                        alt={label}
                     />
                 </label>
 
