@@ -366,7 +366,6 @@ const MintMultipleNft = () => {
                     >
                         {'Minting Failed . . .'}
                     </p>
-                    <p>qqqqqqqqqqq qqqqqqqqqqqq</p>
 
                     <div
                         className={(afterDeploymentDesc[20] ? '' : ' hidden ') + 'grid grid-cols-1 mt-6 gap-4 max-w-md'}
