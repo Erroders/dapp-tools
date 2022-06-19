@@ -1,10 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
-import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import getNFT from '../../../utils/nft/getNftImage';
 import { NFT } from '../../../utils/types';
-import NftCollectionTokenProps from './NftCollectionTokenProps';
 
 interface NFTCardProps {
     chainId: string;
