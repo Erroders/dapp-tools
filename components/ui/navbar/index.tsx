@@ -1,14 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../../../pages/_app';
+import connectWallet from '../../wallet/connectWallet';
+import { wallets } from '../../wallet/connectWallet/enums';
 
 interface NavbarProps {
     title?: string;
     walletAddressText?: string;
 }
 
-const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
+const Navbar = ({}: NavbarProps) => {
     const { signer, walletAddress, setModalVisibility, updateSigner } = useContext(WalletContext);
     const [networkName, setNetworkName] = useState('Not Connected');
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -27,7 +29,10 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
         if (signer) {
             setDropdownOpen(!dropdownOpen);
         } else {
-            setModalVisibility(true);
+            // setModalVisibility(true);
+            connectWallet(wallets.ANY, updateSigner).then((provider) => {
+                updateSigner(provider);
+            });
         }
     };
 
@@ -85,6 +90,7 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
                                             onClick={() => {
                                                 updateSigner(null);
                                                 setDropdownOpen(false);
+                                                // TODO: Call disconnect
                                             }}
                                         >
                                             Disconnect
