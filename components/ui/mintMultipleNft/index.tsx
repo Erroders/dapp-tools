@@ -48,7 +48,7 @@ const MintMultipleNft = () => {
     }, [signer]);
 
     useEffect(() => {
-        setAfterDeploymentDesc(new Array(20).fill(false));
+        setAfterDeploymentDesc(new Array(30).fill(false));
     }, []);
 
     const updateAfterDeploymentDescByIndex = (index: number, value: boolean) => {
@@ -60,6 +60,7 @@ const MintMultipleNft = () => {
                 return v;
             }),
         );
+        console.log(afterDeploymentDesc);
     };
 
     const handleImageChange = (imageFile: File) => {
@@ -86,19 +87,22 @@ const MintMultipleNft = () => {
         };
 
         updateAfterDeploymentDescByIndex(0, true);
-
-        const contractDetailsPromise = deployContract(nftCollectionOpts, ERCs.NFTCollection, signer, chainId);
-
         updateAfterDeploymentDescByIndex(1, true);
+
+        const contractDetailsLocal = await deployContract(nftCollectionOpts, ERCs.NFTCollection, signer, chainId);
+
         updateAfterDeploymentDescByIndex(2, true);
 
-        setContractDetails(await contractDetailsPromise);
+        setContractDetails(contractDetailsLocal);
 
-        if (contractDetails) {
+        console.log(contractDetailsLocal);
+        console.log(contractDetails);
+
+        if (contractDetailsLocal) {
             updateAfterDeploymentDescByIndex(3, true);
-            setContractAddress(contractDetails.contractAddress);
+            setContractAddress(contractDetailsLocal.contractAddress);
             updateAfterDeploymentDescByIndex(4, true);
-            setConfirmationLink(contractDetails.confirmationLink);
+            setConfirmationLink(contractDetailsLocal.confirmationLink);
             updateAfterDeploymentDescByIndex(5, true);
         } else {
             updateAfterDeploymentDescByIndex(6, true);

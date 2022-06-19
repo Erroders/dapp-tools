@@ -307,7 +307,7 @@ const MintSingleNft = () => {
                     <p className={(afterDeploymentDesc[6] ? '' : ' hidden ') + 'whitespace-pre-line'}>
                         {'View Details on: '}{' '}
                         <a href={confirmationLink} target="_blank" className="text-blue-500 font-semibold">
-                            {'confirmationLink'}
+                            {confirmationLink}
                         </a>
                     </p>
                     <p
