@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Description = ({ description }: { description: string }) => {
+const Description = ({ description }: { description: string | null }) => {
     return (
         <div className="bg-white border-2 border-black divide-y divide-gray-200 my-2">
             <details className="p-6 group">

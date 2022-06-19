@@ -1,12 +1,8 @@
 import React from 'react';
+import { Attribute } from '../../../utils/types';
 import PropertiesCard from './PropertiesCard';
 
-interface PropertiesProps {
-    trait_type: string;
-    value: string;
-}
-
-const Properties = ({ data }: { data: Array<PropertiesProps> }) => {
+const Properties = ({ data }: { data: Attribute[] | null }) => {
     return (
         <div className="bg-white border-2 border-black divide-y divide-gray-200 my-2">
             <details className="p-6 group">

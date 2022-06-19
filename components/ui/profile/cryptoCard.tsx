@@ -4,21 +4,19 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import networks from '../../../data/networks.json';
 import { WalletContext } from '../../../pages/_app';
+import { CryptoCurrency } from '../../../utils/types';
 
-interface ICard {
-    balance: string;
-    contractAddress: string;
-    contractDecimals: number;
-    contractName: string;
-    contractSymbol: string;
-    logoUrl: string;
-    ercSupports: string[];
-    type: 'dust' | 'nonDust';
-    signer: ethers.Signer | null;
-}
-
-const CryptoCard = (props: ICard) => {
+const CryptoCard = (cc: CryptoCurrency) => {
     const { chainId } = useContext(WalletContext);
+    const {
+        contract_address,
+        contract_name,
+        contract_decimals,
+        contract_ticker_symbol,
+        supports_erc,
+        balance,
+        logo_url,
+    } = cc;
     return (
         <div className="relative block group h-48">
             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
@@ -26,13 +24,13 @@ const CryptoCard = (props: ICard) => {
             <div className="relative flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2">
                 <div className="absolute flex gap-1 top-3 right-8 group invisible group-hover:visible">
                     <p className="font-medium text-sm italic text-gray-500">
-                        {props.contractAddress.substring(0, 6)}......
-                        {props.contractAddress.substring(props.contractAddress.length - 6)}
+                        {contract_address.substring(0, 6)}......
+                        {contract_address.substring(contract_address.length - 6)}
                     </p>
                     <div
                         className="relative"
                         onClick={() => {
-                            navigator.clipboard.writeText(props.contractAddress);
+                            navigator.clipboard.writeText(contract_address);
                         }}
                     >
                         <svg
@@ -61,30 +59,32 @@ const CryptoCard = (props: ICard) => {
                         </svg>
                     </div>
                 </div>
+
                 <div className="px-8 pb-8 transition-opacity group-hover:opacity-0 group-hover:absolute">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                        src={props.logoUrl}
+                        src={logo_url}
                         onError={(target) => {
                             target.currentTarget.onerror = null;
-                            target.currentTarget.src = makeBlockie(props.contractAddress);
+                            const blockie = makeBlockie(contract_address);
+                            target.currentTarget.src = blockie;
                         }}
                         className="w-14 h-14 rounded-full"
-                        alt={props.contractName}
+                        alt={contract_name}
                     />
-
-                    <h2 className="mt-4 text-xl font-medium">{props.contractName}</h2>
+                    <h2 className="mt-4 text-xl font-medium">{contract_name}</h2>
                 </div>
 
                 <div className="absolute w-full px-8 py-4 transition-opacity opacity-0 group-hover:opacity-100 group-hover:relative">
                     <h2 className="mt-4 text-xl font-medium">
-                        {props.contractName} (<span className="text-base font-semibold">{props.contractSymbol}</span>)
+                        {contract_name} (<span className="text-base font-semibold">{contract_ticker_symbol}</span>)
                     </h2>
                     <p className="text-2xl mt-0.5 font-bold">
-                        {new BigNumber(props.balance).shiftedBy(-props.contractDecimals).toFixed(3)}
+                        {new BigNumber(balance ? balance : 0).shiftedBy(-contract_decimals).toFixed(3)}
                     </p>
                     <div className="flex gap-2 items-center mt-3">
-                        {props.ercSupports &&
-                            props.ercSupports.map((erc, index) => {
+                        {supports_erc &&
+                            supports_erc.map((erc, index) => {
                                 return (
                                     <div key={index}>
                                         <span className="rounded-full px-4 py-1.5 bg-green-100 text-green-700 font-medium text-xs">
@@ -99,7 +99,7 @@ const CryptoCard = (props: ICard) => {
                         onClick={async () => {
                             if (chainId) {
                                 const explorerUrl = networks[chainId].blockExplorerURL;
-                                const link = `${explorerUrl}address/${props.contractAddress}`;
+                                const link = `${explorerUrl}address/${contract_address}`;
                                 window.open(link, '_newtab');
                             }
                         }}

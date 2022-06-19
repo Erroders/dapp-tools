@@ -1,9 +1,10 @@
 import axios from 'axios';
 import path from 'path';
-import { NftDataProps } from '../../components/ui/nftPage';
 import { getIPFSUrl } from '../getIPFSUrl';
+import { NFT } from '../types';
+import { tokenAsNFT } from '../type_functions';
 
-export default async function getNftImage({
+export default async function getNFT({
     chainId,
     contractAddress,
     tokenId,
@@ -11,7 +12,7 @@ export default async function getNftImage({
     tokenId: string;
     contractAddress: string;
     chainId: string;
-}): Promise<string> {
+}): Promise<NFT | null> {
     let imageLink: string | void = '';
     const metadataApiUrl =
         new URL(
@@ -24,14 +25,13 @@ export default async function getNftImage({
             key: process.env.NEXT_PUBLIC_COVALENT_API_KEY,
         },
     });
-    const nftMetadata: NftDataProps = metadataRes.data.data.items[0];
-    imageLink = nftMetadata.nft_data[0].external_data.image;
-
-    if (nftMetadata.nft_data[0].token_url) {
-        const tempLink = await getIPFSImageURl(nftMetadata.nft_data[0].token_url);
-        tempLink && tempLink.length > 0 && (imageLink = tempLink);
-    }
-    return imageLink;
+    const nft = await tokenAsNFT(metadataRes.data.data.items[0]);
+    // if (nft.nft_data[0].token_url) {
+    //     const tempLink = await getIPFSImageURl(nft.nft_data[0].token_url);
+    //     tempLink && tempLink.length > 0 && (imageLink = tempLink);
+    // }
+    // return imageLink;
+    return nft;
 }
 
 // function that returns IPFS url
