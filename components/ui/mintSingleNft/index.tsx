@@ -21,7 +21,6 @@ const MintSingleNft = () => {
     const [nftImage, setNftImage] = useState<File>();
     const [nftName, setNftName] = useState('');
     const [nftDescription, setNftDescription] = useState('');
-    const [nftExternalUrl, setNftExternalUrl] = useState('');
 
     const [afterDeploymentDesc, setAfterDeploymentDesc] = useState<Array<boolean>>([]);
     const [contractAddress, setContractAddress] = useState('');
@@ -92,7 +91,6 @@ const MintSingleNft = () => {
         const metadata = await uploadIpfsData({
             name: nftName,
             description: nftDescription,
-            externalUrl: nftExternalUrl,
             image: nftImage,
         });
 
@@ -171,14 +169,6 @@ const MintSingleNft = () => {
                             type={TextInputTypes.TEXT}
                             value={nftDescription}
                             setValue={setNftDescription}
-                        />
-
-                        <TextInput
-                            id="nftExternalUrl"
-                            label="External URL"
-                            type={TextInputTypes.TEXT}
-                            value={nftExternalUrl}
-                            setValue={setNftExternalUrl}
                         />
 
                         <Button
