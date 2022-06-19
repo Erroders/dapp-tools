@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { Card, CardProps } from '../generalComponents';
 import _homepageInfo from '../../../data/homepageInfo.json';
 import profiles from '../../../data/profiles.json';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Profile from '../generalComponents/Profile';
 
@@ -18,8 +18,8 @@ const Homepage = () => {
 
     return (
         <div className="p-6 max-w-screen-xl mx-auto">
-            <section className="mt-20 mb-24">
-                <h1 className="text-3xl text-center my-5">
+            <section className="mt-24 mb-16">
+                <h1 className="text-3xl text-center my-5 font-medium">
                     Launch your NFTs or cryptocurrencies on any EVM supported chain in just few clicks
                 </h1>
                 <p className="text-lg text-center px-72">
@@ -51,7 +51,7 @@ const Homepage = () => {
                     );
                 })}
             </div>
-            <section id="#developers" className="my-44">
+            <section id="#developers" className="mt-44 mb-16">
                 <h2 className="text-3xl font-medium text-center">Contributors</h2>
                 <div className="flex mx-auto justify-center gap-20 my-10">
                     {profiles.map((profile, index) => {
@@ -60,9 +60,14 @@ const Homepage = () => {
                 </div>
             </section>
             <footer className="h-20 border-t-2 border-black border-dashed flex flex-col items-center justify-center pt-5">
-                <p className="font-semibold">made with 🖤🖤🖤</p>
+                <p className="font-semibold">
+                    <span className="inline">
+                        made with
+                        <img src="/profile/hb.png" alt="black heart" className="inline scale-75" />
+                    </span>
+                </p>
                 <p>
-                    © {new Date().getFullYear()}{' '}
+                    © {new Date().getFullYear()}
                     <a className="underline" href="https://github.com/Erroders">
                         Erroders
                     </a>

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { NFT, NFTTransaction } from '../../../utils/types';
 import Collection from './Collection';
 import Description from './Description';
@@ -21,12 +22,7 @@ const NftPage = ({ nft, nftTransactions, tokenIds, chainId }: NftPageProps) => {
             <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-2">
                     <div className="border-2 border-black relative w-full h-[500px]">
-                        <Image
-                            src={nft.metadata.image ? nft.metadata.image : '/logo.svg'}
-                            alt={nft.contract_name}
-                            layout="fill"
-                            // priority={true}
-                        />
+                        <img src={nft.metadata.image ? nft.metadata.image : '/logo.svg'} alt={nft.contract_name} />
                     </div>
 
                     <Description description={nft.metadata.description} />
@@ -44,6 +40,8 @@ const NftPage = ({ nft, nftTransactions, tokenIds, chainId }: NftPageProps) => {
                 </div>
                 <div className="col-span-3">
                     <NameDetails
+                        chainId={chainId}
+                        contractAddress={nft.contract_address}
                         contractName={nft.contract_name}
                         tokenId={nft.token_id ? nft.token_id : 'unavailable'}
                         owner={nft.owner ? nft.owner : 'unavailable'}
