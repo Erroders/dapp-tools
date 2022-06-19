@@ -334,7 +334,7 @@ const MintMultipleNft = () => {
                     </div>
                 </details>
 
-                <details id="step4" className="bg-white border border-black divide-gray-200 p-6" open={true}>
+                <details id="step4" className="bg-white border border-black divide-gray-200 p-6" open={step4Open}>
                     <summary
                         className="flex cursor-pointer"
                         onClick={(e) => {
