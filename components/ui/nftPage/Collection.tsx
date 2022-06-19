@@ -11,7 +11,7 @@ interface CollectionProps {
 const Collection = ({ data, chainId, contractAddress }: CollectionProps) => {
     return (
         <div className="bg-white border-2 border-black divide-y divide-gray-200 my-2">
-            <details className="p-6 group" open>
+            <details className="p-6 group h-full" open>
                 <summary className="flex items-center justify-between cursor-pointer">
                     <h5 className="text-lg font-semibold text-gray-900">More from this Collection</h5>
 
@@ -28,8 +28,8 @@ const Collection = ({ data, chainId, contractAddress }: CollectionProps) => {
                     </span>
                 </summary>
 
-                <div className="text-sm w-full my-4 grid gap-1.5">
-                    <div className="flex gap-4 overflow-x-scroll p-4">
+                <div className="text-sm w-full my-4 grid gap-1.5 h-full">
+                    <div className="flex gap-4 overflow-x-scroll p-4 h-full">
                         {/* <div className="ml-4"></div> */}
                         {data.map((tokenId) => {
                             return (

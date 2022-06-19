@@ -10,7 +10,7 @@ const Profile = () => {
     const [tab, setTab] = useState<'Cryptocurrencies' | 'NFTs'>('Cryptocurrencies');
 
     return (
-        <div className="py-10 px-4 max-w-screen-xl mx-auto">
+        <div className="mt-10 py-10 px-4 max-w-screen-xl mx-auto">
             {/* Buttons fro NFT / Cryptocurrency */}
             <div className="w-full flex gap-4">
                 <div
