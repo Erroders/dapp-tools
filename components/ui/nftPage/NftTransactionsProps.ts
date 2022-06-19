@@ -18,7 +18,7 @@ export interface NftTransaction {
     from_address: string;
     from_address_label: any;
     to_address: string;
-    to_address_label?: string;
+    to_address_label: string;
     value: string;
     value_quote: number;
     gas_offered: number;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NftTransaction } from './NftTransactionsProps';
+import { NFTTransaction } from '../../../utils/types';
 
 const TransactionCard = ({
     from_address,
@@ -8,7 +8,7 @@ const TransactionCard = ({
     to_address_label,
     block_signed_at,
     value,
-}: NftTransaction) => {
+}: NFTTransaction) => {
     const price = Number.parseFloat(value) / 10 ** 18;
     const date = new Date(block_signed_at);
 
@@ -19,7 +19,7 @@ const TransactionCard = ({
     return (
         <div className="grid grid-cols-5 whitespace-pre-wrap gap-4">
             <div className="">{price != 0 ? 'Sale' : 'Transfer'}</div>
-            <div className="">{price != 0 ? price : ''}</div>
+            <div className="">{price != 0 ? price : 'NA'}</div>
             <div className="truncate">{from_address_label || from_address}</div>
             <div className="truncate">{to_address_label || to_address}</div>
             <div className="truncate">{dateString}</div>

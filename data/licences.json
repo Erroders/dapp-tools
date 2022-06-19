@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "name": "No License",
+        "value": "None"
+    },
+    {
+        "id": 2,
+        "name": "The Unlicense",
+        "value": "Unlicense"
+    },
+    {
+        "id": 3,
+        "name": "MIT License",
+        "value": "MIT"
+    },
+    {
+        "id": 4,
+        "name": "GNU General Public License v2.0",
+        "value": "GNU GPLv2"
+    },
+    {
+        "id": 5,
+        "name": "GNU General Public License v3.0",
+        "value": "GNU GPLv3"
+    },
+    {
+        "id": 6,
+        "name": "GNU Lesser General Public License v2.1",
+        "value": "GNU LGPLv2.1"
+    },
+    {
+        "id": 7,
+        "name": "GNU Lesser General Public License v3.0",
+        "value": "GNU LGPLv3"
+    },
+    {
+        "id": 8,
+        "name": "BSD 2-clause 'Simplified' license",
+        "value": "BSD-2-Clause"
+    },
+    {
+        "id": 9,
+        "name": "BSD 3-clause 'New' Or 'Revised' license*",
+        "value": "BSD-3-Clause"
+    },
+    {
+        "id": 10,
+        "name": "Mozilla Public License 2.0",
+        "value": "MPL-2.0"
+    },
+    {
+        "id": 11,
+        "name": "Open Software License 3.0",
+        "value": "OSL-3.0"
+    },
+    {
+        "id": 12,
+        "name": "Apache 2.0",
+        "value": "Apache-2.0"
+    },
+    {
+        "id": 13,
+        "name": "GNU Affero General Public License",
+        "value": "GNU AGPLv3"
+    },
+    {
+        "id": 14,
+        "name": "Business Source License",
+        "value": "BSL 1.1"
+    }
+]

@@ -1,12 +1,8 @@
 import React from 'react';
+import { Attribute } from '../../../utils/types';
 import PropertiesCard from './PropertiesCard';
 
-interface PropertiesProps {
-    trait_type: string;
-    value: string;
-}
-
-const Properties = ({ data }: { data: Array<PropertiesProps> }) => {
+const Properties = ({ data }: { data: Attribute[] | null }) => {
     return (
         <div className="bg-white border-2 border-black divide-y divide-gray-200 my-2">
             <details className="p-6 group">
@@ -26,7 +22,7 @@ const Properties = ({ data }: { data: Array<PropertiesProps> }) => {
                     </span>
                 </summary>
 
-                {data.length === 0 ? (
+                {!data || data.length === 0 ? (
                     <p className="py-2 mt-4">Properties Not Available</p>
                 ) : (
                     <div className="grid grid-cols-3 gap-3 py-2 mt-4">

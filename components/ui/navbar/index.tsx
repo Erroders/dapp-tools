@@ -1,43 +1,67 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../../../pages/_app';
+import connectWallet from '../../wallet/connectWallet';
+import { wallets } from '../../wallet/connectWallet/enums';
 
 interface NavbarProps {
     title?: string;
     walletAddressText?: string;
 }
 
-const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
-    const walletContext = useContext(WalletContext);
+const Navbar = ({}: NavbarProps) => {
+    const { signer, walletAddress, setModalVisibility, updateSigner } = useContext(WalletContext);
     const [networkName, setNetworkName] = useState('Not Connected');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
-        walletContext.web3Provider?.getNetwork().then((v) => {
-            setNetworkName(v.name);
-        });
-    }, [walletContext.web3Provider]);
+        if (signer) {
+            signer.provider?.getNetwork().then((v) => {
+                setNetworkName(v.name);
+            });
+        } else {
+            setNetworkName('Not Connected');
+        }
+    }, [signer]);
 
     const handleWalletBtnClick = () => {
-        if (walletContext.web3Provider) {
+        if (signer) {
             setDropdownOpen(!dropdownOpen);
         } else {
-            walletContext.updateConnectWalletModalVisibility(true);
+            // setModalVisibility(true);
+            connectWallet(wallets.ANY, updateSigner).then((provider) => {
+                updateSigner(provider);
+            });
         }
     };
 
     return (
-        <header className="shadow-md sticky top-0 w-full bg-white z-30">
+        <nav className="sticky top-0 w-full bg-white z-30 py-5 backdrop-blur-md bg-white/60">
             <div className="max-w-screen-xl p-4 mx-auto">
                 <div className="flex items-center justify-between space-x-4 lg:space-x-10">
-                    <div className="flex lg:w-0 lg:flex-1 text-xl font-medium">
-                        <Link href={'/'}>{title}</Link>
+                    <div className="flex lg:w-0 lg:flex-1 text-xl font-medium cursor-pointer">
+                        <Link href={'/'} passHref>
+                            <a
+                                onClick={() => {
+                                    setDropdownOpen(false);
+                                }}
+                            >
+                                <Image
+                                    src={'/logo.svg'}
+                                    width="100"
+                                    height="60"
+                                    layout="fixed"
+                                    alt="dapp tools logo"
+                                    priority={true}
+                                />
+                            </a>
+                        </Link>
                     </div>
 
                     <div className="items-center justify-end flex space-x-4">
                         <div className="relative block group">
-                            <span className="absolute inset-0 border-2 border-black border-dashed"></span>
-                            <button className="relative p-2 text-xs cursor-default flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-1 group-hover:-translate-y-1">
+                            <button className="relative p-2 text-xs cursor-default flex items-end h-full transition-transform transform bg-white border-2 border-black">
                                 {networkName || 'Not Connected'}
                             </button>
                         </div>
@@ -45,26 +69,35 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
                         <div className="relative block group">
                             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
                             <button
-                                className="relative p-2 text-xs flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-1.5 group-hover:-translate-y-1.5"
+                                className={`relative p-2 text-xs flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2 ${
+                                    dropdownOpen && '-translate-x-1.5 -translate-y-1.5'
+                                }`}
                                 onClick={handleWalletBtnClick}
                             >
-                                {walletContext.walletAddress || 'Connect Wallet'}
+                                {walletAddress || 'Connect Wallet'}
                             </button>
 
                             {dropdownOpen && (
-                                <div className="h-auto w-full absolute bg-white mt-1.5">
-                                    <span className="absolute inset-0 border-2 border-black border-dashed"></span>
-                                    <ul className="text-right px-3 py-1.5 bg-white border-2 border-black group-hover:-translate-x-1 group-hover:-translate-y-1">
-                                        <li className="hover:font-semibold cursor-pointer">
-                                            <Link href={'/profile'}>Profile</Link>
-                                        </li>
+                                <div className="h-auto w-full absolute bg-white mt-2">
+                                    {/* <span className="absolute inset-0 border-2 border-black border-dashed"></span> */}
+                                    {/* <ul className="text-right px-3 py-1.5 bg-white border-2 border-black group-hover:-translate-x-1 group-hover:-translate-y-1"> */}
+                                    <ul className="text-right px-3 py-1.5 bg-white border-2 border-black">
+                                        <Link href={'/profile'}>
+                                            <li
+                                                className="hover:font-semibold cursor-pointer"
+                                                onClick={() => {
+                                                    setDropdownOpen(false);
+                                                }}
+                                            >
+                                                Profile
+                                            </li>
+                                        </Link>
                                         <li
                                             className="hover:font-semibold cursor-pointer"
                                             onClick={() => {
-                                                walletContext.updateWalletAddress('');
-                                                walletContext.updateChainid(0);
-                                                walletContext.updateWeb3Provider(null);
+                                                updateSigner(null);
                                                 setDropdownOpen(false);
+                                                // TODO: Call disconnect
                                             }}
                                         >
                                             Disconnect
@@ -76,7 +109,7 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
                     </div>
                 </div>
             </div>
-        </header>
+        </nav>
     );
 };
 
