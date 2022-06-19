@@ -1,10 +1,9 @@
 import React from 'react';
-
-import { NftTransaction } from './NftTransactionsProps';
+import { NFTTransaction } from '../../../utils/types';
 import TransactionCard from './TransactionCard';
 
 interface TransactionsProps {
-    data: NftTransaction[];
+    data: NFTTransaction[];
 }
 
 const Transactions = ({ data }: TransactionsProps) => {

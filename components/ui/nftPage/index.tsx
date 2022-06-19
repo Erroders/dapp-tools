@@ -1,72 +1,55 @@
-import { useEffect, useState } from 'react';
-import { getIPFSImageURl } from '../../../utils/nft/getNftImage';
+import { NFT, NFTTransaction } from '../../../utils/types';
 import Collection from './Collection';
 import Description from './Description';
 import Details from './Details';
 import NameDetails from './NameDetails';
-import NftCollectionTokenProps from './NftCollectionTokenProps';
 import NftMetadataProps from './NftMetadataProps';
-import NftTransactionsProps from './NftTransactionsProps';
 import Properties from './Properties';
 import Transactions from './Transactions';
+import Image from 'next/image';
 
-interface NftPageProps {
-    nftMetadata: NftMetadataProps;
-    nftTransactions: NftTransactionsProps;
-    nftCollectionTokens: Array<NftCollectionTokenProps>;
+export interface NftPageProps {
+    nft: NFT;
+    nftTransactions: NFTTransaction[];
+    tokenIds: string[];
     chainId: string;
 }
 
-const NftPage = ({ nftMetadata, nftTransactions, nftCollectionTokens, chainId }: NftPageProps) => {
-    const [image, setImage] = useState('');
-    const fetchImage = async (): Promise<string> => {
-        if (nftMetadata.nft_data[0].token_url) {
-            const newSrc = await getIPFSImageURl(nftMetadata.nft_data[0].token_url);
-            if (newSrc && newSrc.length > 0) {
-                setImage(newSrc);
-                return newSrc;
-            }
-        }
-        setImage('/logo.svg');
-        return '/logo.svg';
-    };
-
-    useEffect(() => {
-        nftMetadata.nft_data[0].external_data.image
-            ? setImage(nftMetadata.nft_data[0].external_data.image)
-            : fetchImage();
-    }, []);
-
+const NftPage = ({ nft, nftTransactions, tokenIds, chainId }: NftPageProps) => {
     return (
         <div className="p-6 max-w-screen-xl mx-auto">
             <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-2">
-                    <div className="border-2 border-black relative">
-                        {/*  eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={image} alt={nftMetadata.contract_name} />
+                    <div className="border-2 border-black relative w-full h-[500px]">
+                        <Image
+                            src={nft.metadata.image ? nft.metadata.image : '/logo.svg'}
+                            alt={nft.contract_name}
+                            layout="fill"
+                            // priority={true}
+                        />
                     </div>
 
-                    <Description description={nftMetadata.nft_data[0].external_data.description} />
-                    <Properties data={nftMetadata.nft_data[0].external_data.attributes} />
+                    <Description description={nft.metadata.description} />
+                    <Properties data={nft.attributes} />
                     {/* TODO: blockchain */}
                     <Details
                         blockchain={'Ethereum'}
-                        contractAddress={nftMetadata.contract_address}
-                        contractTickerSymbol={nftMetadata.contract_ticker_symbol}
-                        metadata={{ burned: nftMetadata.nft_data[0].burned }}
-                        tokenId={nftMetadata.nft_data[0].token_id}
-                        tokenStandard={nftMetadata.nft_data[0].supports_erc}
-                        tokenBalance={nftMetadata.nft_data[0].token_balance}
+                        contractAddress={nft.contract_address}
+                        contractTickerSymbol={nft.contract_ticker_symbol}
+                        metadata={{ burned: nft.burned }}
+                        tokenId={nft.token_id ? nft.token_id : 'unavailable'}
+                        tokenStandard={nft.supports_erc!}
+                        tokenBalance={nft.token_balance ? nft.token_balance : 'unavailable'}
                     />
                 </div>
                 <div className="col-span-3">
                     <NameDetails
-                        contractName={nftMetadata.contract_name}
-                        tokenId={nftMetadata.nft_data[0].token_id}
-                        owner={nftMetadata.nft_data[0].owner}
+                        contractName={nft.contract_name}
+                        tokenId={nft.token_id ? nft.token_id : 'unavailable'}
+                        owner={nft.owner ? nft.owner : 'unavailable'}
                     />
-                    <Transactions data={nftTransactions.nft_transactions} />
-                    <Collection data={nftCollectionTokens} chainId={chainId} />
+                    <Transactions data={nftTransactions} />
+                    <Collection data={tokenIds} chainId={chainId} contractAddress={nft.contract_address} />
                 </div>
             </div>
         </div>

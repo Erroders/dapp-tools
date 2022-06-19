@@ -40,7 +40,12 @@ async function connectWallet(
 
         connection.on('accountsChanged', (accounts: string[]) => {
             console.log('account changed:', accounts[0]);
-            cb(provider);
+            if (!accounts[0]) {
+                web3Modal.clearCachedProvider();
+                cb(null);
+            } else {
+                cb(provider);
+            }
         });
         connection.on('chainChanged', (chainId: number) => {
             console.log('chain changed:', chainId);

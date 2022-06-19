@@ -42,7 +42,14 @@ const Navbar = ({ title = 'Dapp Tools' }: NavbarProps) => {
                                     setDropdownOpen(false);
                                 }}
                             >
-                                <Image src={'/logo.svg'} width="100" height="60" layout="fixed" alt="dapp tools logo" />
+                                <Image
+                                    src={'/logo.svg'}
+                                    width="100"
+                                    height="60"
+                                    layout="fixed"
+                                    alt="dapp tools logo"
+                                    priority={true}
+                                />
                             </a>
                         </Link>
                     </div>

@@ -1,13 +1,14 @@
 import React from 'react';
+import { NFT } from '../../../utils/types';
 import NftCard from './NftCard';
-import NftCollectionTokenProps from './NftCollectionTokenProps';
 
 interface CollectionProps {
-    data: Array<NftCollectionTokenProps>;
+    data: string[];
     chainId: string;
+    contractAddress: string;
 }
 
-const Collection = ({ data, chainId }: CollectionProps) => {
+const Collection = ({ data, chainId, contractAddress }: CollectionProps) => {
     return (
         <div className="bg-white border-2 border-black divide-y divide-gray-200 my-2">
             <details className="p-6 group" open>
@@ -30,10 +31,10 @@ const Collection = ({ data, chainId }: CollectionProps) => {
                 <div className="text-sm w-full my-4 grid gap-1.5">
                     <div className="flex gap-4 overflow-x-scroll p-4">
                         {/* <div className="ml-4"></div> */}
-                        {data.map((token, index) => {
+                        {data.map((tokenId) => {
                             return (
-                                <div key={token.token_id}>
-                                    <NftCard chainId={chainId} {...token} />
+                                <div key={tokenId}>
+                                    <NftCard chainId={chainId} contractAddress={contractAddress} tokenId={tokenId} />
                                 </div>
                             );
                         })}

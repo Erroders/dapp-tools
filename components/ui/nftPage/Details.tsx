@@ -1,14 +1,15 @@
 import React from 'react';
+import { ERCStandards } from '../../../utils/types';
 
 interface DetailsProps {
     contractAddress: string;
     contractTickerSymbol: string;
     tokenId: string;
     tokenBalance: string;
-    tokenStandard: string[];
+    tokenStandard: ERCStandards[];
     blockchain: string;
     metadata: {
-        burned: boolean;
+        burned: boolean | null;
     };
 }
 
@@ -22,11 +23,11 @@ const Details = ({
     tokenStandard,
 }: DetailsProps) => {
     let tokenType: string;
-    if (tokenStandard.includes('erc1155')) {
+    if (tokenStandard.includes(ERCStandards.ERC1155)) {
         tokenType = 'ERC1155';
-    } else if (tokenStandard.includes('erc777')) {
+    } else if (tokenStandard.includes(ERCStandards.ERC777)) {
         tokenType = 'ERC777';
-    } else if (tokenStandard.includes('erc721')) {
+    } else if (tokenStandard.includes(ERCStandards.ERC721)) {
         tokenType = 'ERC721';
     } else {
         tokenType = 'ERC20';

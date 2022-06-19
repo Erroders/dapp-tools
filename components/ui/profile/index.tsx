@@ -1,44 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { WalletContext } from '../../../pages/_app';
-import { getWalletTokenDetails } from '../../../utils/wallet_token_details';
 import CryptoCard from './cryptoCard';
 import NFTCard from './nftCard';
 
 const Profile = () => {
-    const { signer, walletAddress, chainId, profileDataFetch, setProfileDataFetch } = useContext(WalletContext);
+    const { walletAddress, nftData, dustCryptocurrencyData, nonDustCryptocurrencyData, profileDataFetch } =
+        useContext(WalletContext);
     const [hideDustToggle, setHideDustToggle] = useState<boolean>(false);
-    const [nftData, setNftData] = useState<any[]>([]);
-    const [dustCryptocurrencyData, setDustCryptocurrencyData] = useState<any[]>([]);
-    const [nonDustCryptocurrencyData, setNonDustCryptocurrencyData] = useState<any[]>([]);
     const [tab, setTab] = useState<'Cryptocurrencies' | 'NFTs'>('Cryptocurrencies');
-    let nftFlag = 0;
-
-    const fetchData = async () => {
-        if (walletAddress && chainId && !profileDataFetch) {
-            setProfileDataFetch(true);
-            const data = await getWalletTokenDetails(walletAddress, chainId);
-            setProfileDataFetch(false);
-            if (data) {
-                console.log(data);
-                setDustCryptocurrencyData(data.dustCryptocurrencyData);
-                setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
-                setNftData(data.nftData);
-            }
-            nftFlag = 0;
-        }
-    };
-
-    useEffect(() => {
-        setDustCryptocurrencyData([]);
-        setNonDustCryptocurrencyData([]);
-        setNftData([]);
-        if (signer)
-            fetchData()
-                // .then(() => {
-                //     console.log(nonDustCryptocurrencyData, dustCryptocurrencyData, nftData);
-                // })
-                .catch(console.error);
-    }, [signer, walletAddress, chainId]);
 
     return (
         <div className="py-10 px-4 max-w-screen-xl mx-auto">
@@ -96,47 +65,22 @@ const Profile = () => {
                                         }}
                                         onChange={() => {}}
                                     />
-                                    <span className="w-12 h-6 flex items-center flex-shrink-0 ml-2 p-1 rounded-full duration-300 ease-in-out border-2 border-black after:border-2 after:border-black peer-checked:bg-gray-600 after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-5"></span>
+                                    <span className="w-12 h-6 flex items-center flex-shrink-0 pl-1 ml-2 rounded-full duration-300 ease-in-out border-2 border-black after:border-black peer-checked:bg-black after:bg-black after:w-4 after:h-4 after:border-0 peer-checked:after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-5"></span>
                                 </label>
                             </div>
-                            {nonDustCryptocurrencyData.length > 0 &&
-                                nonDustCryptocurrencyData.map((obj, index) => {
-                                    return (
-                                        <CryptoCard
-                                            key={index}
-                                            balance={obj.balance}
-                                            contractAddress={obj.contract_address}
-                                            contractDecimals={obj.contract_decimals}
-                                            contractName={obj.contract_name}
-                                            contractSymbol={obj.contract_ticker_symbol}
-                                            logoUrl={obj.logo_url}
-                                            ercSupports={obj.supports_erc}
-                                            type={'nonDust'}
-                                            signer={signer}
-                                        />
-                                    );
-                                })}
-                            {dustCryptocurrencyData.length > 0 &&
-                                !hideDustToggle &&
-                                dustCryptocurrencyData.map((obj, index) => {
-                                    return (
-                                        <CryptoCard
-                                            key={index}
-                                            balance={obj.balance}
-                                            contractAddress={obj.contract_address}
-                                            contractDecimals={obj.contract_decimals}
-                                            contractName={obj.contract_name}
-                                            contractSymbol={obj.contract_ticker_symbol}
-                                            logoUrl={obj.logo_url}
-                                            ercSupports={obj.supports_erc}
-                                            type={'dust'}
-                                            signer={signer}
-                                        />
-                                    );
-                                })}
-                            {(nonDustCryptocurrencyData.length === 0 && dustCryptocurrencyData.length === 0) ||
-                                (hideDustToggle && nonDustCryptocurrencyData.length === 0 && (
-                                    <>
+                            {!profileDataFetch ? (
+                                <>
+                                    {nonDustCryptocurrencyData &&
+                                        nonDustCryptocurrencyData.map((obj, index) => {
+                                            return <CryptoCard key={index} {...obj} />;
+                                        })}
+                                    {dustCryptocurrencyData &&
+                                        !hideDustToggle &&
+                                        dustCryptocurrencyData.map((obj, index) => {
+                                            return <CryptoCard key={index} {...obj} />;
+                                        })}
+                                    {((!nonDustCryptocurrencyData && !dustCryptocurrencyData) ||
+                                        (hideDustToggle && !nonDustCryptocurrencyData)) && (
                                         <div className="w-full col-span-4 text-center py-44">
                                             <div className="flex flex-col gap-2 text-2xl">
                                                 <span>No Cryptocurrencies found in the Wallet</span>
@@ -145,51 +89,41 @@ const Profile = () => {
                                                 </span>
                                             </div>
                                         </div>
-                                    </>
-                                ))}
+                                    )}
+                                </>
+                            ) : (
+                                <div className="w-full col-span-4 text-center py-44">
+                                    <div className="flex flex-col gap-2 text-2xl">
+                                        <span>Fetching your tokens ...</span>
+                                    </div>
+                                </div>
+                            )}
                         </>
                     ) : (
                         <>
-                            {nftData.length > 0 &&
-                                nftData.map((obj, index1) => {
-                                    if (
-                                        !obj ||
-                                        obj.contract_name === null ||
-                                        !obj.nft_data ||
-                                        obj.nft_data.length === 0
-                                    ) {
-                                        nftFlag = nftFlag + 1;
-                                        return;
-                                    }
-                                    return obj.nft_data.map((nft: any, index2: any) => {
-                                        return (
-                                            <NFTCard
-                                                key={index2}
-                                                contractAddress={obj.contract_address}
-                                                contractName={obj.contract_name}
-                                                contractSymbol={obj.contract_ticker_symbol}
-                                                type={'nft'}
-                                                nftData={{
-                                                    tokenId: nft.token_id,
-                                                    tokenBalance: nft.token_balance,
-                                                    tokenUrl: nft.token_url,
-                                                    ercSupports: nft.supports_erc,
-                                                }}
-                                            />
-                                        );
-                                    });
-                                })}
-                            {(nftData.length === 0 || nftFlag === nftData.length) && (
+                            {!profileDataFetch ? (
                                 <>
-                                    <div className="w-full col-span-4 text-center py-44">
-                                        <div className="flex flex-col gap-2 text-2xl">
-                                            <span>No NFTs found in the Wallet</span>
-                                            <span className="text-xl italic font-mono font-semibold">
-                                                {walletAddress}
-                                            </span>
+                                    {nftData ? (
+                                        nftData.map((obj, index) => {
+                                            return <NFTCard key={index} {...obj} />;
+                                        })
+                                    ) : (
+                                        <div className="w-full col-span-4 text-center py-44">
+                                            <div className="flex flex-col gap-2 text-2xl">
+                                                <span>No NFTs found in the Wallet</span>
+                                                <span className="text-xl italic font-mono font-semibold">
+                                                    {walletAddress}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </>
+                            ) : (
+                                <div className="w-full col-span-4 text-center py-44">
+                                    <div className="flex flex-col gap-2 text-2xl">
+                                        <span>Fetching your tokens ...</span>
+                                    </div>
+                                </div>
                             )}
                         </>
                     )}

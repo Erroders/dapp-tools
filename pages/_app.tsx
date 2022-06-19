@@ -8,6 +8,8 @@ import connectWallet from '../components/wallet/connectWallet';
 import { wallets } from '../components/wallet/connectWallet/enums';
 import Navbar from '../components/ui/navbar';
 import { isEqual } from 'lodash';
+import { CryptoCurrency, NFT } from '../utils/types';
+import { getWalletTokenDetails } from '../utils/wallet_token_details';
 
 interface WalletContextProps {
     profileDataFetch: boolean;
@@ -15,7 +17,10 @@ interface WalletContextProps {
     modalVisibility: boolean;
     chainId: keyof typeof networks | null;
     signer: ethers.Signer | null;
-    setProfileDataFetch: (profileDataFetch: boolean) => void;
+    nftData: NFT[] | null;
+    dustCryptocurrencyData: CryptoCurrency[] | null;
+    nonDustCryptocurrencyData: CryptoCurrency[] | null;
+    fetchData: () => void;
     setModalVisibility: (visibilty: boolean) => void;
     updateSigner: (provider: ethers.providers.Web3Provider | null) => void;
 }
@@ -26,7 +31,10 @@ export const WalletContext = createContext<WalletContextProps>({
     walletAddress: '',
     chainId: null,
     modalVisibility: false,
-    setProfileDataFetch: (profileDataFetch: boolean) => {},
+    nftData: null,
+    dustCryptocurrencyData: null,
+    nonDustCryptocurrencyData: null,
+    fetchData: async () => {},
     setModalVisibility: (visibilty: boolean) => {},
     updateSigner: (provider: ethers.providers.Web3Provider | null) => {},
 });
@@ -37,11 +45,35 @@ function MyApp({ Component, pageProps }: AppProps) {
     const [signer, setSigner] = useState<ethers.Signer | null>(null);
     const [chainId, setChainId] = useState<keyof typeof networks | null>(null);
     const [profileDataFetch, setProfileDataFetch] = useState<boolean>(false);
+    const [nftData, setNftData] = useState<NFT[] | null>(null);
+    const [dustCryptocurrencyData, setDustCryptocurrencyData] = useState<CryptoCurrency[] | null>(null);
+    const [nonDustCryptocurrencyData, setNonDustCryptocurrencyData] = useState<CryptoCurrency[] | null>(null);
+
+    const fetchData = async () => {
+        if (walletAddress && chainId) {
+            setProfileDataFetch(true);
+            const data = await getWalletTokenDetails(walletAddress, chainId);
+            setProfileDataFetch(false);
+            if (data) {
+                console.log(data);
+                setDustCryptocurrencyData(data.dustCryptocurrencyData);
+                setNonDustCryptocurrencyData(data.nonDustCryptocurrencyData);
+                setNftData(data.nftData);
+            }
+        } else {
+            setDustCryptocurrencyData(null);
+            setNonDustCryptocurrencyData(null);
+            setNftData(null);
+        }
+    };
 
     useEffect(() => {
-        console.log('signer updated', signer);
-        setProfileDataFetch(false);
+        fetchData();
+    }, [walletAddress, chainId]);
+
+    useEffect(() => {
         if (signer) {
+            console.log('signer updated', signer);
             signer.getAddress().then((address) => {
                 if (address !== walletAddress) setWalletAddress(address);
             });
@@ -65,11 +97,15 @@ function MyApp({ Component, pageProps }: AppProps) {
             } else {
                 signer && setSigner(null);
             }
+        } else {
+            setSigner(null);
         }
     };
 
     useEffect(() => {
-        connectWallet(wallets.ANY, updateSigner);
+        connectWallet(wallets.ANY, updateSigner).then((provider) => {
+            updateSigner(provider);
+        });
     }, []);
 
     return (
@@ -80,7 +116,10 @@ function MyApp({ Component, pageProps }: AppProps) {
                 modalVisibility: modalVisibility,
                 chainId: chainId,
                 signer: signer,
-                setProfileDataFetch: setProfileDataFetch,
+                nftData: nftData,
+                dustCryptocurrencyData: dustCryptocurrencyData,
+                nonDustCryptocurrencyData: nonDustCryptocurrencyData,
+                fetchData: fetchData,
                 setModalVisibility: setModalVisibility,
                 updateSigner: updateSigner,
             }}
