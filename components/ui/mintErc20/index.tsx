@@ -67,7 +67,7 @@ const MintErc20 = () => {
             return;
         }
 
-        if (Number.parseInt(premint) < 1) {
+        if (Number.parseInt(premint) < 0) {
             return;
         }
 
@@ -143,14 +143,14 @@ const MintErc20 = () => {
                     <div className="grid grid-cols-1 mt-6 gap-4 max-w-md">
                         <TextInput
                             id="name"
-                            label="Token Name"
+                            label="Token Name*"
                             type={TextInputTypes.TEXT}
                             value={name}
                             setValue={setName}
                         />
                         <TextInput
                             id="symbol"
-                            label="Token Symbol"
+                            label="Token Symbol*"
                             type={TextInputTypes.TEXT}
                             value={symbol}
                             setValue={setSymbol}
@@ -158,26 +158,36 @@ const MintErc20 = () => {
 
                         <TextInput
                             id="premint"
-                            label="Premint"
+                            label="Premint*"
                             type={TextInputTypes.NUMBER}
                             value={premint}
                             setValue={setPremint}
-                            minNum={1}
+                            minNum={0}
                         />
 
                         <div className="grid grid-cols-2 gap-4">
-                            <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
-                            <CheckboxInput id="snapshots" label="Snapshots" value={snapshots} setValue={setSnapshots} />
-                            <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
-                            <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
-                            <CheckboxInput id="permit" label="Permit" value={permit} setValue={setPermit} />
-                            <CheckboxInput id="votes" label="Votes" value={votes} setValue={setVotes} />
-                            <CheckboxInput id="flashmint" label="Flashmint" value={flashmint} setValue={setFlashmint} />
+                            <CheckboxInput id="burnable" label="Burnable*" value={burnable} setValue={setBurnable} />
+                            <CheckboxInput
+                                id="snapshots"
+                                label="Snapshots*"
+                                value={snapshots}
+                                setValue={setSnapshots}
+                            />
+                            <CheckboxInput id="pausable" label="Pausable*" value={pausable} setValue={setPausable} />
+                            <CheckboxInput id="mintable" label="Mintable*" value={mintable} setValue={setMintable} />
+                            <CheckboxInput id="permit" label="Permit*" value={permit} setValue={setPermit} />
+                            <CheckboxInput id="votes" label="Votes*" value={votes} setValue={setVotes} />
+                            <CheckboxInput
+                                id="flashmint"
+                                label="Flashmint*"
+                                value={flashmint}
+                                setValue={setFlashmint}
+                            />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <DropdownInput
                                 id="accesss"
-                                label="Access Control"
+                                label="Access Control*"
                                 value={access}
                                 setValue={setAccess}
                                 valueOptions={[
@@ -193,7 +203,7 @@ const MintErc20 = () => {
                             />
                             <DropdownInput
                                 id="upgradeable"
-                                label="Upgradeable"
+                                label="Upgradeable*"
                                 value={upgradeable}
                                 setValue={setUpgradeable}
                                 valueOptions={[
@@ -216,14 +226,14 @@ const MintErc20 = () => {
 
                         <TextInput
                             id="securityContact"
-                            label="Security Contact"
+                            label="Security Contact*"
                             type={TextInputTypes.TEXT}
                             value={securityContract}
                             setValue={setSecurityContract}
                         />
                         <DropdownInput
                             id="license"
-                            label="License"
+                            label="License*"
                             valueOptions={getLicences()}
                             value={license}
                             setValue={setLicense}
@@ -231,7 +241,7 @@ const MintErc20 = () => {
 
                         <TextInput
                             id="network"
-                            label="Network"
+                            label="Network*"
                             type={TextInputTypes.TEXT}
                             value={networkName}
                             setValue={setNetworkName}

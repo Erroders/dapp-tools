@@ -132,14 +132,14 @@ const MintErc721 = () => {
                     <div className="grid grid-cols-1 mt-6 gap-4 max-w-md">
                         <TextInput
                             id="name"
-                            label="Token Name"
+                            label="Token Name*"
                             type={TextInputTypes.TEXT}
                             value={name}
                             setValue={setName}
                         />
                         <TextInput
                             id="symbol"
-                            label="Token Symbol"
+                            label="Token Symbol*"
                             type={TextInputTypes.TEXT}
                             value={symbol}
                             setValue={setSymbol}
@@ -148,32 +148,32 @@ const MintErc721 = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <CheckboxInput
                                 id="enumerable"
-                                label="Enumerable"
+                                label="Enumerable*"
                                 value={enumerable}
                                 setValue={setEnumerable}
                             />
                             <CheckboxInput
                                 id="uriStorage"
-                                label="URI Storage"
+                                label="URI Storage*"
                                 value={uriStorage}
                                 setValue={setUriStorage}
                             />
-                            <CheckboxInput id="burnable" label="Burnable" value={burnable} setValue={setBurnable} />
-                            <CheckboxInput id="pausable" label="Pausable" value={pausable} setValue={setPausable} />
-                            <CheckboxInput id="mintable" label="Mintable" value={mintable} setValue={setMintable} />
+                            <CheckboxInput id="burnable" label="Burnable*" value={burnable} setValue={setBurnable} />
+                            <CheckboxInput id="pausable" label="Pausable*" value={pausable} setValue={setPausable} />
+                            <CheckboxInput id="mintable" label="Mintable*" value={mintable} setValue={setMintable} />
                             <CheckboxInput
                                 id="incremental"
-                                label="Incremental"
+                                label="Incremental*"
                                 value={incremental}
                                 setValue={setIncremental}
                             />
-                            <CheckboxInput id="votes" label="Votes" value={votes} setValue={setVotes} />
+                            <CheckboxInput id="votes" label="Votes*" value={votes} setValue={setVotes} />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <DropdownInput
                                 id="accesss"
-                                label="Access Control"
+                                label="Access Control*"
                                 value={access}
                                 setValue={setAccess}
                                 valueOptions={[
@@ -189,7 +189,7 @@ const MintErc721 = () => {
                             />
                             <DropdownInput
                                 id="upgradeable"
-                                label="Upgradeable"
+                                label="Upgradeable*"
                                 value={upgradeable}
                                 setValue={setUpgradeable}
                                 valueOptions={[
@@ -212,14 +212,14 @@ const MintErc721 = () => {
 
                         <TextInput
                             id="securityContact"
-                            label="Security Contact"
+                            label="Security Contact*"
                             type={TextInputTypes.TEXT}
                             value={securityContract}
                             setValue={setSecurityContract}
                         />
                         <DropdownInput
                             id="license"
-                            label="License"
+                            label="License*"
                             valueOptions={getLicences()}
                             value={license}
                             setValue={setLicense}
@@ -227,7 +227,7 @@ const MintErc721 = () => {
 
                         <TextInput
                             id="network"
-                            label="Network"
+                            label="Network*"
                             type={TextInputTypes.TEXT}
                             value={networkName}
                             setValue={setNetworkName}

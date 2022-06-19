@@ -176,14 +176,14 @@ const MintMultipleNft = () => {
                     <div className="grid grid-cols-1 mt-6 gap-4 max-w-md">
                         <TextInput
                             id="name"
-                            label="Token Name"
+                            label="Token Name*"
                             type={TextInputTypes.TEXT}
                             value={name}
                             setValue={setName}
                         />
                         <TextInput
                             id="symbol"
-                            label="Token Symbol"
+                            label="Token Symbol*"
                             type={TextInputTypes.TEXT}
                             value={symbol}
                             setValue={setSymbol}
@@ -191,14 +191,14 @@ const MintMultipleNft = () => {
 
                         <TextInput
                             id="securityContact"
-                            label="Security Contact"
+                            label="Security Contact*"
                             type={TextInputTypes.TEXT}
                             value={securityContract}
                             setValue={setSecurityContract}
                         />
                         <DropdownInput
                             id="license"
-                            label="License"
+                            label="License*"
                             valueOptions={getLicences()}
                             value={license}
                             setValue={setLicense}
@@ -206,7 +206,7 @@ const MintMultipleNft = () => {
 
                         <TextInput
                             id="network"
-                            label="Network"
+                            label="Network*"
                             type={TextInputTypes.TEXT}
                             value={networkName}
                             setValue={setNetworkName}
@@ -292,7 +292,7 @@ const MintMultipleNft = () => {
                         <div className="max-w-xs">
                             <ImageInput
                                 id="nftImage"
-                                label="Select Image"
+                                label="Select Image*"
                                 image={nftImage}
                                 imageOnChange={handleImageChange}
                             />
@@ -300,14 +300,14 @@ const MintMultipleNft = () => {
 
                         <TextInput
                             id="nftName"
-                            label="NFT Name"
+                            label="NFT Name*"
                             type={TextInputTypes.TEXT}
                             value={nftName}
                             setValue={setNftName}
                         />
                         <TextInput
                             id="nftDescription"
-                            label="Description"
+                            label="Description*"
                             type={TextInputTypes.TEXT}
                             value={nftDescription}
                             setValue={setNftDescription}
