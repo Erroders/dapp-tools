@@ -287,7 +287,7 @@ const MintErc721 = () => {
                             rel="noreferrer"
                             className="text-blue-500 font-semibold"
                         >
-                            {'confirmationLink'}
+                            {confirmationLink}
                         </a>
                     </p>
                     <p
