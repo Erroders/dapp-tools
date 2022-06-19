@@ -11,7 +11,7 @@ export default async function getNftImage({
     tokenId: string;
     contractAddress: string;
     chainId: string;
-}): Promise<string | void> {
+}): Promise<string> {
     let imageLink: string | void = '';
     const metadataApiUrl =
         new URL(

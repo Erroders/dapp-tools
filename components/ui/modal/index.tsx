@@ -1,5 +1,4 @@
-import { ethers } from 'ethers';
-import React, { RefObject, useContext, useEffect, useRef, useState } from 'react';
+import { useContext } from 'react';
 import { WalletContext } from '../../../pages/_app';
 import connectWallet from '../../wallet/connectWallet';
 import { wallets } from '../../wallet/connectWallet/enums';
@@ -9,7 +8,7 @@ const WalletModal = () => {
     const { updateSigner, modalVisibility, setModalVisibility } = useContext(WalletContext);
 
     const connect = (wallet: wallets) => {
-        connectWallet(wallet, updateSigner).then((provider) => {
+        connectWallet(wallets.ANY, updateSigner).then((provider) => {
             updateSigner(provider);
         });
     };

@@ -1,12 +1,28 @@
 // https://mirror.xyz/woj.eth/bFdyI5_3f0MoKSRIQ0piYdSOFJWQqbo-r8oTqjSQ9hI
 // https://www.npmjs.com/package/web3modal
 
+import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
+import UAuthSPA from '@uauth/js';
+import type { IUAuthOptions } from '@uauth/web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
+import Web3Modal from 'web3modal';
+import * as UAuthWeb3Modal from '../../../utils/wallet/ud-web3modal';
 import { wallets } from './enums';
 
+export const uauthOptions: IUAuthOptions = {
+    clientID: 'fa0005a1-7200-4d4b-bd7a-9f50662127fd',
+    redirectUri: 'https://475a-2405-201-5c0d-709e-8a7-9419-3171-40d3.in.ngrok.io/',
+    scope: 'openid wallet',
+};
+
 const providerOptions = {
+    'custom-uauth': {
+        display: UAuthWeb3Modal.display,
+        connector: UAuthWeb3Modal.connector,
+        package: UAuthSPA,
+        options: uauthOptions,
+    },
     walletconnect: {
         package: WalletConnectProvider, // required
         options: {
@@ -17,6 +33,19 @@ const providerOptions = {
             network: 'matic',
         },
     },
+
+    coinbasewallet: {
+        package: CoinbaseWalletSDK,
+        options: {
+            appName: 'Dapp Tools',
+            infuraId: process.env.NEXT_PUBLIC_WALLET_CONNECT_INFURA_ID,
+            rpc: {
+                137: 'https://rpc-mainnet.maticvigil.com/',
+            },
+            chainId: 137,
+            darkMode: false,
+        },
+    },
 };
 
 async function connectWallet(
@@ -25,9 +54,11 @@ async function connectWallet(
 ): Promise<ethers.providers.Web3Provider | null> {
     const web3Modal = new Web3Modal({
         network: 'matic', // optional
-        cacheProvider: true, // optional
+        cacheProvider: false, // optional
         providerOptions, // required
     });
+
+    UAuthWeb3Modal.registerWeb3Modal(web3Modal);
 
     try {
         let connection;
@@ -40,6 +71,9 @@ async function connectWallet(
 
         connection.on('accountsChanged', (accounts: string[]) => {
             console.log('account changed:', accounts[0]);
+            if (!accounts[0]) {
+                web3Modal.clearCachedProvider();
+            }
             cb(provider);
         });
         connection.on('chainChanged', (chainId: number) => {
@@ -53,6 +87,9 @@ async function connectWallet(
         });
         connection.on('disconnect', (error: { code: number; message: string }) => {
             console.log('disconnect');
+
+            // TODO: Call when disconnected
+
             cb(null);
             if (error) console.error(error);
         });
