@@ -23,13 +23,14 @@ const NftCard = (data: NFTCardProps) => {
 
     if (nft) {
         const { token_id, contract_address, contract_name, metadata } = nft;
+        const nft_stringified = JSON.stringify(nft);
         return (
             <div className="relative block w-72 cursor-pointer">
                 <span className="absolute inset-0 border-2 border-black border-dashed"></span>
 
                 <Link
-                    href={`/nft?nft=${JSON.stringify(
-                        nft,
+                    href={`/nft?nft=${encodeURIComponent(
+                        nft_stringified,
                     )}&contract=${contract_address}&chainid=${chainId}&tokenid=${token_id}`}
                 >
                     <div className="flex items-end transition-transform transform bg-white border-2 border-black hover:-translate-x-2 hover:-translate-y-2">
