@@ -295,8 +295,13 @@ const MintErc20 = () => {
                     </p>
                     <p className={(afterDeploymentDesc[5] ? '' : ' hidden ') + 'whitespace-pre-line'}>
                         {'View Details on: '}{' '}
-                        <a href={confirmationLink} target="_blank" className="text-blue-500 font-semibold">
-                            {'confirmationLink'}
+                        <a
+                            href={confirmationLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-blue-500 font-semibold"
+                        >
+                            {confirmationLink}
                         </a>
                     </p>
                     <p

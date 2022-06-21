@@ -59,7 +59,12 @@ const Details = ({
                     </p>
                     <p className="grid grid-cols-2">
                         <span className="text-black font-medium">Token ID</span>
-                        <span className="text-gray-800 truncate">{tokenId}</span>
+                        <span className="text-gray-800 truncate">
+                            #
+                            {tokenId.length > 10
+                                ? tokenId.substring(0, 6) + '...' + tokenId.substring(tokenId.length - 7)
+                                : tokenId}
+                        </span>
                     </p>
                     <p className="grid grid-cols-2">
                         <span className="text-black font-medium">Contract Ticker Symbol</span>

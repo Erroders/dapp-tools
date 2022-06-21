@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { ethers } from 'ethers';
 import { CryptoCurrency, NFT, token } from './types';
 import { tokenAsCryptocurrency, tokenAsNFT } from './type_functions';
 
@@ -30,26 +28,34 @@ export async function getWalletTokenDetails(
         const url = `${baseURL}/${chainId}/address/${walletAddress}/balances_v2/?key=${API_KEY}&format=json&nft=true&no-nft-fetch=false`;
 
         console.log('fetch start');
-        const response = await axios.get(url);
+        const response = await fetch(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        });
         console.log('fetch end');
-
-        if (response.status === 200) {
-            const result = await response.data;
-            const data = result.data.items as token[];
-            for (const item of data) {
-                if (item.type === 'cryptocurrency') {
-                    const cc = await tokenAsCryptocurrency(item);
-                    cc && nonDustCryptocurrencyData.push(cc);
-                } else if (item.type === 'dust') {
-                    const cc = await tokenAsCryptocurrency(item);
-                    cc && dustCryptocurrencyData.push(cc);
-                } else if (item.type === 'stablecoin') {
-                    const cc = await tokenAsCryptocurrency(item);
-                    cc && nonDustCryptocurrencyData.push(cc);
-                } else if (item.type === 'nft') {
-                    const nft = await tokenAsNFT(item);
-                    nft && nftData.push(nft);
+        if (response.ok) {
+            try {
+                const result = await response.json();
+                const data = result.data.items as token[];
+                for (const item of data) {
+                    if (item.type === 'cryptocurrency') {
+                        const cc = await tokenAsCryptocurrency(item);
+                        cc && nonDustCryptocurrencyData.push(cc);
+                    } else if (item.type === 'dust') {
+                        const cc = await tokenAsCryptocurrency(item);
+                        cc && dustCryptocurrencyData.push(cc);
+                    } else if (item.type === 'stablecoin') {
+                        const cc = await tokenAsCryptocurrency(item);
+                        cc && nonDustCryptocurrencyData.push(cc);
+                    } else if (item.type === 'nft') {
+                        const nft = await tokenAsNFT(item);
+                        nft && nftData.push(nft);
+                    }
                 }
+            } catch (e) {
+                console.log(e);
             }
         }
 

@@ -59,7 +59,6 @@ const MintMultipleNft = () => {
                 return v;
             }),
         );
-        console.log(afterDeploymentDesc);
     };
 
     const handleImageChange = (imageFile: File) => {
@@ -93,9 +92,6 @@ const MintMultipleNft = () => {
         updateAfterDeploymentDescByIndex(2, true);
 
         setContractDetails(contractDetailsLocal);
-
-        console.log(contractDetailsLocal);
-        console.log(contractDetails);
 
         if (contractDetailsLocal) {
             updateAfterDeploymentDescByIndex(3, true);
@@ -260,8 +256,13 @@ const MintMultipleNft = () => {
                     </p>
                     <p className={(afterDeploymentDesc[5] ? '' : ' hidden ') + 'whitespace-pre-line'}>
                         {'View Details on: '}{' '}
-                        <a href={confirmationLink} target="_blank" className="text-blue-500 font-semibold">
-                            {'confirmationLink'}
+                        <a
+                            href={confirmationLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-blue-500 font-semibold"
+                        >
+                            {confirmationLink}
                         </a>
                     </p>
                     <p

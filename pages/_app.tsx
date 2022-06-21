@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ethers } from 'ethers';
 import { isEqual } from 'lodash';
 import type { AppProps } from 'next/app';

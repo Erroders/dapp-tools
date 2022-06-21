@@ -29,15 +29,7 @@ const SubmitButton = ({ title, leftIcon, rightIcon, disabled = false, id }: Subm
                 </div>
             </label>
 
-            <input
-                className="hidden"
-                id={id}
-                name={id}
-                type="submit"
-                onClick={() => {
-                    console.log('tttttttt');
-                }}
-            />
+            <input className="hidden" id={id} name={id} type="submit" />
         </div>
     );
 };

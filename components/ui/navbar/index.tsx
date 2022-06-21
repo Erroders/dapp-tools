@@ -61,7 +61,7 @@ const Navbar = ({}: NavbarProps) => {
 
                     <div className="items-center justify-end flex space-x-4">
                         <div className="relative block group">
-                            <button className="relative p-2 text-xs cursor-default flex items-end h-full transition-transform transform bg-white border-2 border-black">
+                            <button className="relative p-2 text-sm cursor-default flex items-end h-full transition-transform transform bg-white border-2 border-black">
                                 {networkName || 'Not Connected'}
                             </button>
                         </div>
@@ -69,7 +69,7 @@ const Navbar = ({}: NavbarProps) => {
                         <div className="relative block group">
                             <span className="absolute inset-0 border-2 border-black border-dashed"></span>
                             <button
-                                className={`relative p-2 text-xs flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2 ${
+                                className={`font-semibold relative p-2 text-sm flex items-end h-full transition-transform transform bg-white border-2 border-black group-hover:-translate-x-2 group-hover:-translate-y-2 ${
                                     dropdownOpen && '-translate-x-1.5 -translate-y-1.5'
                                 }`}
                                 onClick={handleWalletBtnClick}
