@@ -13,7 +13,7 @@ import solc from 'solc';
 // returns OpenZeppelin's contracts from node_modules as required to compile the custom contract
 function findImports(path: string): { contents: string } {
     // console.log(path);
-    const imported_contract_path = resolve('./utils/imports', path);
+    const imported_contract_path = resolve(`${process.cwd()}/utils/imports`, path);
     // console.log(imported_contract_path, '\n');
     const imported_contract = readFileSync(imported_contract_path, { encoding: 'utf-8' });
     return {

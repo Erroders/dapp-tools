@@ -24,7 +24,9 @@ export type ERC20xData = {
 // then pass it to compile method to generate ABI and bytecode
 export function erc20x(opts: ERC20xData, cb: any): { abi: any; bytecode: any; contract: string; metadata: any } | void {
     opts.name = formatContractName(opts.name);
-    let file: string = readFileSync(`./utils/contracts/${opts.type}SuperToken.sol`, { encoding: 'utf-8' });
+    let file: string = readFileSync(`${process.cwd()}/utils/contracts/${opts.type}SuperToken.sol`, {
+        encoding: 'utf-8',
+    });
     switch (opts.type) {
         case 'Burnable':
             file = stringFormat(file, opts.name, opts.symbol, opts.factory, opts.supply, opts.userData);

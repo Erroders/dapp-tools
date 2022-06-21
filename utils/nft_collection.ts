@@ -23,7 +23,7 @@ export function nftCollection(
     cb: any,
 ): { abi: any; bytecode: any; contract: string; metadata: any } | void {
     opts.name = formatContractName(opts.name);
-    let file: string = readFileSync(`./utils/contracts/NFTCollection.sol`, { encoding: 'utf-8' });
+    let file: string = readFileSync(`${process.cwd()}/utils/contracts/NFTCollection.sol`, { encoding: 'utf-8' });
     file = stringFormat(file, opts.name, opts.symbol, opts.securityContact, opts.license);
     compile(file, opts.name, cb);
 }
