@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useRouter } from 'next/router';
 import React from 'react';
 
 interface NameDetailsProps {
@@ -10,13 +11,14 @@ interface NameDetailsProps {
 }
 
 const NameDetails = ({ contractName, tokenId, owner, chainId, contractAddress }: NameDetailsProps) => {
+    const router = useRouter();
     return (
         <div className="relative bg-white border-2 border-black divide-gray-200 py-4 px-6">
             <div
                 className="absolute top-5 right-5 h-6 w-6 cursor-pointer"
                 onClick={() => {
                     navigator.clipboard.writeText(
-                        `http://localhost:3000/nft?chainid=${chainId}&tokenid=${tokenId}&contract=${contractAddress}`,
+                        `${window.location.origin}${router.pathname}?chainid=${chainId}&tokenid=${tokenId}&contract=${contractAddress}`,
                     );
                 }}
             >

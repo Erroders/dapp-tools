@@ -59,7 +59,6 @@ const MintMultipleNft = () => {
                 return v;
             }),
         );
-        console.log(afterDeploymentDesc);
     };
 
     const handleImageChange = (imageFile: File) => {
@@ -93,9 +92,6 @@ const MintMultipleNft = () => {
         updateAfterDeploymentDescByIndex(2, true);
 
         setContractDetails(contractDetailsLocal);
-
-        console.log(contractDetailsLocal);
-        console.log(contractDetails);
 
         if (contractDetailsLocal) {
             updateAfterDeploymentDescByIndex(3, true);
