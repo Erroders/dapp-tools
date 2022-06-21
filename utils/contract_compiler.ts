@@ -69,11 +69,10 @@ export default function compile(contract_code: string, contract_name: string, cb
     //     }
     // });
 
-    const output = JSON.parse(
-        solc.compile(JSON.stringify(input), {
-            import: findImports,
-        }),
-    );
+    const compiled_contract_output = solc.compile(JSON.stringify(input), {
+        import: findImports,
+    });
+    const output = JSON.parse(compiled_contract_output);
     // console.log(output.contracts[`${contract_name}.sol`]);
     // console.log(output);
 

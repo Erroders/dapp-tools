@@ -14,6 +14,7 @@ export default function handler(
     res: NextApiResponse<{ abi: any; bytecode: any; contract: string; metadata: any } | string>,
 ) {
     const opts: SingleNFTData = req.body;
+    console.log(opts);
     const cb = (result: { abi: any; bytecode: any; contract: string; metadata: any }) => {
         if (result) {
             res.status(200).send(result);

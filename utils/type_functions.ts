@@ -44,7 +44,11 @@ export async function tokenAsNFT(token: token): Promise<NFT | null> {
                     } else if (external_data?.external_url) {
                         url = getIPFSUrl(external_data.external_url);
                     }
-                    const response = await fetch(url);
+                    const response = await fetch(url, {
+                        headers: {
+                            Accept: 'application/json',
+                        },
+                    });
                     const metadata_fetched = await response.json();
                     if (metadata_fetched) {
                         // console.log('metadata found');
