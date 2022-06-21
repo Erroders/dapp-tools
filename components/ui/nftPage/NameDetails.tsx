@@ -32,7 +32,12 @@ const NameDetails = ({ contractName, tokenId, owner, chainId, contractAddress }:
                 />
             </div>
             <h1 className="text-lg font-medium tracking-wider">{contractName}</h1>
-            <h2 className="text-3xl font-bold py-3 tracking-wider">#{tokenId}</h2>
+            <h2 className="text-3xl font-bold py-3 tracking-wider">
+                #
+                {tokenId.length > 10
+                    ? tokenId.substring(0, 6) + '...' + tokenId.substring(tokenId.length - 7)
+                    : tokenId}
+            </h2>
             <h3 className="text-sm pt-4">
                 <span className="font-semibold">Owned By:</span> {owner}
             </h3>

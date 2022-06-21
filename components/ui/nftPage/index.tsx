@@ -21,8 +21,12 @@ const NftPage = ({ nft, nftTransactions, tokenIds, chainId }: NftPageProps) => {
         <div className="p-6 max-w-screen-xl mx-auto">
             <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-2">
-                    <div className="border-2 border-black relative w-full h-[500px]">
-                        <img src={nft.metadata.image ? nft.metadata.image : '/logo.svg'} alt={nft.contract_name} />
+                    <div className="border-2 border-black relative">
+                        <img
+                            src={nft.metadata.image ? nft.metadata.image : '/logo.svg'}
+                            alt={nft.contract_name}
+                            className="w-full object-cover"
+                        />
                     </div>
 
                     <Description description={nft.metadata.description} />
