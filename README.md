@@ -3,17 +3,17 @@
 </div>
 <br>
 
-Dapp Tools is a no-code launchpad for deploying ERC Standard Token Contracts on EVM-compatible chains. There are no extra fees or hidden charges to use the platform. Using [**OpenZeppelin**](openzeppelin)'s battle-tested smart contracts (version 4. x), all the services by default inherit its security advantages and have reduced the risk of vulnerabilities. So whether you are an experienced developer or heard about web3 an hour ago, we've got you covered.
+Dapp Tools is a no-code launchpad for deploying ERC Standard Token Contracts on EVM-compatible chains. There are no extra fees or hidden charges to use the platform. Using [**OpenZeppelin**][openzeppelin]'s battle-tested smart contracts (version 4. x), all the services by default inherit its security advantages and have reduced the risk of vulnerabilities. So whether you are an experienced developer or heard about web3 an hour ago, we've got you covered.
 
 <br>
 
 ## **What's new in it?**
 
-Our team firmly believes in the bright future of web, is well versed in its objectives, and determined to exploit its potential for the coming revolution. Therefore, Dapp Tools offers fully transparent, secure, user-friendly, and privacy-preserved services. It does not collect or rely on users' personal and sensitive information like email, phone number, or residential address. All you need is a cryptocurrency wallet, which is solely owned, managed, and controlled by the user himself. Dapp Tools supports Metamask, WalletConnect, Coinbase, and Unstoppable Domains as of now. It might have struck you that, even if a user owns two different wallets(or public keys specifically), we can't draw this fact!
+Our team firmly believes in the bright future of web, is well versed in its objectives, and determined to exploit its potential for the coming revolution. Therefore, Dapp Tools offers fully transparent, secure, user-friendly, and privacy-preserved services. It does not collect or rely on users' personal and sensitive information like email, phone number, or residential address. All you need is a cryptocurrency wallet, which is solely owned, managed, and controlled by the user himself. Dapp Tools supports Metamask, WalletConnect, Coinbase, and [Unstoppable Domains][unstoppable-domains] as of now. It might have struck you that, even if a user owns two different wallets(or public keys specifically), we can't draw this fact!
 
 Inspired by OpenZeppelin's contract wizard, it offers you to bootstrap your contracts by optionally selecting to include various functionalities specific to the used standard. After deployment, the user becomes the creator, deployer, and owner of the smart contract, thus it can be scaled or built upon independently at any time in the future. In the whole process, Dapp Tools is just like a swiss army knife, it does not keep or require any privileges to operate or interact with the user-owned contracts.
 
-The data used to hydrate the application is sourced from Covalent's API, which is a trusted and reliable source for unified on-chain data. Currently, we offer to deploy on Polygon Mainnet and Mumbai Testnet only. Options for other chains are being tested internally and will be opened soon.
+The data used to hydrate the application is sourced from [Covalent API][covalent-api], which is a trusted and reliable source for unified on-chain data. Currently, we offer to deploy on Polygon Mainnet and Mumbai Testnet only. Options for other chains are being tested internally and will be opened soon.
 
 > It's just the beginning, checkout our [Roadmap](#roadmap) to get a glance of what Dapp Tools is striving to become.
 
@@ -136,6 +136,8 @@ A workaround for this can be to introduce a robust, scalable, and fast backend s
 - [ ] no code support for creating and managing subgraphs
 - [ ] no code support for creating and managing oracles
 
+<br>
+
 ## **Help & Support**
 
 This tool is made purely with the intention to strengthen the existing web3 ecosystem and smoothen the onboarding of newcomers. Your genuine feedbacks are always welcome. Feel free to reach out to any of the contributors in case of doubts or bug reports. Also, we may soon release a rule book for those who may wish to contribute.
@@ -146,6 +148,6 @@ This tool is made purely with the intention to strengthen the existing web3 ecos
 
 [Raghav Goyal](https://github.com/rg12301) ([email](mailto:12301raghavgoyal@gmail.com) preferred)
 
-[openzeppelin]: (https://www.openzeppelin.com/contracts)
-[unstoppable-domains]: (https://www.openzeppelin.com/contracts)
-[covalent-api]: (https://www.openzeppelin.com/contracts)
+[openzeppelin]: https://www.openzeppelin.com/contracts
+[unstoppable-domains]: https://unstoppabledomains.com/
+[covalent-api]: https://www.covalenthq.com/
